@@ -1,0 +1,10 @@
+{
+  "chains": [
+    { "name": "ethereum", "mc": 100 },
+    { "name": "bitcoin", "mc": 400 }
+  ],
+  "bridges": [
+    { "name": "hop", "tvl": 1 },
+    { "name": "wormhole", "tvl": 3 }
+  ]
+}

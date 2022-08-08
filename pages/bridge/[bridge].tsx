@@ -1,22 +1,44 @@
-import { BRIDGES } from '../../data';
+import type { NextPage } from 'next';
+import { loadData } from '../../utils';
 
 interface IBridgeProps {
   bridge: string;
+  tvl: number;
 }
 
-export default function Bridge({ bridge }: IBridgeProps) {
-  return <div>{bridge}</div>;
+interface IBridgePath {
+  params: { bridge: string };
 }
 
-export async function getStaticPaths() {
-  const paths = BRIDGES.map(({ name }) => {
+const Bridge: NextPage<IBridgeProps> = ({ bridge, tvl }: IBridgeProps) => {
+  return (
+    <div>
+      {bridge} : {tvl}
+    </div>
+  );
+};
+
+export async function getStaticPaths(): Promise<{
+  fallback: boolean;
+  paths: IBridgePath[];
+}> {
+  const data = loadData();
+  const paths = data.bridges.map(({ name }: any): IBridgePath => {
     return { params: { bridge: name } };
   });
   return { paths, fallback: false };
 }
 
-export async function getStaticProps({ params }: { params: IBridgeProps }) {
+export async function getStaticProps({
+  params,
+}: IBridgePath): Promise<{ props: IBridgeProps }> {
+  const data = loadData();
+  const tvl = data.bridges.find(
+    (bridge: any) => bridge.name === params.bridge,
+  )!.tvl;
   return {
-    props: { bridge: params.bridge },
+    props: { ...params, tvl },
   };
 }
+
+export default Bridge;

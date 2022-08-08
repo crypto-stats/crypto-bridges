@@ -7,12 +7,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Cryptobridges</title>
-        <meta name="description" content="Data sets and views on crypto economics" />
+        <meta
+          name="description"
+          content="Data sets and views on crypto economics"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <h1>Crypto bridges</h1>
-        <p>Graph here</p>
+        <p>Persistent graph here📈</p>
         <Component {...pageProps} />
       </main>
       <footer>

@@ -9,7 +9,7 @@
       "**/node_modules": true,
       ".next": true
     },
-    "editor.rulers": [100],
+    "editor.rulers": [80],
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
