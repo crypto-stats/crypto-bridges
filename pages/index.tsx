@@ -4,10 +4,10 @@ import Link from 'next/link';
 const Home: NextPage = () => {
   return (
     <div>
-      <Link href="bridges" scroll={false}>
+      <Link href="bridge/:bridgeId" scroll={false}>
         bridges
       </Link>
-      <Link href="chains" scroll={false}>
+      <Link href="chain/:chainId" scroll={false}>
         chains
       </Link>
     </div>

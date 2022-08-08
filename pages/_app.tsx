@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <h1>Crypto bridges</h1>
         <p>Graph here</p>
         <Component {...pageProps} />
       </main>
