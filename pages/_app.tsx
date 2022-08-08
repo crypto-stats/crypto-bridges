@@ -1,21 +1,15 @@
 import type { AppProps } from 'next/app';
-import Head from 'next/head';
+import HtmlHead from '../components/Heading';
+import NetworkDiagram from '../components/NetworkDiagram';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>Cryptobridges</title>
-        <meta
-          name="description"
-          content="Data sets and views on crypto economics"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <HtmlHead />
       <main>
         <h1>Crypto bridges</h1>
-        <p>Persistent graph here📈</p>
+        <NetworkDiagram />
         <Component {...pageProps} />
       </main>
       <footer>

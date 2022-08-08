@@ -23,9 +23,11 @@ export async function getStaticPaths(): Promise<{
   paths: IBridgePath[];
 }> {
   const data = loadData();
-  const paths = data.bridges.map(({ name }: any): IBridgePath => {
-    return { params: { bridge: name } };
-  });
+  const paths = data.nodes
+    .filter((node: any) => node.type === 'bridge')
+    .map(({ name }: any): IBridgePath => {
+      return { params: { bridge: name } };
+    });
   return { paths, fallback: false };
 }
 
@@ -33,9 +35,9 @@ export async function getStaticProps({
   params,
 }: IBridgePath): Promise<{ props: IBridgeProps }> {
   const data = loadData();
-  const tvl = data.bridges.find(
-    (bridge: any) => bridge.name === params.bridge,
-  )!.tvl;
+  const tvl = data.nodes
+    .filter((node: any) => node.type === 'bridge')
+    .find((bridge: any) => bridge.name === params.bridge)!.tvl;
   return {
     props: { ...params, tvl },
   };

@@ -1,10 +1,13 @@
 {
-  "chains": [
-    { "name": "ethereum", "mc": 100 },
-    { "name": "bitcoin", "mc": 400 }
+  "nodes": [
+    { "type": "blockchain", "name": "ETH", "mc": 100 },
+    { "type": "blockchain", "name": "BSC", "mc": 200 },
+    { "type": "blockchain", "name": "SOL", "mc": 400 },
+    { "type": "bridge", "name": "wormhole", "tvl": 10 }
   ],
-  "bridges": [
-    { "name": "hop", "tvl": 1 },
-    { "name": "wormhole", "tvl": 3 }
+  "links": [
+    { "source": "ETH", "target": "wormhole", "tvl": 1 },
+    { "source": "BSC", "target": "wormhole", "tvl": 2 },
+    { "source": "SOL", "target": "wormhole", "tvl": 5 }
   ]
 }

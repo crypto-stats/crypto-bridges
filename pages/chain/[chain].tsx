@@ -16,16 +16,20 @@ const Chain: NextPage<IChainProps> = ({ chain, mc }: IChainProps) => {
 
 export async function getStaticPaths() {
   const data = loadData();
-  const paths = data.chains.map(({ name }: any) => {
-    return { params: { chain: name } };
-  });
+  const paths = data.nodes
+    .filter((node: any) => node.type === 'blockchain')
+    .map(({ name }: any) => {
+      return { params: { chain: name } };
+    });
   return { paths, fallback: false };
 }
 
 export async function getStaticProps({ params }: { params: IChainProps }) {
   const data = loadData();
   // Assume not undefined as it's the same file.
-  const mc = data.chains.find((chain: any) => chain.name === params.chain)!.mc;
+  const mc = data.nodes
+    .filter((node: any) => node.type === 'blockchain')
+    .find((chain: any) => chain.name === params.chain)!.mc;
   return {
     props: { ...params, mc },
   };

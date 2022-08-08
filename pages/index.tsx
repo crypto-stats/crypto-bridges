@@ -11,23 +11,27 @@ const Home: NextPage = () => {
     <div>
       <ul>
         Bridges
-        {data.bridges.map(({ name }: any, index: number) => (
-          <li key={index}>
-            <Link href={`bridge/${name}`} scroll={false} passHref={true}>
-              <a>{name}</a>
-            </Link>
-          </li>
-        ))}
+        {data.nodes
+          .filter((node: any) => node.type === 'bridge')
+          .map(({ name }: any, index: number) => (
+            <li key={index}>
+              <Link href={`bridge/${name}`} scroll={false} passHref={true}>
+                <a>{name}</a>
+              </Link>
+            </li>
+          ))}
       </ul>
       <ul>
         Chains
-        {data.chains.map(({ name }: any, index: number) => (
-          <li key={index}>
-            <Link href={`chain/${name}`} scroll={false} passHref={true}>
-              <a>{name}</a>
-            </Link>
-          </li>
-        ))}
+        {data.nodes
+          .filter((node: any) => node.type === 'blockchain')
+          .map(({ name }: any, index: number) => (
+            <li key={index}>
+              <Link href={`chain/${name}`} scroll={false} passHref={true}>
+                <a>{name}</a>
+              </Link>
+            </li>
+          ))}
       </ul>
     </div>
   );
