@@ -26,7 +26,7 @@ export default function Motion(props: PropsWithChildren) {
       animate={animation.animate}
       exit={animation.exit}
       transition={animation.transition}
-      variants={animation}
+      variants={animation as any}
     >
       {props.children}
     </m.div>
