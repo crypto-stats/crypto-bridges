@@ -3,10 +3,8 @@ import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
+import { BLUE_1, ORANGE_1 } from '../constants';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const COLOR_1 = '#45a2e1';
-const COLOR_2 = '#ef984d';
 
 const getNodeSize = (d: any) => (d.type === 'bridge' ? d.tvl : d.mc / 10);
 
@@ -30,7 +28,7 @@ function drawChart(
     .data(data.links)
     .enter()
     .append('line')
-    .style('stroke', COLOR_2)
+    .style('stroke', ORANGE_1)
     .style('stroke-width', (d: any) => d.tvl * 3);
 
   const node = svg.selectAll('circle').data(data.nodes);
@@ -38,7 +36,7 @@ function drawChart(
   const circles = circleGroups
     .append('circle')
     .attr('r', getNodeSize)
-    .style('fill', (d: any) => (d.type === 'bridge' ? COLOR_2 : COLOR_1));
+    .style('fill', (d: any) => (d.type === 'bridge' ? ORANGE_1 : BLUE_1));
   const text = circleGroups
     .append('text')
     .text((d) => d.name)
