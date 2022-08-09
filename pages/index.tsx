@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import useSWR from 'swr';
+import Motion from '../components/Motion';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
@@ -8,7 +9,7 @@ const Home: NextPage = () => {
   if (error) return <p>Fail</p>;
   if (!data) return <p>Loading</p>;
   return (
-    <div>
+    <Motion>
       <ul>
         Bridges
         {data.nodes
@@ -33,7 +34,7 @@ const Home: NextPage = () => {
             </li>
           ))}
       </ul>
-    </div>
+    </Motion>
   );
 };
 

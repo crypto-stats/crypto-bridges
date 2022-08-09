@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Motion from '../../components/Motion';
 import { loadData } from '../../utils';
 
 interface IBridgeProps {
@@ -12,9 +13,9 @@ interface IBridgePath {
 
 const Bridge: NextPage<IBridgeProps> = ({ bridge, tvl }: IBridgeProps) => {
   return (
-    <div>
+    <Motion>
       {bridge}: This bridge is worth {tvl} trillions!
-    </div>
+    </Motion>
   );
 };
 

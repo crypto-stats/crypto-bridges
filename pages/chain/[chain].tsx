@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Motion from '../../components/Motion';
 import { loadData } from '../../utils';
 
 interface IChainProps {
@@ -8,9 +9,9 @@ interface IChainProps {
 
 const Chain: NextPage<IChainProps> = ({ chain, mc }: IChainProps) => {
   return (
-    <div>
+    <Motion>
       {chain}: A coin worth ${mc}B.
-    </div>
+    </Motion>
   );
 };
 
