@@ -39,7 +39,7 @@ function drawChart(
     .style('fill', (d: any) => (d.type === 'bridge' ? ORANGE_1 : BLUE_1));
   const text = circleGroups
     .append('text')
-    .text((d) => d.name)
+    .text((d: any) => d.name)
     .style('cursor', 'pointer')
     .on('click', onClick);
 
