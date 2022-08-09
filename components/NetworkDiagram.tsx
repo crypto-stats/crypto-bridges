@@ -17,7 +17,8 @@ function drawChart(
   const w = 600;
   const svg = d3.select(svgRef.current);
 
-  function onClick(d: PointerEvent, i: any) {
+  function onClick(e: PointerEvent, i: any) {
+    e.preventDefault();
     const newPath = `/${i.type === 'bridge' ? 'bridge' : 'chain'}/${i.name}`;
     navigateTo(newPath);
   }
