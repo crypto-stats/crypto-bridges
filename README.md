@@ -1,4 +1,4 @@
-# Cryptobridges
+# CryptoBridges
 
 ## Getting started
 
