@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+import Header from '../components/Header';
 import HtmlHead from '../components/Heading';
 import NetworkDiagram from '../components/NetworkDiagram';
 import '../styles/globals.css';
@@ -8,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <HtmlHead />
       <main>
-        <h1>Crypto bridges</h1>
+        <Header />
         <NetworkDiagram />
         <Component {...pageProps} />
       </main>

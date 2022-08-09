@@ -13,7 +13,7 @@ interface IBridgePath {
 const Bridge: NextPage<IBridgeProps> = ({ bridge, tvl }: IBridgeProps) => {
   return (
     <div>
-      {bridge} : {tvl}
+      {bridge}: This bridge is worth {tvl} trillions!
     </div>
   );
 };

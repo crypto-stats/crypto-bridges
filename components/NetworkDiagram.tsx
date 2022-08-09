@@ -30,7 +30,7 @@ function drawChart(
     .data(data.links)
     .enter()
     .append('line')
-    .style('stroke', COLOR_1)
+    .style('stroke', COLOR_2)
     .style('stroke-width', (d: any) => d.tvl * 3);
 
   const node = svg.selectAll('circle').data(data.nodes);
@@ -38,7 +38,7 @@ function drawChart(
   const circles = circleGroups
     .append('circle')
     .attr('r', getNodeSize)
-    .style('fill', COLOR_2);
+    .style('fill', (d: any) => (d.type === 'bridge' ? COLOR_2 : COLOR_1));
   const text = circleGroups
     .append('text')
     .text((d) => d.name)

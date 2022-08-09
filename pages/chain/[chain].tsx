@@ -9,7 +9,7 @@ interface IChainProps {
 const Chain: NextPage<IChainProps> = ({ chain, mc }: IChainProps) => {
   return (
     <div>
-      {chain}: ${mc}
+      {chain}: A coin worth ${mc}B.
     </div>
   );
 };
