@@ -1,0 +1,24 @@
+.menu {
+  padding: 0;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+}
+.item {
+  list-style-type: none;
+  padding: 10px;
+  background: #eee;
+  border-radius: 5px;
+}
+.item a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.item p {
+  margin: 0;
+}

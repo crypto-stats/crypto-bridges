@@ -4,7 +4,9 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import Motion from '../components/Motion';
 import { BRIDGED_VALUE_API_URL } from '../constants';
+import styles from '../styles/index.module.css';
 import { convertDataForGraph } from '../utils';
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
@@ -15,30 +17,38 @@ const Home: NextPage = () => {
   const convertedData = convertDataForGraph(data);
   return (
     <Motion key={router.asPath}>
-      <ul>
-        Bridges
-        {convertedData.nodes
-          .filter((node: any) => node.type === 'bridge')
-          .map(({ name }: any, index: number) => (
-            <li key={index}>
-              <Link href={`bridge/${name}`} scroll={false} passHref={true}>
-                <a>{name}</a>
-              </Link>
-            </li>
-          ))}
-      </ul>
-      <ul>
-        Chains
-        {convertedData.nodes
-          .filter((node: any) => node.type === 'blockchain')
-          .map(({ name }: any, index: number) => (
-            <li key={index}>
-              <Link href={`chain/${name}`} scroll={false} passHref={true}>
-                <a>{name}</a>
-              </Link>
-            </li>
-          ))}
-      </ul>
+      <menu className={styles.menu}>
+        <ul className={styles.list}>
+          Bridges
+          {convertedData.nodes
+            .filter((node: any) => node.type === 'bridge')
+            .map(({ name, value }, index: number) => (
+              <li key={index} className={styles.item}>
+                <Link href={`bridge/${name}`} scroll={false} passHref={true}>
+                  <a>
+                    <p>{name}</p>
+                    <p>{value}</p>
+                  </a>
+                </Link>
+              </li>
+            ))}
+        </ul>
+        <ul className={styles.list}>
+          Chains
+          {convertedData.nodes
+            .filter((node) => node.type === 'blockchain')
+            .map(({ name, value }, index: number) => (
+              <li key={index} className={styles.item}>
+                <Link href={`chain/${name}`} scroll={false} passHref={true}>
+                  <a>
+                    <p>{name}</p>
+                    <p>{value}</p>
+                  </a>
+                </Link>
+              </li>
+            ))}
+        </ul>
+      </menu>
     </Motion>
   );
 };

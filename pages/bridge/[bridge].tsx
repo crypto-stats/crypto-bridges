@@ -17,7 +17,12 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, value }: IBridgeProps) => {
   const router = useRouter();
   return (
     <Motion key={router.asPath}>
-      {bridge}: This bridge is worth {value}
+      <section>
+        <p>
+          This is the page about the {bridge} bridge, with a tvl of {value}.
+        </p>
+        <p>More details soon.</p>
+      </section>
     </Motion>
   );
 };
