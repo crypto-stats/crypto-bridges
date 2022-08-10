@@ -63,7 +63,7 @@ function drawChart(
       .force(
         'charge',
         d3.forceManyBody().strength((d: any) => {
-          const force = Math.log(d.value) / -5000;
+          const force = Math.log(d.value) / -2000;
           const availableArea = (w - PADDING) * (h - PADDING);
           return force * availableArea;
         }),
