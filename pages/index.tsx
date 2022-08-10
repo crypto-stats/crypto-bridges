@@ -1,15 +1,17 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import Motion from '../components/Motion';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const { data, error } = useSWR('/data.json', fetcher);
   if (error) return <p>Fail</p>;
   if (!data) return <p>Loading</p>;
   return (
-    <Motion>
+    <Motion key={router.asPath}>
       <ul>
         Bridges
         {data.nodes

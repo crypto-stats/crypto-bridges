@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Motion from '../../components/Motion';
 import { loadData } from '../../utils';
 
@@ -8,8 +9,9 @@ interface IChainProps {
 }
 
 const Chain: NextPage<IChainProps> = ({ chain, mc }: IChainProps) => {
+  const router = useRouter();
   return (
-    <Motion>
+    <Motion key={router.asPath}>
       {chain}: A coin worth ${mc}B.
     </Motion>
   );

@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Motion from '../../components/Motion';
 import { loadData } from '../../utils';
 
@@ -12,8 +13,9 @@ interface IBridgePath {
 }
 
 const Bridge: NextPage<IBridgeProps> = ({ bridge, tvl }: IBridgeProps) => {
+  const router = useRouter();
   return (
-    <Motion>
+    <Motion key={router.asPath}>
       {bridge}: This bridge is worth {tvl} trillions!
     </Motion>
   );
