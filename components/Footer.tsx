@@ -1,10 +1,14 @@
+import { FOOTER_HEIGHT } from '../constants';
 import styles from '../styles/Footer.module.css';
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
-      <h2>CryptoBridges</h2>
-      <p>Copyright CryptoStats 2022</p>
+    <footer
+      style={{
+        height: `${FOOTER_HEIGHT}px`,
+      }}
+      className={styles.footer}
+    >
       <p>All rights reserved</p>
     </footer>
   );

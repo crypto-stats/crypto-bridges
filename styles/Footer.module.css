@@ -1,7 +1,11 @@
 .footer {
-  margin-top: 100px;
-  padding: 30px;
+  box-sizing: border-box;
   text-align: center;
   background: #000;
   color: #aaa;
+  padding: 5px;
+}
+
+.footer p {
+  margin: 0;
 }

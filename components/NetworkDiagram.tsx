@@ -5,7 +5,14 @@ import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
 import { BRIDGED_VALUE_API_URL, ORANGE_1 } from '../constants';
-import { convertDataForGraph, IGraphData, IGraphNode } from '../utils';
+import style from '../styles/NetworkDiagram.module.css';
+import {
+  convertDataForGraph,
+  getDiagramDimensions,
+  IGraphData,
+  IGraphNode,
+} from '../utils';
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const RATIO = 1 / 10000000;
@@ -18,8 +25,8 @@ function drawChart(
   data: IGraphData,
   navigateTo: (path: string) => void,
 ) {
-  const h = 600;
-  let w = innerWidth;
+  let width = 0,
+    height = 0;
   let currentSimulation:
     | d3.Simulation<d3.SimulationNodeDatum, undefined>
     | undefined = undefined;
@@ -31,7 +38,7 @@ function drawChart(
     navigateTo(newPath);
   }
 
-  svg.attr('width', w).attr('height', h).style('background', '#eee');
+  svg.style('background', '#eee');
 
   const links = svg
     .selectAll('line')
@@ -61,14 +68,17 @@ function drawChart(
     if (currentSimulation !== undefined) {
       currentSimulation.stop();
     }
-    svg.attr('width', w);
+    const dimensions = getDiagramDimensions();
+    width = dimensions.width;
+    height = dimensions.height;
+    svg.attr('width', width).attr('height', height);
     currentSimulation = d3
       .forceSimulation(data.nodes as SimulationNodeDatum[])
       .force(
         'charge',
         d3.forceManyBody().strength((d: any) => {
           const force = getTvlRadius(d) / -5000;
-          const availableArea = (w - PADDING) * (h - PADDING);
+          const availableArea = (width - PADDING) * (height - PADDING);
           return force * availableArea;
         }),
       )
@@ -79,16 +89,13 @@ function drawChart(
           .id((d: any) => (d as IGraphNode).name)
           .links(data.links),
       )
-      .force('center', d3.forceCenter(w / 2, h / 2))
+      .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', ticked)
       .on('end', ticked);
   };
 
   resize();
-  window.addEventListener('resize', () => {
-    w = innerWidth;
-    resize();
-  });
+  window.addEventListener('resize', resize);
 
   function ticked() {
     tvlCircles
@@ -96,7 +103,7 @@ function drawChart(
         const radius = getTvlRadius(d);
         const coord = Math.max(
           PADDING + radius,
-          Math.min(d.x, w - PADDING - radius),
+          Math.min(d.x, width - PADDING - radius),
         );
         d.x = coord;
         return coord;
@@ -105,7 +112,7 @@ function drawChart(
         const radius = getTvlRadius(d);
         const coord = Math.max(
           PADDING + radius,
-          Math.min(d.y, h - PADDING - radius),
+          Math.min(d.y, height - PADDING - radius),
         );
         d.y = coord;
         return coord;
@@ -135,7 +142,7 @@ export default function NetworkDiagram() {
   if (error) return null;
   if (!data) return <p>loading</p>;
   return (
-    <div>
+    <div className={style.networkDiagram}>
       <svg ref={svg} />
     </div>
   );

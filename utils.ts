@@ -1,3 +1,5 @@
+import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
+
 export interface IGraphNode {
   name: string;
   value: number;
@@ -70,4 +72,27 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
     });
   });
   return graphData;
+}
+
+export function useHorizontalLayout(): boolean {
+  if (window === undefined) return false;
+  return (
+    window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT <
+    window.innerWidth - PANEL_WIDTH + 250
+  );
+}
+
+interface IDimensions {
+  width: number;
+  height: number;
+}
+
+export function getDiagramDimensions(): IDimensions {
+  const isLandscape = useHorizontalLayout();
+  return {
+    width: isLandscape ? window.innerWidth - PANEL_WIDTH : window.innerWidth,
+    height: isLandscape
+      ? window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT
+      : window.innerWidth * 0.6,
+  };
 }
