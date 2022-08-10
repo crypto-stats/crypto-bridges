@@ -4,22 +4,21 @@ import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
-import { BLUE_1, BRIDGED_VALUE_API_URL, ORANGE_1 } from '../constants';
+import { BRIDGED_VALUE_API_URL, ORANGE_1 } from '../constants';
 import { convertDataForGraph, IGraphData, IGraphNode } from '../utils';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const RATIO = 1 / 10000000;
 const PADDING = 40;
 
-const getNodeSize = (d: any) =>
-  Math.log(Math.sqrt((d.value * RATIO) / Math.PI) * 3) * 5;
+const getTvlRadius = (d: any) => Math.sqrt((d.value * RATIO) / Math.PI) * 8;
 
 function drawChart(
   svgRef: RefObject<SVGSVGElement>,
   data: IGraphData,
   navigateTo: (path: string) => void,
 ) {
-  const h = 300;
+  const h = 600;
   let w = innerWidth;
   let currentSimulation:
     | d3.Simulation<d3.SimulationNodeDatum, undefined>
@@ -33,6 +32,7 @@ function drawChart(
   }
 
   svg.attr('width', w).attr('height', h).style('background', '#eee');
+
   const links = svg
     .selectAll('line')
     .data(data.links)
@@ -43,10 +43,14 @@ function drawChart(
 
   const node = svg.selectAll('circle').data(data.nodes);
   const circleGroups = node.enter().append('g');
-  const circles = circleGroups
+
+  const tvlCircles = circleGroups
     .append('circle')
-    .attr('r', getNodeSize)
-    .style('fill', (d: any) => (d.type === 'bridge' ? ORANGE_1 : BLUE_1));
+    .attr('r', getTvlRadius)
+    .style('fill', '#ddd')
+    .attr('stroke-width', '1')
+    .attr('stroke', '#ccc');
+
   const text = circleGroups
     .append('text')
     .text((d) => d.name)
@@ -63,7 +67,7 @@ function drawChart(
       .force(
         'charge',
         d3.forceManyBody().strength((d: any) => {
-          const force = Math.log(d.value) / -2000;
+          const force = getTvlRadius(d) / -5000;
           const availableArea = (w - PADDING) * (h - PADDING);
           return force * availableArea;
         }),
@@ -87,14 +91,22 @@ function drawChart(
   });
 
   function ticked() {
-    circles
+    tvlCircles
       .attr('cx', (d: any) => {
-        const coord = Math.max(PADDING, Math.min(d.x, w - PADDING));
+        const radius = getTvlRadius(d);
+        const coord = Math.max(
+          PADDING + radius,
+          Math.min(d.x, w - PADDING - radius),
+        );
         d.x = coord;
         return coord;
       })
       .attr('cy', (d: any) => {
-        const coord = Math.max(PADDING, Math.min(d.y, h - PADDING));
+        const radius = getTvlRadius(d);
+        const coord = Math.max(
+          PADDING + radius,
+          Math.min(d.y, h - PADDING - radius),
+        );
         d.y = coord;
         return coord;
       });
