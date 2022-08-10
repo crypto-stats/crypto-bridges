@@ -53,7 +53,7 @@ function drawChart(
   d3.forceSimulation(data.nodes as SimulationNodeDatum[])
     .force(
       'charge',
-      d3.forceManyBody().strength((d: any) => Math.log10(d.value) * -70),
+      d3.forceManyBody().strength((d: any) => Math.log(d.value) * -50),
     )
     .force(
       'link',
