@@ -123,7 +123,8 @@ function drawChart(
 
 export default function NetworkDiagram() {
   const router = useRouter();
-  const navigateTo = (path: string) => router.push(path);
+  const navigateTo = (path: string) =>
+    router.push(path, undefined, { scroll: false });
   const { data, error } = useSWR(BRIDGED_VALUE_API_URL, fetcher);
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
