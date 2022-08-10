@@ -8,7 +8,11 @@ import { BLUE_1, BRIDGED_VALUE_API_URL, ORANGE_1 } from '../constants';
 import { convertDataForGraph, IGraphData, IGraphNode } from '../utils';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const getNodeSize = (d) => 10;
+const RATIO = 1 / 10000000;
+const PADDING = 40;
+
+const getNodeSize = (d: any) =>
+  Math.log(Math.sqrt((d.value * RATIO) / Math.PI) * 3) * 5;
 
 function drawChart(
   svgRef: RefObject<SVGSVGElement>,
@@ -32,7 +36,7 @@ function drawChart(
     .enter()
     .append('line')
     .style('stroke', ORANGE_1)
-    .style('stroke-width', (d) => 5);
+    .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5);
 
   const node = svg.selectAll('circle').data(data.nodes);
   const circleGroups = node.enter().append('g');
@@ -48,27 +52,40 @@ function drawChart(
 
   d3.forceSimulation(data.nodes as SimulationNodeDatum[])
     .force(
+      'charge',
+      d3.forceManyBody().strength((d: any) => Math.log10(d.value) * -70),
+    )
+    .force(
       'link',
       d3
         .forceLink()
         .id((d: any) => (d as IGraphNode).name)
         .links(data.links),
     )
-    .force('charge', d3.forceManyBody().strength(-200))
     .force('center', d3.forceCenter(w / 2, h / 2))
     .on('tick', ticked)
     .on('end', ticked);
 
   function ticked() {
+    circles
+      .attr('cx', (d: any) => {
+        const coord = Math.max(PADDING, Math.min(d.x, w - PADDING));
+        d.x = coord;
+        return coord;
+      })
+      .attr('cy', (d: any) => {
+        const coord = Math.max(PADDING, Math.min(d.y, h - PADDING));
+        d.y = coord;
+        return coord;
+      });
+    text
+      .attr('dx', (d: any) => d.x - d.name.length * 4.7)
+      .attr('dy', (d: any) => d.y + 5);
     links
       .attr('x1', (d: any) => d.source.x)
       .attr('y1', (d: any) => d.source.y)
       .attr('x2', (d: any) => d.target.x)
       .attr('y2', (d: any) => d.target.y);
-    circles.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
-    text
-      .attr('dx', (d: any) => d.x - d.name.length * 4.7)
-      .attr('dy', (d: any) => d.y + 5);
   }
 }
 
@@ -79,7 +96,6 @@ export default function NetworkDiagram() {
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
     if (data === undefined) return;
-    console.log(data);
     const convertedData = convertDataForGraph(data);
     drawChart(svg, convertedData, navigateTo);
   }, [svg, data]);
