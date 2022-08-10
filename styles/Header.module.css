@@ -2,3 +2,8 @@
   display: flex;
   align-items: center;
 }
+
+.header {
+  padding: 20px;
+  background: #45a2e1;
+}

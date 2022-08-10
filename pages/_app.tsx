@@ -1,6 +1,7 @@
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import type { AppProps } from 'next/app';
 import NextNProgress from 'nextjs-progressbar';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import HtmlHead from '../components/Heading';
 import NetworkDiagram from '../components/NetworkDiagram';
@@ -23,9 +24,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             <NetworkDiagram />
 
             <Component {...pageProps} key={router.asPath} />
-            <footer>
-              <p>Footer</p>
-            </footer>
+            <Footer />
           </m.main>
         </AnimatePresence>
       </LazyMotion>

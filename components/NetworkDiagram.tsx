@@ -20,7 +20,10 @@ function drawChart(
   navigateTo: (path: string) => void,
 ) {
   const h = 300;
-  const w = 600;
+  let w = innerWidth;
+  let currentSimulation:
+    | d3.Simulation<d3.SimulationNodeDatum, undefined>
+    | undefined = undefined;
   const svg = d3.select(svgRef.current);
 
   function onClick(e: PointerEvent, i: IGraphNode) {
@@ -50,21 +53,38 @@ function drawChart(
     .style('cursor', 'pointer')
     .on('click', onClick);
 
-  d3.forceSimulation(data.nodes as SimulationNodeDatum[])
-    .force(
-      'charge',
-      d3.forceManyBody().strength((d: any) => Math.log(d.value) * -50),
-    )
-    .force(
-      'link',
-      d3
-        .forceLink()
-        .id((d: any) => (d as IGraphNode).name)
-        .links(data.links),
-    )
-    .force('center', d3.forceCenter(w / 2, h / 2))
-    .on('tick', ticked)
-    .on('end', ticked);
+  const resize = () => {
+    if (currentSimulation !== undefined) {
+      currentSimulation.stop();
+    }
+    svg.attr('width', w);
+    currentSimulation = d3
+      .forceSimulation(data.nodes as SimulationNodeDatum[])
+      .force(
+        'charge',
+        d3.forceManyBody().strength((d: any) => {
+          const force = Math.log(d.value) / -5000;
+          const availableArea = (w - PADDING) * (h - PADDING);
+          return force * availableArea;
+        }),
+      )
+      .force(
+        'link',
+        d3
+          .forceLink()
+          .id((d: any) => (d as IGraphNode).name)
+          .links(data.links),
+      )
+      .force('center', d3.forceCenter(w / 2, h / 2))
+      .on('tick', ticked)
+      .on('end', ticked);
+  };
+
+  resize();
+  window.addEventListener('resize', () => {
+    w = innerWidth;
+    resize();
+  });
 
   function ticked() {
     circles
