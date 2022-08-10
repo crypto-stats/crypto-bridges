@@ -1,22 +1,23 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Motion from '../../components/Motion';
-import { loadData } from '../../utils';
+import { BRIDGED_VALUE_API_URL } from '../../constants';
+import { convertDataForGraph, IGraphData } from '../../utils';
 
 interface IBridgeProps {
   bridge: string;
-  tvl: number;
+  value?: number;
 }
 
 interface IBridgePath {
   params: { bridge: string };
 }
 
-const Bridge: NextPage<IBridgeProps> = ({ bridge, tvl }: IBridgeProps) => {
+const Bridge: NextPage<IBridgeProps> = ({ bridge, value }: IBridgeProps) => {
   const router = useRouter();
   return (
     <Motion key={router.asPath}>
-      {bridge}: This bridge is worth {tvl} trillions!
+      {bridge}: This bridge is worth {value}
     </Motion>
   );
 };
@@ -25,10 +26,12 @@ export async function getStaticPaths(): Promise<{
   fallback: boolean;
   paths: IBridgePath[];
 }> {
-  const data = loadData();
+  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
+    .then((r) => r.json())
+    .then(convertDataForGraph);
   const paths = data.nodes
-    .filter((node: any) => node.type === 'bridge')
-    .map(({ name }: any): IBridgePath => {
+    .filter((node) => node.type === 'bridge')
+    .map(({ name }): IBridgePath => {
       return { params: { bridge: name } };
     });
   return { paths, fallback: false };
@@ -37,12 +40,14 @@ export async function getStaticPaths(): Promise<{
 export async function getStaticProps({
   params,
 }: IBridgePath): Promise<{ props: IBridgeProps }> {
-  const data = loadData();
-  const tvl = data.nodes
-    .filter((node: any) => node.type === 'bridge')
-    .find((bridge: any) => bridge.name === params.bridge)!.tvl;
+  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
+    .then((r) => r.json())
+    .then(convertDataForGraph);
+  const value = data.nodes
+    .filter((node) => node.type === 'bridge')
+    .find((bridge) => bridge.name === params.bridge)?.value;
   return {
-    props: { ...params, tvl },
+    props: { ...params, value },
   };
 }
 

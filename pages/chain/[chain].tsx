@@ -1,40 +1,54 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Motion from '../../components/Motion';
-import { loadData } from '../../utils';
+import { BRIDGED_VALUE_API_URL } from '../../constants';
+import { convertDataForGraph, IGraphData } from '../../utils';
 
 interface IChainProps {
   chain: string;
-  mc: number;
+  value?: number;
 }
 
-const Chain: NextPage<IChainProps> = ({ chain, mc }: IChainProps) => {
+interface IChainPath {
+  params: { chain: string };
+}
+
+const Chain: NextPage<IChainProps> = ({ chain, value }: IChainProps) => {
   const router = useRouter();
   return (
     <Motion key={router.asPath}>
-      {chain}: A coin worth ${mc}B.
+      {chain}: A coin worth {value}.
     </Motion>
   );
 };
 
-export async function getStaticPaths() {
-  const data = loadData();
+export async function getStaticPaths(): Promise<{
+  fallback: boolean;
+  paths: IChainPath[];
+}> {
+  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
+    .then((r) => r.json())
+    .then(convertDataForGraph);
   const paths = data.nodes
-    .filter((node: any) => node.type === 'blockchain')
-    .map(({ name }: any) => {
+    .filter((node) => node.type === 'blockchain')
+    .map(({ name }) => {
       return { params: { chain: name } };
     });
   return { paths, fallback: false };
 }
 
-export async function getStaticProps({ params }: { params: IChainProps }) {
-  const data = loadData();
+export async function getStaticProps({
+  params,
+}: IChainPath): Promise<{ props: IChainProps }> {
+  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
+    .then((r) => r.json())
+    .then(convertDataForGraph);
   // Assume not undefined as it's the same file.
-  const mc = data.nodes
-    .filter((node: any) => node.type === 'blockchain')
-    .find((chain: any) => chain.name === params.chain)!.mc;
+  const value = data.nodes
+    .filter((node) => node.type === 'blockchain')
+    .find((chain) => chain.name === params.chain)!.value;
   return {
-    props: { ...params, mc },
+    props: { ...params, value },
   };
 }
 

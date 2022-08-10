@@ -1,23 +1,25 @@
 import * as d3 from 'd3';
+import { SimulationNodeDatum } from 'd3';
 import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
-import { BLUE_1, ORANGE_1 } from '../constants';
+import { BLUE_1, BRIDGED_VALUE_API_URL, ORANGE_1 } from '../constants';
+import { convertDataForGraph, IGraphData, IGraphNode } from '../utils';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const getNodeSize = (d: any) => (d.type === 'bridge' ? d.tvl : d.mc / 10);
+const getNodeSize = (d) => 10;
 
 function drawChart(
   svgRef: RefObject<SVGSVGElement>,
-  data: any,
+  data: IGraphData,
   navigateTo: (path: string) => void,
 ) {
   const h = 300;
   const w = 600;
   const svg = d3.select(svgRef.current);
 
-  function onClick(e: PointerEvent, i: any) {
+  function onClick(e: PointerEvent, i: IGraphNode) {
     e.preventDefault();
     const newPath = `/${i.type === 'bridge' ? 'bridge' : 'chain'}/${i.name}`;
     navigateTo(newPath);
@@ -30,7 +32,7 @@ function drawChart(
     .enter()
     .append('line')
     .style('stroke', ORANGE_1)
-    .style('stroke-width', (d: any) => d.tvl * 3);
+    .style('stroke-width', (d) => 5);
 
   const node = svg.selectAll('circle').data(data.nodes);
   const circleGroups = node.enter().append('g');
@@ -40,19 +42,19 @@ function drawChart(
     .style('fill', (d: any) => (d.type === 'bridge' ? ORANGE_1 : BLUE_1));
   const text = circleGroups
     .append('text')
-    .text((d: any) => d.name)
+    .text((d) => d.name)
     .style('cursor', 'pointer')
     .on('click', onClick);
 
-  d3.forceSimulation(data.nodes)
+  d3.forceSimulation(data.nodes as SimulationNodeDatum[])
     .force(
       'link',
       d3
         .forceLink()
-        .id((d: any) => d.name)
+        .id((d: any) => (d as IGraphNode).name)
         .links(data.links),
     )
-    .force('charge', d3.forceManyBody().strength(-1000))
+    .force('charge', d3.forceManyBody().strength(-200))
     .force('center', d3.forceCenter(w / 2, h / 2))
     .on('tick', ticked)
     .on('end', ticked);
@@ -73,11 +75,13 @@ function drawChart(
 export default function NetworkDiagram() {
   const router = useRouter();
   const navigateTo = (path: string) => router.push(path);
-  const { data, error } = useSWR('/data.json', fetcher);
+  const { data, error } = useSWR(BRIDGED_VALUE_API_URL, fetcher);
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
     if (data === undefined) return;
-    drawChart(svg, data, navigateTo);
+    console.log(data);
+    const convertedData = convertDataForGraph(data);
+    drawChart(svg, convertedData, navigateTo);
   }, [svg, data]);
   if (error) return null;
   if (!data) return <p>loading</p>;
