@@ -27,7 +27,7 @@ interface INode {
     toChain?: string;
     website?: string;
     subtitle: string;
-    icon: string;
+    icon: string | 0;
     fromChain: string;
   };
 }
@@ -49,7 +49,8 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
         name: nodeName,
         type: isBridge ? 'bridge' : 'blockchain',
         value: apiNode.results.currentValueLocked,
-        imageSrc: apiNode.metadata.icon,
+        imageSrc:
+          apiNode.metadata.icon === 0 ? '/logo.png' : apiNode.metadata.icon,
       });
     } else {
       graphData.nodes[nodeIndex].value += apiNode.results.currentValueLocked;
@@ -62,7 +63,8 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
         name: fromName,
         type: 'blockchain',
         value: apiNode.results.currentValueLocked,
-        imageSrc: apiNode.metadata.icon,
+        imageSrc:
+          apiNode.metadata.icon === 0 ? '/logo.png' : apiNode.metadata.icon,
       });
     } else {
       graphData.nodes[fromIndex].value += apiNode.results.currentValueLocked;
