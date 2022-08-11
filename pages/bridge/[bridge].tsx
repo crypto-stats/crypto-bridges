@@ -37,7 +37,7 @@ export async function getStaticPaths(): Promise<{
   const paths = data.nodes
     .filter((node) => node.type === 'bridge')
     .map(({ name }): IBridgePath => {
-      return { params: { bridge: name } };
+      return { params: { bridge: name.split(' ').join('-') } };
     });
   return { paths, fallback: false };
 }
@@ -50,7 +50,9 @@ export async function getStaticProps({
     .then(convertDataForGraph);
   const value = data.nodes
     .filter((node) => node.type === 'bridge')
-    .find((bridge) => bridge.name === params.bridge)?.value;
+    .find(
+      (bridge) => bridge.name === params.bridge.split('-').join(' '),
+    )?.value;
   return {
     props: { ...params, value },
   };

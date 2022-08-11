@@ -32,7 +32,7 @@ export async function getStaticPaths(): Promise<{
   const paths = data.nodes
     .filter((node) => node.type === 'blockchain')
     .map(({ name }) => {
-      return { params: { chain: name } };
+      return { params: { chain: name.split(' ').join('-') } };
     });
   return { paths, fallback: false };
 }
@@ -46,7 +46,7 @@ export async function getStaticProps({
   // Assume not undefined as it's the same file.
   const value = data.nodes
     .filter((node) => node.type === 'blockchain')
-    .find((chain) => chain.name === params.chain)!.value;
+    .find((chain) => chain.name === params.chain.split('-').join(' '))!.value;
   return {
     props: { ...params, value },
   };

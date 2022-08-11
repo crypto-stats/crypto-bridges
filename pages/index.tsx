@@ -32,7 +32,11 @@ const Home: NextPage = () => {
             .sort((a, b) => b.value - a.value)
             .map(({ name, value, imageSrc }, index: number) => (
               <li key={index} className={styles.item}>
-                <Link href={`bridge/${name}`} scroll={false} passHref={true}>
+                <Link
+                  href={`bridge/${name.split(' ').join('-')}`}
+                  scroll={false}
+                  passHref={true}
+                >
                   <a>
                     <div>
                       <p>{addLeadingZero(index + 1)}</p>
@@ -63,7 +67,11 @@ const Home: NextPage = () => {
             .sort((a, b) => b.value - a.value)
             .map(({ name, value, imageSrc }, index: number) => (
               <li key={index} className={styles.item}>
-                <Link href={`chain/${name}`} scroll={false} passHref={true}>
+                <Link
+                  href={`chain/${name.split(' ').join('-')}`}
+                  scroll={false}
+                  passHref={true}
+                >
                   <a>
                     <div>
                       <p>{addLeadingZero(index + 1)}</p>
