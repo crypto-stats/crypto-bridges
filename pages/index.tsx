@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -37,12 +36,7 @@ const Home: NextPage = () => {
                   <a>
                     <div>
                       <p>{addLeadingZero(index + 1)}</p>
-                      <Image
-                        src={imageSrc}
-                        width="20"
-                        height="20"
-                        alt=""
-                      />{' '}
+                      <img src={imageSrc} width="20" height="20" alt="" />{' '}
                       <p>{name}</p>
                     </div>
                     <p>{value}</p>
@@ -73,7 +67,7 @@ const Home: NextPage = () => {
                   <a>
                     <div>
                       <p>{addLeadingZero(index + 1)}</p>
-                      <Image src={imageSrc} width="20" height="20" alt="" />
+                      <img src={imageSrc} width="20" height="20" alt="" />
                       <p>{name}</p>
                     </div>
                     <p>{value}</p>

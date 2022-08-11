@@ -4,7 +4,7 @@
 }
 
 .header {
-  padding: 10px 30px;
+  padding: 30px 40px;
   background: #190838;
   box-sizing: border-box;
   text-transform: uppercase;
@@ -13,6 +13,6 @@
   text-decoration: none;
 }
 .header h1 {
-  margin-left: 10px;
+  margin: 0 20px;
   letter-spacing: 3px;
 }

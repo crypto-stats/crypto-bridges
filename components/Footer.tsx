@@ -10,15 +10,26 @@ export default function Footer() {
       className={styles.footer}
     >
       <p>
-        <a href="https://cryptofees.info/">cryptofees.info</a> |{' '}
-        <a href="https://money-movers.info/">money-movers.info</a> |{' '}
-        <a href="https://openorgs.info/">open-orgs.info</a> |{' '}
-        <a href="https://l2fees.info/">l2fees.info</a> |{' '}
-        <a href="https://stakers.info/">stakers.info</a> |{' '}
-        <a href="https://moneyprinter.info/">moneyprinter.info</a>
+        <span>
+          Powered by <a href="https://cryptostats.community">CryptoStats</a> (
+          <a href="https://forum.cryptostats.community/">Forum</a>)
+        </span>
+        <span>
+          <a href="https://twitter.com/CryptoStats_">Twitter</a> |{' '}
+          <a href="https://cryptostats.community/discord">Discord</a> |{' '}
+          <a href="https://github.com/crypto-stats/">Github</a>
+        </span>
       </p>
       <p>
-        Powered by <a href="https://cryptostats.community">CryptoStats</a>
+        <span>Check out our websites:</span>
+        <span>
+          <a href="https://cryptofees.info/">cryptofees.info</a> |{' '}
+          <a href="https://money-movers.info/">money-movers.info</a> |{' '}
+          <a href="https://openorgs.info/">open-orgs.info</a> |{' '}
+          <a href="https://l2fees.info/">l2fees.info</a> |{' '}
+          <a href="https://stakers.info/">stakers.info</a> |{' '}
+          <a href="https://moneyprinter.info/">moneyprinter.info</a>
+        </span>
       </p>
     </footer>
   );

@@ -1,16 +1,24 @@
 .footer {
   box-sizing: border-box;
-  text-align: center;
-  background: #000;
+  background: #190838;
   color: #aaa;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px 30px 40px;
 }
 
 .footer p {
   margin: 0;
+}
+
+.footer > p:last-of-type {
+  text-align: right;
+}
+
+.footer p span {
+  display: block;
 }
 
 .footer a {
