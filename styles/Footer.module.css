@@ -3,9 +3,16 @@
   text-align: center;
   background: #000;
   color: #aaa;
-  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
 }
 
 .footer p {
   margin: 0;
+}
+
+.footer a {
+  color: #aaa;
 }

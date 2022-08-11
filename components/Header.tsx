@@ -14,7 +14,7 @@ export default function Header() {
       <Link href={'/'} passHref={true} scroll={false}>
         <a className={styles.aContainer}>
           <Image src="/logo.png" width={45} height={45} />{' '}
-          <h1>Crypto bridges</h1>
+          <h1>Cryptobridges</h1>
         </a>
       </Link>
     </header>

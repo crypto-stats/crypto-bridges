@@ -3,6 +3,7 @@ import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
 export interface IGraphNode {
   name: string;
   value: number;
+  imageSrc: string;
   type: 'blockchain' | 'bridge';
 }
 
@@ -48,6 +49,7 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
         name: nodeName,
         type: isBridge ? 'bridge' : 'blockchain',
         value: apiNode.results.currentValueLocked,
+        imageSrc: apiNode.metadata.icon,
       });
     } else {
       graphData.nodes[nodeIndex].value += apiNode.results.currentValueLocked;
@@ -60,6 +62,7 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
         name: fromName,
         type: 'blockchain',
         value: apiNode.results.currentValueLocked,
+        imageSrc: apiNode.metadata.icon,
       });
     } else {
       graphData.nodes[fromIndex].value += apiNode.results.currentValueLocked;
@@ -95,4 +98,8 @@ export function getDiagramDimensions(): IDimensions {
       ? window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT
       : window.innerWidth * 0.6,
   };
+}
+
+export function addLeadingZero(n: number) {
+  return n < 10 ? `0${n}` : `${n}`;
 }

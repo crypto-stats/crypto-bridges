@@ -1,6 +1,7 @@
 .menu {
   padding: 0 100px;
   text-align: center;
+  text-transform: uppercase;
 }
 .list {
   display: flex;
@@ -10,15 +11,36 @@
 }
 .item {
   list-style-type: none;
-  padding: 10px;
-  background: #eee;
-  border-radius: 5px;
+  background: #190838;
 }
-.item a {
-  text-decoration: none;
+.item .head {
+  padding: 15px 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  box-sizing: border-box;
+  padding: 15px 10px;
+}
+.item a {
+  padding: 15px 10px;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 0px;
+  box-sizing: border-box;
+  transition: all 400ms ease;
+  scale: 1;
+  align-items: end;
+}
+.item a:hover {
+  background: #6e2d71;
+  border-radius: 200px;
+  scale: 1.01;
+}
+.item > a > div {
+  display: flex;
+  gap: 10px;
+  align-items: end;
 }
 .item p {
   margin: 0;

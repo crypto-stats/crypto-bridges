@@ -38,8 +38,6 @@ function drawChart(
     navigateTo(newPath);
   }
 
-  svg.style('background', '#eee');
-
   const links = svg
     .selectAll('line')
     .data(data.links)
@@ -54,13 +52,12 @@ function drawChart(
   const tvlCircles = circleGroups
     .append('circle')
     .attr('r', getTvlRadius)
-    .style('fill', '#ddd')
-    .attr('stroke-width', '1')
-    .attr('stroke', '#ccc');
+    .style('fill', '#6d7381');
 
   const text = circleGroups
     .append('text')
     .text((d) => d.name)
+    .style('fill', '#ccc')
     .style('cursor', 'pointer')
     .on('click', onClick);
 
