@@ -4,12 +4,13 @@ import { useRouter } from 'next/router';
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
-import { BRIDGED_VALUE_API_URL, ORANGE_1 } from '../constants';
+import { BRIDGED_VALUE_API_URL } from '../constants';
 import style from '../styles/NetworkDiagram.module.css';
 import {
   convertDataForGraph,
   getDiagramDimensions,
   IGraphData,
+  IGraphLink,
   IGraphNode,
 } from '../utils';
 
@@ -34,7 +35,18 @@ function drawChart(
 
   function onClick(e: PointerEvent, i: IGraphNode) {
     e.preventDefault();
-    const newPath = `/${i.type === 'bridge' ? 'bridge' : 'chain'}/${i.name}`;
+    const newPath = `/${i.type === 'bridge' ? 'bridge' : 'chain'}/${i.name
+      .split(' ')
+      .join('-')}`;
+    navigateTo(newPath);
+  }
+
+  function onLineClick(e: PointerEvent, i: IGraphLink) {
+    e.preventDefault();
+    const source: IGraphNode = i.source as any;
+    const newPath = `/${
+      source.type === 'bridge' ? 'bridge' : 'chain'
+    }/${source.name.split(' ').join('-')}`;
     navigateTo(newPath);
   }
 
@@ -43,8 +55,10 @@ function drawChart(
     .data(data.links)
     .enter()
     .append('line')
-    .style('stroke', ORANGE_1)
-    .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5);
+    .style('cursor', 'pointer')
+    .style('stroke', '#6d7381')
+    .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
+    .on('click', onLineClick);
 
   const node = svg.selectAll('circle').data(data.nodes);
   const circleGroups = node.enter().append('g');
@@ -52,7 +66,9 @@ function drawChart(
   const tvlCircles = circleGroups
     .append('circle')
     .attr('r', getTvlRadius)
-    .style('fill', '#6d7381');
+    .style('fill', '#6d7381')
+    .style('cursor', 'pointer')
+    .on('click', onClick);
 
   const text = circleGroups
     .append('text')
