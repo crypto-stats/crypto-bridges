@@ -14,7 +14,10 @@ import {
   IGraphNode,
 } from '../utils';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) =>
+  fetch(url)
+    .then((res) => res.json())
+    .catch(console.error);
 
 const RATIO = 1 / 10000000;
 const PADDING = 40;
@@ -54,9 +57,10 @@ function drawChart(
     .selectAll('line')
     .data(data.links)
     .enter()
-    .append('line')
+    .append('path')
     .style('cursor', 'pointer')
     .style('stroke', '#6d7381')
+    .style('fill', 'none')
     .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
     .on('click', onLineClick);
 
@@ -72,10 +76,16 @@ function drawChart(
 
   const text = circleGroups
     .append('text')
-    .text((d) => d.name)
     .style('fill', '#ccc')
     .style('cursor', 'pointer')
+    .attr('font-size', '1em')
     .on('click', onClick);
+  text.append('tspan').text((d) => d.name.split(' ')[0]);
+  text
+    .append('tspan')
+    .text((d) => d.name.split(' ')[1] ?? '')
+    .attr('dy', '20')
+    .attr('dx', (d: any) => -d.name.split(' ')[1]?.length * 9);
 
   const resize = () => {
     if (currentSimulation !== undefined) {
@@ -131,13 +141,16 @@ function drawChart(
         return coord;
       });
     text
-      .attr('dx', (d: any) => d.x - d.name.length * 4.7)
+      .attr('dx', (d: any) => d.x - d.name.split(' ')[0].length * 4.7)
       .attr('dy', (d: any) => d.y + 5);
-    links
-      .attr('x1', (d: any) => d.source.x)
-      .attr('y1', (d: any) => d.source.y)
-      .attr('x2', (d: any) => d.target.x)
-      .attr('y2', (d: any) => d.target.y);
+    links.attr('d', (d: any) => {
+      const dx = d.target.x - d.source.x;
+      const dy = d.target.y - d.source.y;
+      const dr = Math.sqrt(dx * dx + dy * dy);
+      const source = dx > 0 ? d.source : d.target;
+      const target = dx > 0 ? d.target : d.source;
+      return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
+    });
   }
 }
 
