@@ -1,8 +1,0 @@
-.flexOrienterHorizontal {
-  display: flex;
-  flex-direction: row;
-}
-.flexOrienterVertical {
-  display: flex;
-  flex-direction: column;
-}

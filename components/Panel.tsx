@@ -23,15 +23,15 @@ export default function Content(props: PropsWithChildren) {
   }, []);
   return (
     <div
-      className={styles.content}
+      className={isLandscape ? styles.sidePanel : styles.content}
       style={{
         maxWidth: isLandscape ? `calc(100% - ${graphWidth}px)` : 'inherit',
-        maxHeight: isLandscape ? `${graphHeight}px` : 'inherit',
+        maxHeight: isLandscape ? `100%` : 'inherit',
       }}
     >
       <SimpleBar
         style={{
-          maxHeight: isLandscape ? `${graphHeight}px` : 'inherit',
+          maxHeight: isLandscape ? `100%` : 'inherit',
           width: '100%',
         }}
         forceVisible="y"

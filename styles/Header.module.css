@@ -5,14 +5,11 @@
 
 .header {
   padding: 30px 40px;
-  background: #190838;
   box-sizing: border-box;
-  text-transform: uppercase;
 }
 .header a {
   text-decoration: none;
 }
 .header h1 {
   margin: 0 20px;
-  letter-spacing: 3px;
 }

@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import BackButton from '../../components/BackButton';
 import Motion from '../../components/Motion';
 import { BRIDGED_VALUE_API_URL } from '../../constants';
 import { convertDataForGraph, IGraphData } from '../../utils';
@@ -17,7 +18,13 @@ const Chain: NextPage<IChainProps> = ({ chain, value }: IChainProps) => {
   const router = useRouter();
   return (
     <Motion key={router.asPath}>
-      {chain}: A coin worth {value}.
+      <section>
+        <BackButton />
+        <p>
+          This is the page about the {chain} chain, with a tvl of {value}.
+        </p>
+        <p>More details soon.</p>
+      </section>
     </Motion>
   );
 };

@@ -3,3 +3,12 @@
   display: inline-block;
   width: 100%;
 }
+.sidePanel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 600px;
+  padding: 40px 0;
+  box-sizing: border-box;
+}

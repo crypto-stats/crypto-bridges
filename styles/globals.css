@@ -1,12 +1,12 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   margin: 0;
   overflow-x: hidden;
-  background: #190838;
-  color: #ccc;
+  background: linear-gradient(90deg, #020611 0%, #091126 86.46%);
+  color: #fff;
 }
 a {
-  color: #ccc;
+  color: #fff;
 }
 
 svg text {

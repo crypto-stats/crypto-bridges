@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import BackButton from '../../components/BackButton';
 import Motion from '../../components/Motion';
 import { BRIDGED_VALUE_API_URL } from '../../constants';
 import { convertDataForGraph, IGraphData } from '../../utils';
@@ -18,6 +19,7 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, value }: IBridgeProps) => {
   return (
     <Motion key={router.asPath}>
       <section>
+        <BackButton />
         <p>
           This is the page about the {bridge} bridge, with a tvl of {value}.
         </p>

@@ -19,8 +19,7 @@ const Home: NextPage = () => {
     <Motion key={router.asPath}>
       <menu className={styles.menu}>
         <ol className={styles.list}>
-          Bridges (
-          {convertedData.nodes.filter((node) => node.type === 'bridge').length})
+          <h2>Bridges</h2>
           <li className={styles.item}>
             <div className={styles.head}>
               <p>## name</p>
@@ -43,19 +42,14 @@ const Home: NextPage = () => {
                       <img src={imageSrc} width="20" height="20" alt="" />{' '}
                       <p>{name}</p>
                     </div>
-                    <p>{value}</p>
+                    <p>{value.toFixed(0)}</p>
                   </a>
                 </Link>
               </li>
             ))}
         </ol>
         <ol className={styles.list}>
-          Chains (
-          {
-            convertedData.nodes.filter((node) => node.type === 'blockchain')
-              .length
-          }
-          )
+          <h2>Chains</h2>
           <li className={styles.item}>
             <div className={styles.head}>
               <p>## name</p>
@@ -78,7 +72,7 @@ const Home: NextPage = () => {
                       <img src={imageSrc} width="20" height="20" alt="" />
                       <p>{name}</p>
                     </div>
-                    <p>{value}</p>
+                    <p>{value.toFixed(0)}</p>
                   </a>
                 </Link>
               </li>

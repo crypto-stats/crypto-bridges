@@ -1,7 +1,6 @@
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import type { AppProps } from 'next/app';
 import NextNProgress from 'nextjs-progressbar';
-import { FlexOrienter } from '../components/FlexOrienter';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import HtmlHead from '../components/Heading';
@@ -23,12 +22,10 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             transition={{ duration: 1 }}
           >
             <Header />
-            <FlexOrienter>
-              <NetworkDiagram />
-              <Panel>
-                <Component {...pageProps} key={router.asPath} />
-              </Panel>
-            </FlexOrienter>
+            <NetworkDiagram />
+            <Panel>
+              <Component {...pageProps} key={router.asPath} />
+            </Panel>
             <Footer />
           </m.main>
         </AnimatePresence>
