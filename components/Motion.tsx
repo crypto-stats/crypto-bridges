@@ -15,10 +15,6 @@ const ANIMATIONS: Variants = {
     opacity: 0,
     y: 10,
   },
-  transition: {
-    ease: 'easeOut',
-    duration: 0.5,
-  } as any,
 };
 
 export default function Motion(props: PropsWithChildren) {
@@ -27,7 +23,6 @@ export default function Motion(props: PropsWithChildren) {
       initial={'initial'}
       animate={'animate'}
       exit={'exit'}
-      transition={ANIMATIONS.transition}
       variants={ANIMATIONS}
     >
       {props.children}

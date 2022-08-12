@@ -79,7 +79,7 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
   return graphData;
 }
 
-export function useHorizontalLayout(): boolean {
+export function needsLandscape(): boolean {
   if (window === undefined) return false;
   return (
     window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT <
@@ -93,7 +93,7 @@ interface IDimensions {
 }
 
 export function getDiagramDimensions(): IDimensions {
-  const isLandscape = useHorizontalLayout();
+  const isLandscape = needsLandscape();
   return {
     width: isLandscape ? window.innerWidth - PANEL_WIDTH : window.innerWidth,
     height: isLandscape

@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import styles from '../styles/Panel.module.css';
-import { getDiagramDimensions, useHorizontalLayout } from '../utils';
+import { getDiagramDimensions, needsLandscape } from '../utils';
 
 export default function Content(props: PropsWithChildren) {
   const [isLandscape, setLandscape] = useState(false);
@@ -10,7 +10,7 @@ export default function Content(props: PropsWithChildren) {
   const [graphHeight, setGraphHeight] = useState(0);
   useEffect(() => {
     const updateToSidePanel = () => {
-      const isLandscape = useHorizontalLayout();
+      const isLandscape = needsLandscape();
       setLandscape(isLandscape);
       const dimensions = getDiagramDimensions();
       setGraphWidth(Math.ceil(dimensions.width));

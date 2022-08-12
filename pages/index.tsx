@@ -5,16 +5,17 @@ import useSWR from 'swr';
 import Motion from '../components/Motion';
 import { BRIDGED_VALUE_API_URL } from '../constants';
 import styles from '../styles/index.module.css';
+import type { ICsApiData } from '../utils';
 import { addLeadingZero, convertDataForGraph } from '../utils';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { data, error } = useSWR(BRIDGED_VALUE_API_URL, fetcher);
-  if (error) return <p>Fail</p>;
-  if (!data) return <p>Loading</p>;
-  const convertedData = convertDataForGraph(data);
+  const answer = useSWR(BRIDGED_VALUE_API_URL, fetcher);
+  if (answer.error) return <p>Fail</p>;
+  if (!answer.data) return <p>Loading</p>;
+  const convertedData = convertDataForGraph(answer.data as ICsApiData);
   return (
     <Motion key={router.asPath}>
       <menu className={styles.menu}>

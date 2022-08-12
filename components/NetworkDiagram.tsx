@@ -9,6 +9,7 @@ import style from '../styles/NetworkDiagram.module.css';
 import {
   convertDataForGraph,
   getDiagramDimensions,
+  ICsApiData,
   IGraphData,
   IGraphLink,
   IGraphNode,
@@ -126,7 +127,7 @@ function drawChart(
         const radius = getTvlRadius(d);
         const coord = Math.max(
           PADDING + radius,
-          Math.min(d.x, width - PADDING - radius),
+          Math.min(d.x as number, width - PADDING - radius),
         );
         d.x = coord;
         return coord;
@@ -135,20 +136,21 @@ function drawChart(
         const radius = getTvlRadius(d);
         const coord = Math.max(
           PADDING + radius,
-          Math.min(d.y, height - PADDING - radius),
+          Math.min(d.y as number, height - PADDING - radius),
         );
         d.y = coord;
         return coord;
       });
     text
       .attr('dx', (d: any) => d.x - d.name.split(' ')[0].length * 4.7)
-      .attr('dy', (d: any) => d.y + 5);
+      .attr('dy', (d: any) => (d.y as number) + 5);
     links.attr('d', (d: any) => {
       const dx = d.target.x - d.source.x;
       const dy = d.target.y - d.source.y;
       const dr = Math.sqrt(dx * dx + dy * dy);
       const source = dx > 0 ? d.source : d.target;
       const target = dx > 0 ? d.target : d.source;
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
     });
   }
@@ -162,7 +164,7 @@ export default function NetworkDiagram() {
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
     if (data === undefined) return;
-    const convertedData = convertDataForGraph(data);
+    const convertedData = convertDataForGraph(data as ICsApiData);
     drawChart(svg, convertedData, navigateTo);
   }, [svg, data]);
   if (error) return null;

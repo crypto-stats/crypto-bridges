@@ -50,10 +50,9 @@ export async function getStaticProps({
   const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
     .then((r) => r.json())
     .then(convertDataForGraph);
-  // Assume not undefined as it's the same file.
   const value = data.nodes
     .filter((node) => node.type === 'blockchain')
-    .find((chain) => chain.name === params.chain.split('-').join(' '))!.value;
+    .find((chain) => chain.name === params.chain.split('-').join(' '))?.value;
   return {
     props: { ...params, value },
   };
