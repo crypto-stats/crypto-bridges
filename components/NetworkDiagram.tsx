@@ -137,7 +137,9 @@ function drawGraph(
     .append('image')
     .attr('href', (d: any) => d.imageSrc)
     .attr('width', IMAGE_SIZE_PX)
-    .attr('height', IMAGE_SIZE_PX);
+    .attr('height', IMAGE_SIZE_PX)
+    .style('cursor', 'pointer')
+    .on('click', onClick);
 
   const text = circleGroups
     .append('text')
