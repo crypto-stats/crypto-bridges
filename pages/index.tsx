@@ -43,7 +43,7 @@ const Home: NextPage = () => {
                       <img src={imageSrc} width="20" height="20" alt="" />{' '}
                       <p>{name}</p>
                     </div>
-                    <p>{value.toFixed(0)}</p>
+                    <p>{value?.toFixed(0)}</p>
                   </a>
                 </Link>
               </li>
@@ -73,7 +73,7 @@ const Home: NextPage = () => {
                       <img src={imageSrc} width="20" height="20" alt="" />
                       <p>{name}</p>
                     </div>
-                    <p>{value.toFixed(0)}</p>
+                    <p>{value?.toFixed(0)}</p>
                   </a>
                 </Link>
               </li>

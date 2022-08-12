@@ -26,10 +26,18 @@ interface INode {
     name: string;
     toChain?: string;
     website?: string;
+    category:
+      | 'multisig-dynamic'
+      | 'multisig-hardware'
+      | 'multisig'
+      | 'light-client'
+      | 'native'
+      | 'unknown';
     subtitle: string;
     icon: string | 0;
     fromChain: string;
   };
+  errors: { [key: string]: string };
 }
 
 export interface ICsApiData {
