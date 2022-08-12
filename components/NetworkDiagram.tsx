@@ -171,7 +171,9 @@ function drawGraph(
   function findSelected(path: string): IGraphNode | undefined {
     return path.length === 1
       ? undefined
-      : data.nodes.find((node) => node.name === path.split('/')[2]);
+      : data.nodes.find(
+          (node) => node.name === path.split('/')[2].split('-').join(' '),
+        );
   }
 
   const highlight = () => {
