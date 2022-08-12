@@ -19,6 +19,11 @@ enum COLORS {
   SELECTED = '#D750C8',
 }
 
+enum NODE_AREAS_SHARE {
+  MIN = 0.001,
+  MAX = 0.015,
+}
+
 interface INetworkGraph {
   updateSelected: (path: string) => void;
 }
@@ -31,8 +36,6 @@ const fetcher = (url: string) =>
 const RATIO = 1 / 10000000;
 const PADDING = 40;
 
-const getTvlRadius = (d: any) => Math.sqrt((d.value * RATIO) / Math.PI) * 8;
-
 function drawGraph(
   svgRef: RefObject<SVGSVGElement>,
   data: IGraphData,
@@ -44,6 +47,36 @@ function drawGraph(
   let currentSimulation:
     | d3.Simulation<d3.SimulationNodeDatum, undefined>
     | undefined = undefined;
+
+  // Algorithmic node sizes:
+  // nodeSurface = availableSurface * A * log(B * value)
+  // we want to apply min and max results to control the graph's clarity
+  // and the node repulsion force in the d3 simulation force.
+  // Here we find the constants A and B given returned values from the data
+  // and arbitrary min/max node areas.
+  // (https://math.stackexchange.com/questions/716152/graphing-given-two-points-on-a-graph-find-the-logarithmic-function-that-passes)
+  const sortedNodes = data.nodes.sort((a, b) => a.value - b.value);
+  const maxValue = sortedNodes[sortedNodes.length - 1].value;
+  const minValue = sortedNodes[0].value;
+  const A =
+    (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX) /
+    Math.log(minValue / maxValue);
+  const B = Math.exp(
+    (NODE_AREAS_SHARE.MAX * Math.log(minValue) -
+      NODE_AREAS_SHARE.MIN * Math.log(maxValue)) /
+      (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX),
+  );
+
+  function getTvlRadius(d: any): number {
+    // linear:
+    // return Math.sqrt((d.value * RATIO) / Math.PI) * 8;
+
+    const availableArea = (width - PADDING) * (height - PADDING);
+    const areaShare = A * Math.log(B * d.value);
+    const area = availableArea * areaShare;
+    return Math.sqrt(area / Math.PI);
+  }
+
   const svg = d3.select(svgRef.current);
 
   function onClick(e: PointerEvent, i: IGraphNode) {
@@ -129,6 +162,8 @@ function drawGraph(
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', ticked)
       .on('end', ticked);
+
+    tvlCircles.attr('r', getTvlRadius);
   };
 
   resize();
@@ -236,10 +271,9 @@ export default function NetworkDiagram() {
           {<fegaussianblur
             class="blur"
             result="coloredBlur"
-            stddeviation="6"
+            stddeviation="3"
           ></fegaussianblur>
           <femerge>
-            <femergenode in="coloredBlur"></femergenode>
             <femergenode in="coloredBlur"></femergenode>
             <femergenode in="SourceGraphic"></femergenode>
           </femerge>}
