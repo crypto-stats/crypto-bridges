@@ -120,6 +120,7 @@ function drawGraph(
     .style('cursor', 'pointer')
     .style('stroke', COLORS.DEFAULT)
     .style('fill', 'none')
+    .style('fill-opacity', 0)
     .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
     .on('click', onLineClick);
 
@@ -135,7 +136,7 @@ function drawGraph(
 
   const images = circleGroups
     .append('image')
-    .attr('href', (d: any) => d.imageSrc)
+    .attr('href', (d: any) => d.imageSrc as string)
     .attr('width', IMAGE_SIZE_PX)
     .attr('height', IMAGE_SIZE_PX)
     .style('cursor', 'pointer')
@@ -292,7 +293,7 @@ export default function NetworkDiagram() {
       svg.current.innerHTML = `
       <defs>
         <filter id="glow">
-          {<fegaussianblur
+          <fegaussianblur
             class="blur"
             result="coloredBlur"
             stddeviation="3"
@@ -300,7 +301,7 @@ export default function NetworkDiagram() {
           <femerge>
             <femergenode in="coloredBlur"></femergenode>
             <femergenode in="SourceGraphic"></femergenode>
-          </femerge>}
+          </femerge>
         </filter>
       </defs>`;
     }
