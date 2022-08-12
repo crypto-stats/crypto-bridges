@@ -48,16 +48,17 @@ function drawGraph(
     | d3.Simulation<d3.SimulationNodeDatum, undefined>
     | undefined = undefined;
 
-  // Algorithmic node sizes:
-  // nodeSurface = availableSurface * A * log(B * value)
-  // we want to apply min and max results to control the graph's clarity
+  // Dynamic node sizes:
+  // we want to apply min and max node surfaces to control the graph's clarity
   // and the node repulsion force in the d3 simulation force.
-  // Here we find the constants A and B given returned values from the data
+  // Here we find the constants given returned values from the data
   // and arbitrary min/max node areas.
-  // (https://math.stackexchange.com/questions/716152/graphing-given-two-points-on-a-graph-find-the-logarithmic-function-that-passes)
   const sortedNodes = data.nodes.sort((a, b) => a.value - b.value);
   const maxValue = sortedNodes[sortedNodes.length - 1].value;
   const minValue = sortedNodes[0].value;
+  // Logarithmic constants:
+  // nodeSurface = availableSurface * A * log(B * value)
+  // (https://math.stackexchange.com/questions/716152/graphing-given-two-points-on-a-graph-find-the-logarithmic-function-that-passes)
   const A =
     (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX) /
     Math.log(minValue / maxValue);
@@ -66,15 +67,24 @@ function drawGraph(
       NODE_AREAS_SHARE.MIN * Math.log(maxValue)) /
       (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX),
   );
+  // Linear constants:
+  // nodeSurface = availableSurface * (C * value + D)
+  const C =
+    (NODE_AREAS_SHARE.MAX - NODE_AREAS_SHARE.MIN) / (maxValue - minValue);
+  const D = NODE_AREAS_SHARE.MAX - maxValue * C;
 
   function getTvlRadius(d: any): number {
-    // linear:
-    // return Math.sqrt((d.value * RATIO) / Math.PI) * 8;
-
     const availableArea = (width - PADDING) * (height - PADDING);
-    const areaShare = A * Math.log(B * d.value);
+
+    // linear:
+    const areaShare = C * d.value + D;
     const area = availableArea * areaShare;
     return Math.sqrt(area / Math.PI);
+
+    // logarithmic:
+    // const areaShare = A * Math.log(B * d.value);
+    // const area = availableArea * areaShare;
+    // return Math.sqrt(area / Math.PI);
   }
 
   const svg = d3.select(svgRef.current);
