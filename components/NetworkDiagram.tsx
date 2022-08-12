@@ -59,6 +59,8 @@ function drawGraph(
   function onLineClick(e: PointerEvent, i: IGraphLink) {
     e.preventDefault();
     const source: IGraphNode = i.source as any;
+    selected = source;
+    highlight();
     const newPath = `/${
       source.type === 'bridge' ? 'bridge' : 'chain'
     }/${source.name.split(' ').join('-')}`;
