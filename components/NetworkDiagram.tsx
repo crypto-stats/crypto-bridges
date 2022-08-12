@@ -182,18 +182,31 @@ function drawGraph(
         return COLORS.SELECTED;
       }
     });
-    links.style('stroke', (d: any) => {
-      if (selected === undefined) {
-        return COLORS.DEFAULT;
-      } else if (
-        (selected.type === 'bridge' && selected.name === d.target.name) ||
-        (selected.type === 'blockchain' && selected.name === d.source.name)
-      ) {
-        return COLORS.SELECTED;
-      } else {
-        return COLORS.DEFAULT;
-      }
-    });
+    links
+      .style('stroke', (d: any) => {
+        if (selected === undefined) {
+          return COLORS.DEFAULT;
+        } else if (
+          (selected.type === 'bridge' && selected.name === d.target.name) ||
+          (selected.type === 'blockchain' && selected.name === d.source.name)
+        ) {
+          return COLORS.SELECTED;
+        } else {
+          return COLORS.DEFAULT;
+        }
+      })
+      .style('filter', (d: any) => {
+        if (selected === undefined) {
+          return 'none';
+        } else if (
+          (selected.type === 'bridge' && selected.name === d.target.name) ||
+          (selected.type === 'blockchain' && selected.name === d.source.name)
+        ) {
+          return 'url(#glow)';
+        } else {
+          return 'none';
+        }
+      });
   };
 
   const updateSelected = (path: string) => {
@@ -215,7 +228,21 @@ export default function NetworkDiagram() {
     if (data === undefined) return;
     if (graph !== undefined) return;
     if (svg.current !== null) {
-      svg.current.innerHTML = '';
+      svg.current.innerHTML = `
+      <defs>
+        <filter id="glow">
+          {<fegaussianblur
+            class="blur"
+            result="coloredBlur"
+            stddeviation="6"
+          ></fegaussianblur>
+          <femerge>
+            <femergenode in="coloredBlur"></femergenode>
+            <femergenode in="coloredBlur"></femergenode>
+            <femergenode in="SourceGraphic"></femergenode>
+          </femerge>}
+        </filter>
+      </defs>`;
     }
     const navigateTo = (path: string) =>
       router.push(path, undefined, { scroll: false });
@@ -230,7 +257,7 @@ export default function NetworkDiagram() {
   if (!data) return <p>loading</p>;
   return (
     <div className={style.networkDiagram}>
-      <svg ref={svg} />
+      <svg ref={svg}></svg>
     </div>
   );
 }
