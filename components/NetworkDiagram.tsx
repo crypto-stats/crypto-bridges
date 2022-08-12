@@ -251,7 +251,6 @@ export default function NetworkDiagram() {
     setGraph(g);
     const updateUrl = (path: string) => g.updateSelected(path);
     router.events.on('routeChangeStart', updateUrl);
-    return () => router.events.off('routeChangeStart', updateUrl);
   }, [svg, data, router, graph]);
   if (error) return null;
   if (!data) return <p>loading</p>;
