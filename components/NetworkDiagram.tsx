@@ -24,6 +24,8 @@ enum NODE_AREAS_SHARE {
   MAX = 0.015,
 }
 
+const IMAGE_SIZE_PX = 30;
+
 interface INetworkGraph {
   updateSelected: (path: string) => void;
 }
@@ -131,16 +133,23 @@ function drawGraph(
     .style('cursor', 'pointer')
     .on('click', onClick);
 
+  const images = circleGroups
+    .append('image')
+    .attr('href', (d: any) => d.imageSrc)
+    .attr('width', IMAGE_SIZE_PX)
+    .attr('height', IMAGE_SIZE_PX);
+
   const text = circleGroups
     .append('text')
     .style('fill', '#ccc')
     .style('cursor', 'pointer')
     .attr('font-size', '1em')
     .on('click', onClick);
-  text.append('tspan').text((d) => d.name.split(' ')[0]);
+  text.append('tspan');
+  //.text((d) => d.name.split(' ')[0]);
   text
     .append('tspan')
-    .text((d) => d.name.split(' ')[1] ?? '')
+    //.text((d) => d.name.split(' ')[1] ?? '')
     .attr('dy', '20')
     .attr('dx', (d: any) => -d.name.split(' ')[1]?.length * 9 || '0');
 
@@ -202,6 +211,9 @@ function drawGraph(
     text
       .attr('dx', (d: any) => d.x - d.name.split(' ')[0].length * 4.7)
       .attr('dy', (d: any) => (d.y as number) + 5);
+    images
+      .attr('x', (d: any) => d.x - IMAGE_SIZE_PX / 2)
+      .attr('y', (d: any) => d.y - IMAGE_SIZE_PX / 2);
     links.attr('d', (d: any) => {
       const dx = d.target.x - d.source.x;
       const dy = d.target.y - d.source.y;
