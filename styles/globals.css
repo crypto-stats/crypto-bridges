@@ -15,6 +15,22 @@ svg text {
   -ms-user-select: none;
   user-select: none;
 }
+.dash {
+  stroke-dashoffset: 0;
+  animation: dash 3600s linear infinite;
+}
+.dash-reverse {
+  animation: dash 3600s linear reverse infinite;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 50000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 
 svg text::selection {
   background: none;

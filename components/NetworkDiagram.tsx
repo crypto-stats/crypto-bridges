@@ -15,7 +15,7 @@ import {
 } from '../utils';
 
 enum COLORS {
-  DEFAULT = '#6d7381',
+  DEFAULT = '#304273',
   SELECTED = '#D750C8',
 }
 
@@ -117,8 +117,10 @@ function drawGraph(
     .data(data.links)
     .enter()
     .append('path')
+    .attr('class', 'dash')
     .style('cursor', 'pointer')
     .style('stroke', COLORS.DEFAULT)
+    .style('stroke-dasharray', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
     .style('fill', 'none')
     .style('fill-opacity', 0)
     .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
@@ -217,15 +219,19 @@ function drawGraph(
     images
       .attr('x', (d: any) => d.x - IMAGE_SIZE_PX / 2)
       .attr('y', (d: any) => d.y - IMAGE_SIZE_PX / 2);
-    links.attr('d', (d: any) => {
-      const dx = d.target.x - d.source.x;
-      const dy = d.target.y - d.source.y;
-      const dr = Math.sqrt(dx * dx + dy * dy);
-      const source = dx > 0 ? d.source : d.target;
-      const target = dx > 0 ? d.target : d.source;
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
-    });
+    links
+      .attr('d', (d: any) => {
+        const dx = d.target.x - d.source.x;
+        const dy = d.target.y - d.source.y;
+        const dr = Math.sqrt(dx * dx + dy * dy);
+        const source = dx > 0 ? d.source : d.target;
+        const target = dx > 0 ? d.target : d.source;
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
+      })
+      .attr('class', (d: any) =>
+        d.target.x - d.source.x > 0 ? 'dash' : 'dash-reverse',
+      );
   }
 
   function findSelected(path: string): IGraphNode | undefined {
