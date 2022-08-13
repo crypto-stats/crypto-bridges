@@ -37,16 +37,17 @@ svg text {
   stroke: #d750c8;
 }
 .dash {
-  stroke-dashoffset: 0;
+  pointer-events: none;
   animation: dash 3600s linear infinite;
 }
 .dash-reverse {
+  pointer-events: none;
   animation: dash 3600s linear reverse infinite;
 }
 
 @keyframes dash {
   from {
-    stroke-dashoffset: 50000;
+    stroke-dashoffset: 25000;
   }
   to {
     stroke-dashoffset: 0;

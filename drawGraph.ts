@@ -70,21 +70,34 @@ export function drawGraph(
 
   const svg = select(svgRef.current);
 
-  const links = svg
+  const clickablePaths = svg
     .selectAll('line')
     .data(data.links)
     .enter()
     .append('path')
-    .style('cursor', 'pointer')
-    .style('stroke-dasharray', MIN_PATH_WIDTH)
     .style('fill', 'none')
     .style('fill-opacity', 0)
+    .style('cursor', 'pointer')
+    .style('stroke', 'rgba(255,255,255,0)')
+    .style('stroke-opacity', 0)
     .style('stroke-width', getPathWidth)
+    .on('mouseover', onMouseOverLink)
+    .on('mouseout', onMouseOut)
     .on('click', function (e: MouseEvent, path: IGraphLink) {
       e.preventDefault();
       const sourceNode: IGraphNode = path.source as any;
       navigateTo(getPathFromNode(sourceNode));
-    })
+    });
+
+  const paths = svg
+    .selectAll('line')
+    .data(data.links)
+    .enter()
+    .append('path')
+    .style('stroke-dasharray', MIN_PATH_WIDTH)
+    .style('fill', 'none')
+    .style('fill-opacity', 0)
+    .style('stroke-width', getPathWidth)
     .classed('dash', true)
     .classed('highlight', true)
     .classed('path-default', true);
@@ -135,7 +148,7 @@ export function drawGraph(
 
   function highlightNode(node: IGraphNode) {
     const connectedNodeNames: string[] = [];
-    links
+    paths
       .classed('path-selected', (d: any) => {
         if (d.source.name === node.name || d.target.name === node.name) {
           connectedNodeNames.push(d.source.name as string);
@@ -172,16 +185,20 @@ export function drawGraph(
         ? `url(#${IMAGE_GLOW_ID})`
         : 'none';
     });
-    links.classed('path-hovered', false).style('filter', function () {
+    paths.classed('path-hovered', false).style('filter', function () {
       return select(this).classed('path-selected')
         ? `url(#${GLOW_ID})`
         : 'none';
     });
   }
 
+  function onMouseOverLink(e: MouseEvent, path: IGraphLink) {
+    onMouseOver(e, path.source);
+  }
+
   function onMouseOver(e: MouseEvent, node: IGraphNode) {
     const connectedNodeNames: string[] = [];
-    links
+    paths
       .classed('path-hovered', (d: any) => {
         if (d.source.name === node.name || d.target.name === node.name) {
           connectedNodeNames.push(d.source.name as string);
@@ -312,7 +329,8 @@ export function drawGraph(
       .attr('height', (d: any) => getTvlRadius(d) * 2)
       .attr('x', (d: any) => d.x - getTvlRadius(d))
       .attr('y', (d: any) => d.y - getTvlRadius(d));
-    links.style('stroke-width', getPathWidth);
+    paths.style('stroke-width', getPathWidth);
+    clickablePaths.style('stroke-width', getPathWidth);
   }
 
   function ticked() {
@@ -341,18 +359,20 @@ export function drawGraph(
     images
       .attr('x', (d: any) => d.x - getTvlRadius(d))
       .attr('y', (d: any) => d.y - getTvlRadius(d));
-    links
-      .attr('d', (d: any) => {
-        const dx = d.target.x - d.source.x;
-        const dy = d.target.y - d.source.y;
-        const dr = Math.sqrt(dx * dx + dy * dy);
-        const source = dx > 0 ? d.source : d.target;
-        const target = dx > 0 ? d.target : d.source;
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
-      })
+    const getPath = (d: any) => {
+      const dx = d.target.x - d.source.x;
+      const dy = d.target.y - d.source.y;
+      const dr = Math.sqrt(dx * dx + dy * dy);
+      const source = dx > 0 ? d.source : d.target;
+      const target = dx > 0 ? d.target : d.source;
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
+    };
+    paths
+      .attr('d', getPath)
       .classed('dash', (d: any) => d.target.x - d.source.x > 0)
       .classed('dash-reverse', (d: any) => d.target.x - d.source.x <= 0);
+    clickablePaths.attr('d', getPath);
   }
 
   function findSelected(path: string): IGraphNode | undefined {
@@ -369,7 +389,7 @@ export function drawGraph(
       highlightNode(selected);
     } else {
       tvlCircles.classed('circle-selected', false).style('filter', 'none');
-      links.classed('path-selected', false).style('filter', 'none');
+      paths.classed('path-selected', false).style('filter', 'none');
       images.style('filter', 'none');
     }
   }
