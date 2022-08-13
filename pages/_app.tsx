@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import HtmlHead from '../components/Heading';
 import NetworkDiagram from '../components/NetworkDiagram';
 import Panel from '../components/Panel';
-import { ORANGE_1 } from '../constants';
+import { GRAPH_COLORS } from '../constants';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     <>
       <HtmlHead />
       <LazyMotion features={domAnimation}>
-        <NextNProgress color={ORANGE_1} height={4} />
+        <NextNProgress color={GRAPH_COLORS.DEFAULT} height={4} />
         <AnimatePresence exitBeforeEnter>
           <m.main
             initial={{ opacity: 0 }}

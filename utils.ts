@@ -1,4 +1,9 @@
-import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
+import {
+  FOOTER_HEIGHT,
+  HEADER_HEIGHT,
+  NODE_AREAS_SHARE,
+  PANEL_WIDTH,
+} from './constants';
 
 export interface IGraphNode {
   name: string;
@@ -112,4 +117,28 @@ export function getDiagramDimensions(): IDimensions {
 
 export function addLeadingZero(n: number) {
   return n < 10 ? `0${n}` : `${n}`;
+}
+
+// Logarithmic constants:
+// node radius distribution follows A * log(B * value)
+// (https://math.stackexchange.com/questions/716152/graphing-given-two-points-on-a-graph-find-the-logarithmic-function-that-passes)
+export function findLogParameters(min: number, max: number): [number, number] {
+  const A = (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX) / Math.log(min / max);
+  const B = Math.exp(
+    (NODE_AREAS_SHARE.MAX * Math.log(min) -
+      NODE_AREAS_SHARE.MIN * Math.log(max)) /
+      (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX),
+  );
+  return [A, B];
+}
+
+// Linear constants:
+// node radius distribution follows (A * value + B)
+export function findLinearParameters(
+  min: number,
+  max: number,
+): [number, number] {
+  const A = (NODE_AREAS_SHARE.MAX - NODE_AREAS_SHARE.MIN) / (max - min);
+  const B = NODE_AREAS_SHARE.MAX - max * A;
+  return [A, B];
 }
