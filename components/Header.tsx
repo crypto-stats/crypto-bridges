@@ -26,8 +26,10 @@ export default function Header() {
   return (
     <header className={styles.header} ref={el}>
       <Link href={'/'} passHref={true} scroll={false}>
-        <a className={styles.aContainer}>
-          <Image src="/logo.png" width={45} height={45} />{' '}
+        <a>
+          <span className={styles.verticalAlign}>
+            <Image src="/logo.png" width={45} height={45} alt="" />
+          </span>
           <h1>Cryptobridges.info</h1>
         </a>
       </Link>

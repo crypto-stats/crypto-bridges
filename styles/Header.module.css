@@ -1,15 +1,16 @@
-.aContainer {
-  display: flex;
-  align-items: center;
-}
-
 .header {
-  padding: 30px 40px;
+  padding: 20px;
   box-sizing: border-box;
+  text-align: center;
 }
 .header a {
   text-decoration: none;
 }
 .header h1 {
   margin: 0 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.verticalAlign {
+  vertical-align: middle;
 }

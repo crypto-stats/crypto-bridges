@@ -1,8 +1,5 @@
-.menuLandscape {
-  padding: 0px 40px 0px 0px;
-}
-.menuPortrait {
-  padding: 0 20px;
+.noPadding {
+  padding: 0;
 }
 .list {
   display: flex;

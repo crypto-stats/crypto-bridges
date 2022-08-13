@@ -2,6 +2,7 @@
   box-sizing: border-box;
   display: inline-block;
   width: 100%;
+  padding: 0 20px 40px 20px;
 }
 .sidePanel {
   position: absolute;
@@ -9,6 +10,6 @@
   top: 0;
   height: 100%;
   width: 600px;
-  padding: 40px 0;
+  padding: 20px 40px 20px 0;
   box-sizing: border-box;
 }

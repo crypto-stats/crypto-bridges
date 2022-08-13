@@ -78,7 +78,7 @@ svg text::selection {
 }
 .simplebar-track {
   background: #0a021a;
-  right: 15px;
+  right: -20px;
 }
 .simplebar-track.simplebar-vertical {
   width: 6px;
