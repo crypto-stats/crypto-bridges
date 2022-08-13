@@ -20,3 +20,4 @@ export const MIN_PATH_WIDTH = 4;
 export const IMAGE_SIZE_PX = 30;
 
 export const GLOW_ID = 'glow';
+export const IMAGE_GLOW_ID = 'image-glow';

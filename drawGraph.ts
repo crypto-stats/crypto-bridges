@@ -9,7 +9,7 @@ import {
 import type { RefObject } from 'react';
 import {
   GLOW_ID,
-  IMAGE_SIZE_PX,
+  IMAGE_GLOW_ID,
   MIN_PATH_WIDTH,
   NODE_AREAS_SHARE,
 } from './constants';
@@ -108,8 +108,6 @@ export function drawGraph(
   const images = circleGroups
     .append('image')
     .attr('href', (d: any) => d.imageSrc as string)
-    .attr('width', IMAGE_SIZE_PX)
-    .attr('height', IMAGE_SIZE_PX)
     .style('cursor', 'pointer')
     .on('mouseover', onMouseOver)
     .on('mouseout', onMouseOut)
@@ -158,15 +156,20 @@ export function drawGraph(
       )
       .style('filter', (c: any) =>
         connectedNodeNames.indexOf(c.name as string) > -1
-          ? `url(#${GLOW_ID})`
+          ? `url(#${IMAGE_GLOW_ID})`
           : 'none',
       );
+    images.style('filter', (d: any) =>
+      connectedNodeNames.indexOf(d.name as string) > -1
+        ? `url(#${IMAGE_GLOW_ID})`
+        : 'none',
+    );
   }
 
   function onMouseOut() {
     tvlCircles.classed('circle-hovered', false).style('filter', function () {
       return select(this).classed('circle-selected')
-        ? `url(#${GLOW_ID})`
+        ? `url(#${IMAGE_GLOW_ID})`
         : 'none';
     });
     links.classed('path-hovered', false).style('filter', function () {
@@ -202,7 +205,7 @@ export function drawGraph(
       .style('filter', function (c: any) {
         return connectedNodeNames.indexOf(c.name as string) > -1 ||
           select(this).classed('circle-selected')
-          ? `url(#${GLOW_ID})`
+          ? `url(#${IMAGE_GLOW_ID})`
           : 'none';
       });
   }
@@ -304,6 +307,11 @@ export function drawGraph(
       .on('end', ticked);
 
     tvlCircles.attr('r', getTvlRadius);
+    images
+      .attr('width', (d: any) => getTvlRadius(d) * 2)
+      .attr('height', (d: any) => getTvlRadius(d) * 2)
+      .attr('x', (d: any) => d.x - getTvlRadius(d))
+      .attr('y', (d: any) => d.y - getTvlRadius(d));
     links.style('stroke-width', getPathWidth);
   }
 
@@ -331,8 +339,8 @@ export function drawGraph(
       .attr('dx', (d: any) => d.x - d.name.split(' ')[0].length * 4.7)
       .attr('dy', (d: any) => (d.y as number) + 5);
     images
-      .attr('x', (d: any) => d.x - IMAGE_SIZE_PX / 2)
-      .attr('y', (d: any) => d.y - IMAGE_SIZE_PX / 2);
+      .attr('x', (d: any) => d.x - getTvlRadius(d))
+      .attr('y', (d: any) => d.y - getTvlRadius(d));
     links
       .attr('d', (d: any) => {
         const dx = d.target.x - d.source.x;
