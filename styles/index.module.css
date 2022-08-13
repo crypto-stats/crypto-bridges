@@ -1,6 +1,8 @@
-.menu {
-  padding: 0px 40px 0px 20px;
-  text-align: center;
+.menuLandscape {
+  padding: 0px 40px 0px 0px;
+}
+.menuPortrait {
+  padding: 0 20px;
 }
 .list {
   display: flex;

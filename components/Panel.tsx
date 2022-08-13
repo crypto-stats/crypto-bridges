@@ -7,19 +7,17 @@ import { getDiagramDimensions, needsLandscape } from '../utils';
 export default function Content(props: PropsWithChildren) {
   const [isLandscape, setLandscape] = useState(false);
   const [graphWidth, setGraphWidth] = useState(0);
-  const [graphHeight, setGraphHeight] = useState(0);
   useEffect(() => {
-    const updateToSidePanel = () => {
+    const updatePanel = () => {
       const isLandscape = needsLandscape();
       setLandscape(isLandscape);
-      const dimensions = getDiagramDimensions();
-      setGraphWidth(Math.ceil(dimensions.width));
-      setGraphHeight(Math.ceil(dimensions.height));
+      const { width } = getDiagramDimensions();
+      setGraphWidth(Math.ceil(width));
       document.body.style.overflowY = isLandscape ? 'hidden' : 'auto';
     };
-    updateToSidePanel();
-    window.addEventListener('resize', updateToSidePanel);
-    return () => window.removeEventListener('resize', updateToSidePanel);
+    updatePanel();
+    window.addEventListener('resize', updatePanel);
+    return () => window.removeEventListener('resize', updatePanel);
   }, []);
   return (
     <div
@@ -29,16 +27,19 @@ export default function Content(props: PropsWithChildren) {
         maxHeight: isLandscape ? `100%` : 'inherit',
       }}
     >
-      <SimpleBar
-        style={{
-          maxHeight: isLandscape ? `100%` : 'inherit',
-          width: '100%',
-        }}
-        forceVisible="y"
-        autoHide={false}
-      >
-        {props.children}
-      </SimpleBar>
+      {isLandscape && (
+        <SimpleBar
+          style={{
+            maxHeight: '100%',
+            width: '100%',
+          }}
+          forceVisible="y"
+          autoHide={false}
+        >
+          {props.children}
+        </SimpleBar>
+      )}
+      {!isLandscape && props.children}
     </div>
   );
 }
