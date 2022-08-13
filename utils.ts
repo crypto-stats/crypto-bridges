@@ -89,10 +89,7 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
 
 export function needsLandscape(): boolean {
   if (window === undefined) return false;
-  return (
-    window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT <
-    window.innerWidth - PANEL_WIDTH + 250
-  );
+  return window.innerWidth - PANEL_WIDTH > PANEL_WIDTH;
 }
 
 interface IDimensions {

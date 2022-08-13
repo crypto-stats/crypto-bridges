@@ -22,7 +22,7 @@ export default function NetworkDiagram() {
     if (svg.current !== null) {
       svg.current.innerHTML = `
       <defs>
-      <filter id="${GLOW_ID}" width="180%" height="180%" x="-40%" y="-40%">
+      <filter id="${GLOW_ID}" width="200%" height="200%" x="-50%" y="-50%">
         <fegaussianblur
           class="blur"
           result="coloredBlur"
