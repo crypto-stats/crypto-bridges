@@ -1,15 +1,14 @@
-import type { SimulationNodeDatum } from 'd3';
 import {
   forceCenter,
   forceLink,
   forceManyBody,
   forceSimulation,
   select,
+  SimulationNodeDatum,
 } from 'd3';
 import type { RefObject } from 'react';
 import {
   GLOW_ID,
-  GRAPH_COLORS,
   IMAGE_SIZE_PX,
   MIN_PATH_WIDTH,
   NODE_AREAS_SHARE,
@@ -45,7 +44,6 @@ export function drawGraph(
   data: IGraphData,
   navigateTo: (path: string) => void,
 ): INetworkGraph {
-  let selected: IGraphNode | undefined;
   let width = 0,
     height = 0;
   let availableArea = (width - PADDING) * (height - PADDING);
@@ -77,14 +75,19 @@ export function drawGraph(
     .data(data.links)
     .enter()
     .append('path')
-    .attr('class', 'dash')
     .style('cursor', 'pointer')
-    .style('stroke', GRAPH_COLORS.DEFAULT)
-    .style('stroke-dasharray', MIN_PATH_WIDTH * 2)
+    .style('stroke-dasharray', MIN_PATH_WIDTH)
     .style('fill', 'none')
     .style('fill-opacity', 0)
     .style('stroke-width', getPathWidth)
-    .on('click', onLineClick);
+    .on('click', function (e: MouseEvent, path: IGraphLink) {
+      e.preventDefault();
+      const sourceNode: IGraphNode = path.source as any;
+      navigateTo(getPathFromNode(sourceNode));
+    })
+    .classed('dash', true)
+    .classed('highlight', true)
+    .classed('path-default', true);
 
   const circleGroups = svg
     .selectAll('circle')
@@ -95,9 +98,12 @@ export function drawGraph(
   const tvlCircles = circleGroups
     .append('circle')
     .attr('r', getTvlRadius)
-    .style('fill', GRAPH_COLORS.DEFAULT)
     .style('cursor', 'pointer')
-    .on('click', onClick);
+    .on('click', onClick)
+    .on('mouseover', onMouseOver)
+    .on('mouseout', onMouseOut)
+    .classed('highlight', true)
+    .classed('circle-default', true);
 
   const images = circleGroups
     .append('image')
@@ -105,6 +111,8 @@ export function drawGraph(
     .attr('width', IMAGE_SIZE_PX)
     .attr('height', IMAGE_SIZE_PX)
     .style('cursor', 'pointer')
+    .on('mouseover', onMouseOver)
+    .on('mouseout', onMouseOut)
     .on('click', onClick);
 
   const text = circleGroups
@@ -112,7 +120,9 @@ export function drawGraph(
     .style('fill', '#ccc')
     .style('cursor', 'pointer')
     .attr('font-size', '1em')
-    .on('click', onClick);
+    .on('click', function (e: MouseEvent, d: any) {
+      console.log(d);
+    });
   text.append('tspan');
   //.text((d) => d.name.split(' ')[0]);
   text
@@ -124,6 +134,84 @@ export function drawGraph(
   resize();
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
+
+  function highlightNode(node: IGraphNode) {
+    const connectedNodeNames: string[] = [];
+    links
+      .classed('path-selected', (d: any) => {
+        if (d.source.name === node.name || d.target.name === node.name) {
+          connectedNodeNames.push(d.source.name as string);
+          connectedNodeNames.push(d.target.name as string);
+          return true;
+        }
+        return false;
+      })
+      .style('filter', (d: any) =>
+        d.source.name === node.name || d.target.name === node.name
+          ? `url(#${GLOW_ID})`
+          : 'none',
+      );
+    tvlCircles
+      .classed(
+        'circle-selected',
+        (c: any) => connectedNodeNames.indexOf(c.name as string) > -1,
+      )
+      .style('filter', (c: any) =>
+        connectedNodeNames.indexOf(c.name as string) > -1
+          ? `url(#${GLOW_ID})`
+          : 'none',
+      );
+  }
+
+  function onMouseOut() {
+    tvlCircles.classed('circle-hovered', false).style('filter', function () {
+      return select(this).classed('circle-selected')
+        ? `url(#${GLOW_ID})`
+        : 'none';
+    });
+    links.classed('path-hovered', false).style('filter', function () {
+      return select(this).classed('path-selected')
+        ? `url(#${GLOW_ID})`
+        : 'none';
+    });
+  }
+
+  function onMouseOver(e: MouseEvent, node: IGraphNode) {
+    const connectedNodeNames: string[] = [];
+    links
+      .classed('path-hovered', (d: any) => {
+        if (d.source.name === node.name || d.target.name === node.name) {
+          connectedNodeNames.push(d.source.name as string);
+          connectedNodeNames.push(d.target.name as string);
+          return true;
+        }
+        return false;
+      })
+      .style('filter', function (d: any) {
+        return d.source.name === node.name ||
+          d.target.name === node.name ||
+          select(this).classed('path-selected')
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
+    tvlCircles
+      .classed(
+        'circle-hovered',
+        (c: any) => connectedNodeNames.indexOf(c.name as string) > -1,
+      )
+      .style('filter', function (c: any) {
+        return connectedNodeNames.indexOf(c.name as string) > -1 ||
+          select(this).classed('circle-selected')
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
+  }
+
+  function onClick(e: MouseEvent, node: IGraphNode) {
+    e.preventDefault();
+    highlightNode(node);
+    navigateTo(getPathFromNode(node));
+  }
 
   function getPathWidthParameters(): [number, number] {
     const maxNodeArea = NODE_AREAS_SHARE.MAX * availableArea;
@@ -156,7 +244,6 @@ export function drawGraph(
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
         const width = kAP * d.tvl + kBP;
-        console.log(width);
         return width;
       }
       case DISTRIBUTION.LOGARITHMIC: {
@@ -185,21 +272,6 @@ export function drawGraph(
     return `/${n.type === 'bridge' ? 'bridge' : 'chain'}/${n.name
       .split(' ')
       .join('-')}`;
-  }
-
-  function onClick(e: PointerEvent, i: IGraphNode) {
-    e.preventDefault();
-    selected = i;
-    highlight();
-    navigateTo(getPathFromNode(i));
-  }
-
-  function onLineClick(e: PointerEvent, i: IGraphLink) {
-    e.preventDefault();
-    const source: IGraphNode = i.source as any;
-    selected = source;
-    highlight();
-    navigateTo(getPathFromNode(source));
   }
 
   function resize() {
@@ -233,7 +305,6 @@ export function drawGraph(
 
     tvlCircles.attr('r', getTvlRadius);
     links.style('stroke-width', getPathWidth);
-    // links.style('stroke-dasharray', getPathWidth);
   }
 
   function ticked() {
@@ -272,9 +343,8 @@ export function drawGraph(
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
       })
-      .attr('class', (d: any) =>
-        d.target.x - d.source.x > 0 ? 'dash' : 'dash-reverse',
-      );
+      .classed('dash', (d: any) => d.target.x - d.source.x > 0)
+      .classed('dash-reverse', (d: any) => d.target.x - d.source.x <= 0);
   }
 
   function findSelected(path: string): IGraphNode | undefined {
@@ -285,44 +355,14 @@ export function drawGraph(
         );
   }
 
-  function highlight() {
-    tvlCircles.style('fill', (d: any) => {
-      if (selected === undefined || d.name !== selected.name) {
-        return GRAPH_COLORS.DEFAULT;
-      } else {
-        return GRAPH_COLORS.SELECTED;
-      }
-    });
-    links
-      .style('stroke', (d: any) => {
-        if (selected === undefined) {
-          return GRAPH_COLORS.DEFAULT;
-        } else if (
-          (selected.type === 'bridge' && selected.name === d.target.name) ||
-          (selected.type === 'blockchain' && selected.name === d.source.name)
-        ) {
-          return GRAPH_COLORS.SELECTED;
-        } else {
-          return GRAPH_COLORS.DEFAULT;
-        }
-      })
-      .style('filter', (d: any) => {
-        if (selected === undefined) {
-          return 'none';
-        } else if (
-          (selected.type === 'bridge' && selected.name === d.target.name) ||
-          (selected.type === 'blockchain' && selected.name === d.source.name)
-        ) {
-          return `url(#${GLOW_ID})`;
-        } else {
-          return 'none';
-        }
-      });
-  }
-
   function updateSelected(path: string) {
-    selected = findSelected(path);
-    highlight();
+    const selected = findSelected(path);
+    if (selected !== undefined) {
+      highlightNode(selected);
+    } else {
+      tvlCircles.classed('circle-selected', false).style('filter', 'none');
+      links.classed('path-selected', false).style('filter', 'none');
+    }
   }
 
   return { updateSelected };

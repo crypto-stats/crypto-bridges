@@ -15,7 +15,7 @@ export enum NODE_AREAS_SHARE {
   MAX = 0.015,
 }
 
-export const MIN_PATH_WIDTH = 2;
+export const MIN_PATH_WIDTH = 4;
 
 export const IMAGE_SIZE_PX = 30;
 

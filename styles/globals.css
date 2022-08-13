@@ -15,6 +15,27 @@ svg text {
   -ms-user-select: none;
   user-select: none;
 }
+.highlight {
+  transition: fill 400ms ease, stroke 400ms ease;
+}
+.circle-default {
+  fill: #304273;
+}
+.circle-hovered {
+  fill: #712ebb;
+}
+.circle-selected {
+  fill: #d750c8;
+}
+.path-default {
+  stroke: #304273;
+}
+.path-hovered {
+  stroke: #712ebb;
+}
+.path-selected {
+  stroke: #d750c8;
+}
 .dash {
   stroke-dashoffset: 0;
   animation: dash 3600s linear infinite;
