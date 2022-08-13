@@ -33,7 +33,7 @@ export default function NetworkDiagram() {
           <femergenode in="SourceGraphic"></femergenode>
         </femerge>
       </filter>
-      <filter id="${IMAGE_GLOW_ID}" width="400%" height="400%" x="-100%" y="-100%">
+      <filter id="${IMAGE_GLOW_ID}" width="200%" height="200%" x="-50%" y="-50%">
         <fegaussianblur
           class="blur"
           result="coloredBlur"
