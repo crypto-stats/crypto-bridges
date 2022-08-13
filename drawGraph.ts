@@ -85,8 +85,8 @@ export function drawGraph(
     .on('mouseout', onMouseOut)
     .on('click', function (e: MouseEvent, path: IGraphLink) {
       e.preventDefault();
-      const sourceNode: IGraphNode = path.source as any;
-      navigateTo(getPathFromNode(sourceNode));
+      const targetNode: IGraphNode = path.target as any;
+      navigateTo(getPathFromNode(targetNode));
     });
 
   const paths = svg
@@ -193,7 +193,7 @@ export function drawGraph(
   }
 
   function onMouseOverLink(e: MouseEvent, path: IGraphLink) {
-    onMouseOver(e, path.source);
+    onMouseOver(e, path.target as any as IGraphNode);
   }
 
   function onMouseOver(e: MouseEvent, node: IGraphNode) {
