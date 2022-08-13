@@ -37,10 +37,9 @@ export default function NetworkDiagram() {
         <fegaussianblur
           class="blur"
           result="coloredBlur"
-          stddeviation="15"
+          stddeviation="10"
         ></fegaussianblur>
         <femerge>
-        <femergenode in="coloredBlur"></femergenode>
         <femergenode in="coloredBlur"></femergenode>
           <femergenode in="SourceGraphic"></femergenode>
         </femerge>

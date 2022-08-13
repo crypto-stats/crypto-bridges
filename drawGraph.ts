@@ -370,6 +370,7 @@ export function drawGraph(
     } else {
       tvlCircles.classed('circle-selected', false).style('filter', 'none');
       links.classed('path-selected', false).style('filter', 'none');
+      images.style('filter', 'none');
     }
   }
 
