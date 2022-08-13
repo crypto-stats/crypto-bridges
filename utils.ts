@@ -1,9 +1,4 @@
-import {
-  FOOTER_HEIGHT,
-  HEADER_HEIGHT,
-  NODE_AREAS_SHARE,
-  PANEL_WIDTH,
-} from './constants';
+import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
 
 export interface IGraphNode {
   name: string;
@@ -122,12 +117,16 @@ export function addLeadingZero(n: number) {
 // Logarithmic constants:
 // node radius distribution follows A * log(B * value)
 // (https://math.stackexchange.com/questions/716152/graphing-given-two-points-on-a-graph-find-the-logarithmic-function-that-passes)
-export function findLogParameters(min: number, max: number): [number, number] {
-  const A = (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX) / Math.log(min / max);
+export function findLogParameters(
+  minInput: number,
+  maxInput: number,
+  minOutput: number,
+  maxOutput: number,
+): [number, number] {
+  const A = (minOutput - maxOutput) / Math.log(minInput / maxInput);
   const B = Math.exp(
-    (NODE_AREAS_SHARE.MAX * Math.log(min) -
-      NODE_AREAS_SHARE.MIN * Math.log(max)) /
-      (NODE_AREAS_SHARE.MIN - NODE_AREAS_SHARE.MAX),
+    (maxOutput * Math.log(minInput) - minOutput * Math.log(maxInput)) /
+      (minOutput - maxOutput),
   );
   return [A, B];
 }
@@ -135,10 +134,12 @@ export function findLogParameters(min: number, max: number): [number, number] {
 // Linear constants:
 // node radius distribution follows (A * value + B)
 export function findLinearParameters(
-  min: number,
-  max: number,
+  minInput: number,
+  maxInput: number,
+  minOutput: number,
+  maxOutput: number,
 ): [number, number] {
-  const A = (NODE_AREAS_SHARE.MAX - NODE_AREAS_SHARE.MIN) / (max - min);
-  const B = NODE_AREAS_SHARE.MAX - max * A;
+  const A = (maxOutput - minOutput) / (maxInput - minInput);
+  const B = maxOutput - maxInput * A;
   return [A, B];
 }

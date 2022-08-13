@@ -1,7 +1,19 @@
 import type { SimulationNodeDatum } from 'd3';
-import d3 from 'd3';
+import {
+  forceCenter,
+  forceLink,
+  forceManyBody,
+  forceSimulation,
+  select,
+} from 'd3';
 import type { RefObject } from 'react';
-import { GLOW_ID, GRAPH_COLORS, IMAGE_SIZE_PX } from './constants';
+import {
+  GLOW_ID,
+  GRAPH_COLORS,
+  IMAGE_SIZE_PX,
+  MIN_PATH_WIDTH,
+  NODE_AREAS_SHARE,
+} from './constants';
 import {
   findLinearParameters,
   findLogParameters,
@@ -10,8 +22,6 @@ import {
   IGraphLink,
   IGraphNode,
 } from './utils';
-
-const RATIO = 1 / 10000000;
 
 const PADDING = 40;
 
@@ -38,18 +48,29 @@ export function drawGraph(
   let selected: IGraphNode | undefined;
   let width = 0,
     height = 0;
+  let availableArea = (width - PADDING) * (height - PADDING);
   let currentSimulation:
     | d3.Simulation<d3.SimulationNodeDatum, undefined>
     | undefined = undefined;
 
   const distribution: DISTRIBUTION = DISTRIBUTION.LINEAR;
   const sortedNodes = data.nodes.sort((a, b) => a.value - b.value);
-  const maxValue = sortedNodes[sortedNodes.length - 1].value;
-  const minValue = sortedNodes[0].value;
-  const [kLogA, kLogB] = findLogParameters(minValue, maxValue);
-  const [kLinA, kLinB] = findLinearParameters(minValue, maxValue);
+  const [kLogAN, kLogBN] = findLogParameters(
+    sortedNodes[0].value,
+    sortedNodes[sortedNodes.length - 1].value,
+    NODE_AREAS_SHARE.MIN,
+    NODE_AREAS_SHARE.MAX,
+  );
+  const [kLinAN, kLinBN] = findLinearParameters(
+    sortedNodes[0].value,
+    sortedNodes[sortedNodes.length - 1].value,
+    NODE_AREAS_SHARE.MIN,
+    NODE_AREAS_SHARE.MAX,
+  );
+  const sortedLinks = data.links.sort((a, b) => a.tvl - b.tvl);
+  let [kAP, kBP] = getPathWidthParameters();
 
-  const svg = d3.select(svgRef.current);
+  const svg = select(svgRef.current);
 
   const links = svg
     .selectAll('line')
@@ -59,10 +80,10 @@ export function drawGraph(
     .attr('class', 'dash')
     .style('cursor', 'pointer')
     .style('stroke', GRAPH_COLORS.DEFAULT)
-    .style('stroke-dasharray', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
+    .style('stroke-dasharray', MIN_PATH_WIDTH * 2)
     .style('fill', 'none')
     .style('fill-opacity', 0)
-    .style('stroke-width', (d) => Math.log((d.tvl * RATIO) / 3) * 5)
+    .style('stroke-width', getPathWidth)
     .on('click', onLineClick);
 
   const circleGroups = svg
@@ -104,16 +125,56 @@ export function drawGraph(
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
 
-  function getTvlRadius(d: any): number {
-    const availableArea = (width - PADDING) * (height - PADDING);
+  function getPathWidthParameters(): [number, number] {
+    const maxNodeArea = NODE_AREAS_SHARE.MAX * availableArea;
+    const maxNodeRadius = Math.sqrt(maxNodeArea / Math.PI);
+    const maxPathWidthNodeRadiusRatio =
+      sortedLinks[sortedLinks.length - 1].tvl /
+      sortedNodes[sortedNodes.length - 1].value;
+    const maxPathWidth = maxNodeRadius * maxPathWidthNodeRadiusRatio;
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const areaShare = kLinA * d.value + kLinB;
+        return findLinearParameters(
+          sortedLinks[0].tvl,
+          sortedLinks[sortedLinks.length - 1].tvl,
+          MIN_PATH_WIDTH,
+          maxPathWidth,
+        );
+      }
+      case DISTRIBUTION.LOGARITHMIC: {
+        return findLogParameters(
+          sortedLinks[0].tvl,
+          sortedLinks[sortedLinks.length - 1].tvl,
+          MIN_PATH_WIDTH,
+          maxPathWidth,
+        );
+      }
+    }
+  }
+
+  function getPathWidth(d: any): number {
+    switch (distribution) {
+      case DISTRIBUTION.LINEAR: {
+        const width = kAP * d.tvl + kBP;
+        console.log(width);
+        return width;
+      }
+      case DISTRIBUTION.LOGARITHMIC: {
+        const width = kAP * Math.log(kBP * d.tvl);
+        return width;
+      }
+    }
+  }
+
+  function getTvlRadius(d: any): number {
+    switch (distribution) {
+      case DISTRIBUTION.LINEAR: {
+        const areaShare = kLinAN * d.value + kLinBN;
         const area = availableArea * areaShare;
         return Math.sqrt(area / Math.PI);
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const areaShare = kLogA * Math.log(kLogB * d.value);
+        const areaShare = kLogAN * Math.log(kLogBN * d.value);
         const area = availableArea * areaShare;
         return Math.sqrt(area / Math.PI);
       }
@@ -148,29 +209,31 @@ export function drawGraph(
     const dimensions = getDiagramDimensions();
     width = dimensions.width;
     height = dimensions.height;
+    availableArea = (width - PADDING) * (height - PADDING);
+    [kAP, kBP] = getPathWidthParameters();
+
     svg.attr('width', width).attr('height', height);
-    currentSimulation = d3
-      .forceSimulation(data.nodes as SimulationNodeDatum[])
+    currentSimulation = forceSimulation(data.nodes as SimulationNodeDatum[])
       .force(
         'charge',
-        d3.forceManyBody().strength((d: any) => {
+        forceManyBody().strength((d: any) => {
           const force = getTvlRadius(d) / -5000;
-          const availableArea = (width - PADDING) * (height - PADDING);
           return force * availableArea;
         }),
       )
       .force(
         'link',
-        d3
-          .forceLink()
+        forceLink()
           .id((d: any) => (d as IGraphNode).name)
           .links(data.links),
       )
-      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('center', forceCenter(width / 2, height / 2))
       .on('tick', ticked)
       .on('end', ticked);
 
     tvlCircles.attr('r', getTvlRadius);
+    links.style('stroke-width', getPathWidth);
+    // links.style('stroke-dasharray', getPathWidth);
   }
 
   function ticked() {
