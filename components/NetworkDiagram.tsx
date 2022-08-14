@@ -41,7 +41,6 @@ export default function NetworkDiagram() {
         ></fegaussianblur>
         <femerge>
         <femergenode in="coloredBlur"></femergenode>
-          <femergenode in="SourceGraphic"></femergenode>
         </femerge>
       </filter>
       </defs>`;

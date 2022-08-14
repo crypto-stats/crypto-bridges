@@ -291,16 +291,22 @@ export function drawGraph(
   }
 
   function resize() {
+    const dimensions = getDiagramDimensions();
+    // Cancel resize if the dimensions have not actualy changed (as in
+    // portrait mode height resize).
+    if (dimensions.width === width && dimensions.height === height) {
+      return;
+    }
     if (currentSimulation !== undefined) {
       currentSimulation.stop();
     }
-    const dimensions = getDiagramDimensions();
     width = dimensions.width;
     height = dimensions.height;
     availableArea = (width - PADDING) * (height - PADDING);
     [kAP, kBP] = getPathWidthParameters();
 
     svg.attr('width', width).attr('height', height);
+
     currentSimulation = forceSimulation(data.nodes as SimulationNodeDatum[])
       .force(
         'charge',

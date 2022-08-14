@@ -9,6 +9,10 @@ a {
   color: #fff;
 }
 
+svg * {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 svg text {
   -webkit-user-select: none;
   -moz-user-select: none;
