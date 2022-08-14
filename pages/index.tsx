@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -18,7 +19,7 @@ const Home: NextPage = () => {
   const convertedData = convertDataForGraph(answer.data as ICsApiData);
   return (
     <Motion key={router.asPath}>
-      <menu className={styles.noPadding}>
+      <menu className={styles.menu}>
         <ol className={styles.list}>
           <h2>Bridges</h2>
           <li className={styles.item}>
@@ -40,7 +41,12 @@ const Home: NextPage = () => {
                   <a>
                     <div>
                       <p>{addLeadingZero(index + 1)}</p>
-                      <img src={imageSrc} width="20" height="20" alt="" />{' '}
+                      <Image
+                        src={imageSrc}
+                        width="20"
+                        height="20"
+                        alt=""
+                      />{' '}
                       <p>{name}</p>
                     </div>
                     <p>{value?.toFixed(0)}</p>

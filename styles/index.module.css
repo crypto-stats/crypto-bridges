@@ -1,5 +1,7 @@
-.noPadding {
+.menu {
   padding: 0;
+  margin: 0;
+  text-transform: uppercase;
 }
 .list {
   display: flex;
@@ -8,14 +10,13 @@
   padding: 0;
 }
 .list h2 {
-  color: #d750c8;
   margin: 0;
-  text-transform: capitalize;
   text-align: left;
-  font-style: normal;
   font-weight: 300;
-  font-size: 24px;
-  line-height: 29px;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.16em;
+  color: #d750c8;
   padding-left: 10px;
 }
 .item {
@@ -29,13 +30,17 @@
   box-sizing: border-box;
   padding: 15px 10px;
   text-transform: uppercase;
+  background: linear-gradient(
+    90deg,
+    rgba(215, 80, 200, 0.2) 0%,
+    rgba(215, 80, 200, 0.084) 100%
+  );
 }
 .item a {
   padding: 15px 10px;
   text-decoration: none;
   display: flex;
   justify-content: space-between;
-  border-radius: 0px;
   box-sizing: border-box;
   transition: all 600ms ease;
   scale: 1;
@@ -48,12 +53,12 @@
 }
 .item a:hover {
   background: rgba(215, 80, 200, 0.5);
-  border-radius: 6px;
+  border-radius: 10px;
   scale: 1.01;
 }
 .item > a > div {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: flex-end;
 }
 .item p {

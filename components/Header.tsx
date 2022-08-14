@@ -35,18 +35,24 @@ export default function Header() {
       </Link>
       <p className={styles.baseline}>
         <span className={styles.poweredBy}>Powered by</span>{' '}
-        <b className={styles.verticalAlign}>
-          <span className={styles.verticalAlign}>
-            <Image
-              src={'/cryptostats.svg'}
-              alt="logo"
-              width={20}
-              height={20}
-              className={styles.verticalAlign}
-            />
-          </span>{' '}
-          CryptoStats
-        </b>
+        <a
+          href="https://cryptostats.community"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <b className={styles.verticalAlign}>
+            <span className={styles.verticalAlign}>
+              <Image
+                src={'/cryptostats.svg'}
+                alt="logo"
+                width={20}
+                height={20}
+                className={styles.verticalAlign}
+              />
+            </span>{' '}
+            CryptoStats
+          </b>
+        </a>
       </p>
     </header>
   );

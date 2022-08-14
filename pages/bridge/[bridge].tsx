@@ -3,7 +3,9 @@ import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
 import Motion from '../../components/Motion';
 import { BRIDGED_VALUE_API_URL } from '../../constants';
-import { convertDataForGraph, IGraphData } from '../../utils';
+import styles from '../../styles/page.module.css';
+import type { IGraphData } from '../../utils';
+import { convertDataForGraph } from '../../utils';
 
 interface IBridgeProps {
   bridge: string;
@@ -18,7 +20,7 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, value }: IBridgeProps) => {
   const router = useRouter();
   return (
     <Motion key={router.asPath}>
-      <section>
+      <section className={styles.section}>
         <BackButton />
         <p>
           This is the page about the {bridge} bridge, with a tvl of {value}.

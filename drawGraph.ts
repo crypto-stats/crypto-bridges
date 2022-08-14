@@ -22,7 +22,7 @@ import {
   IGraphNode,
 } from './utils';
 
-const PADDING = 20;
+const PADDING = 30;
 
 export interface INetworkGraph {
   updateSelected: (path: string) => void;
