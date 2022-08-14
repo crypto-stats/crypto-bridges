@@ -1,5 +1,5 @@
 .header {
-  padding: 20px;
+  padding-top: 20px;
   box-sizing: border-box;
   text-align: center;
 }
@@ -13,4 +13,15 @@
 }
 .verticalAlign {
   vertical-align: middle;
+}
+.baseline {
+  margin: 0;
+}
+.poweredBy {
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: #beddff;
 }

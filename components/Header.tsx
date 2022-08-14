@@ -33,6 +33,21 @@ export default function Header() {
           <h1>Cryptobridges.info</h1>
         </a>
       </Link>
+      <p className={styles.baseline}>
+        <span className={styles.poweredBy}>Powered by</span>{' '}
+        <b className={styles.verticalAlign}>
+          <span className={styles.verticalAlign}>
+            <Image
+              src={'/cryptostats.svg'}
+              alt="logo"
+              width={20}
+              height={20}
+              className={styles.verticalAlign}
+            />
+          </span>{' '}
+          CryptoStats
+        </b>
+      </p>
     </header>
   );
 }
