@@ -1,4 +1,5 @@
 .backButton {
+  border-radius: 40px;
   border: none;
   outline: none;
   color: #fff;
@@ -10,6 +11,5 @@
   box-sizing: border-box;
   width: 137px;
   height: 35px;
-  background: rgba(215, 80, 200, 0.5);
-  border-radius: 6px;
+  background: rgba(69, 100, 178, 0.5);
 }
