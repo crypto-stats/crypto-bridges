@@ -24,6 +24,8 @@ import {
 
 const PADDING = 30;
 
+const MIN_PATH_CLICK_WIDTH = 40;
+
 export interface INetworkGraph {
   updateSelected: (path: string) => void;
 }
@@ -80,7 +82,6 @@ export function drawGraph(
     .style('cursor', 'pointer')
     .style('stroke', 'rgba(255,255,255,0)')
     .style('stroke-opacity', 0)
-    .style('stroke-width', getPathWidth)
     .on('mouseover', onMouseOverLink)
     .on('mouseout', onMouseOut)
     .on('click', function (e: MouseEvent, path: IGraphLink) {
@@ -337,7 +338,9 @@ export function drawGraph(
       .attr('x', (d: any) => d.x - getTvlRadius(d))
       .attr('y', (d: any) => d.y - getTvlRadius(d));
     paths.style('stroke-width', getPathWidth);
-    clickablePaths.style('stroke-width', getPathWidth);
+    clickablePaths.style('stroke-width', (d: any) =>
+      Math.max(MIN_PATH_CLICK_WIDTH, getPathWidth(d)),
+    );
   }
 
   function ticked() {
