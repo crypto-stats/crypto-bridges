@@ -53,14 +53,14 @@
 .bridgeAudit {
   padding: 4px 8px;
   background: rgba(30, 36, 51, 0.8);
-  width: 78px;
-  height: 47px;
+  min-width: 78px;
+  transition: background 400ms ease;
 }
-.bridgeAudit a {
+.bridgeAudit:hover {
+  background: rgb(41, 49, 70);
+}
+.bridgeAudits a {
   text-decoration: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 .auditYear {
   margin: 0;

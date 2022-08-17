@@ -6,7 +6,7 @@ export default function BackButton() {
   const onClick = () => router.push('/');
   return (
     <button onClick={onClick} className={styles.backButton}>
-      {'<--'} Back to all
+      &#129044; Back to all
     </button>
   );
 }

@@ -28,25 +28,25 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
       </div>
-      <div className={styles.bridgeItem}>
-        {node.audits && (
+      {node.audits && (
+        <div className={styles.bridgeItem}>
           <div className={styles.bridgeDataItem}>
             <h2>security audits</h2>
             <div className={styles.bridgeAudits}>
               {node.audits.map((audit, index) => (
-                <div key={index} className={styles.bridgeAudit}>
-                  <a href={audit.url}>
+                <a key={index} href={audit.url}>
+                  <div className={styles.bridgeAudit}>
                     <p className={styles.auditYear}>{audit.date}</p>
                     <p className={styles.auditFirm}>
                       {audit.name.split('by ')[1]}
                     </p>
-                  </a>
-                </div>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
