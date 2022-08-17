@@ -5,15 +5,15 @@ import type { PropsWithChildren } from 'react';
 const ANIMATIONS: Variants = {
   initial: {
     opacity: 0,
-    y: 10,
+    x: 10,
   },
   animate: {
     opacity: 1,
-    y: 0,
+    x: 0,
   },
-  exit: {
+  exit2: {
     opacity: 0,
-    y: 10,
+    x: 10,
   },
 };
 
@@ -22,8 +22,9 @@ export default function Motion(props: PropsWithChildren) {
     <m.div
       initial={'initial'}
       animate={'animate'}
-      exit={'exit'}
+      exit={'exit2'}
       variants={ANIMATIONS}
+      transition={{ duration: 0.5 }}
     >
       {props.children}
     </m.div>

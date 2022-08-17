@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           <m.main
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 2 }}
           >
             <Header />
             <NetworkDiagram />
