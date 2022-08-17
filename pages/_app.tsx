@@ -15,20 +15,20 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <HtmlHead />
       <LazyMotion features={domAnimation}>
         <NextNProgress color={GRAPH_COLORS.DEFAULT} height={4} />
-        <AnimatePresence exitBeforeEnter>
-          <m.main
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 2 }}
-          >
-            <Header />
-            <NetworkDiagram />
-            <Panel>
+        <m.main
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <Header />
+          <NetworkDiagram />
+          <Panel>
+            <AnimatePresence exitBeforeEnter>
               <Component {...pageProps} key={router.asPath} />
-            </Panel>
-            <Footer />
-          </m.main>
-        </AnimatePresence>
+            </AnimatePresence>
+          </Panel>
+          <Footer />
+        </m.main>
       </LazyMotion>
     </>
   );

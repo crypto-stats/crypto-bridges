@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import Motion from '../components/Motion';
 import Table from '../components/Table';
@@ -11,13 +10,22 @@ import { convertDataForGraph } from '../utils';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
-  const router = useRouter();
   const answer = useSWR(BRIDGED_VALUE_API_URL, fetcher);
-  if (answer.error) return <p>Fail</p>;
-  if (!answer.data) return <p>Loading</p>;
+  if (answer.error)
+    return (
+      <div>
+        <p className={styles.status}>Fail</p>
+      </div>
+    );
+  if (!answer.data)
+    return (
+      <div>
+        <p className={styles.status}>Loading...</p>
+      </div>
+    );
   const convertedData = convertDataForGraph(answer.data as ICsApiData);
   return (
-    <Motion key={router.asPath}>
+    <Motion key={'main'}>
       <menu className={styles.menu}>
         <Table
           listsChains={false}

@@ -14,11 +14,10 @@ const fetcher = (url: string) =>
 export default function NetworkDiagram() {
   const router = useRouter();
   const [graph, setGraph] = useState<INetworkGraph>();
-  const { data, error } = useSWR(BRIDGED_VALUE_API_URL, fetcher);
+  const { data } = useSWR(BRIDGED_VALUE_API_URL, fetcher);
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
-    if (data === undefined) return;
-    if (graph !== undefined) return;
+    if (data === undefined || graph !== undefined) return;
     if (svg.current !== null) {
       svg.current.innerHTML = `
       <defs>
@@ -53,8 +52,6 @@ export default function NetworkDiagram() {
     const updateUrl = (path: string) => g.updateSelected(path);
     router.events.on('routeChangeStart', updateUrl);
   }, [svg, data, router, graph]);
-  if (error) return null;
-  if (!data) return <p>loading</p>;
   return (
     <div className={style.networkDiagram}>
       <svg ref={svg}></svg>

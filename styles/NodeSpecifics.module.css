@@ -44,6 +44,10 @@
   font-size: 16px;
   line-height: 19px;
   text-align: center;
+  transition: background 400ms ease;
+}
+.bugButton:hover {
+  background: rgba(69, 100, 178, 0.7);
 }
 .nodeInfo {
   display: flex;

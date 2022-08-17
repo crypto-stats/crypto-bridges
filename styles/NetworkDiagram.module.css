@@ -1,3 +1,11 @@
 .networkDiagram {
   display: inline-block;
 }
+
+.status {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #d750c8;
+  opacity: 0.7;
+}

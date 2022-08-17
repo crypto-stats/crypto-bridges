@@ -12,4 +12,8 @@
   width: 137px;
   height: 35px;
   background: rgba(69, 100, 178, 0.5);
+  transition: background 300ms ease;
+}
+.backButton:hover {
+  background: rgba(69, 100, 178, 0.7);
 }

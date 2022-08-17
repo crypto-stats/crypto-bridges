@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
 import BridgeSpecifics from '../../components/Bridge';
 import Motion from '../../components/Motion';
@@ -19,10 +18,9 @@ interface IBridgePath {
 }
 
 const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
-  const router = useRouter();
   const bridgeName = bridge.split('-').join(' ');
   return (
-    <Motion key={router.asPath}>
+    <Motion>
       <section className={styles.section}>
         <BackButton />
         <BridgeSpecifics data={data} name={bridge} />

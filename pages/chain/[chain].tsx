@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
 import BoxRow, { BoxAlign } from '../../components/BoxRow';
 import ChainSpecifics from '../../components/Chain';
@@ -20,10 +19,9 @@ interface IChainPath {
 }
 
 const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
-  const router = useRouter();
   const chainName = chain.split('-').join(' ');
   return (
-    <Motion key={router.asPath}>
+    <Motion>
       <section className={styles.section}>
         <BackButton />
         <ChainSpecifics data={data} name={chain} />
