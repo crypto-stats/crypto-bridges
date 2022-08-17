@@ -1,59 +1,60 @@
-import type { NextPage } from 'next';
-import useSWR from 'swr';
+import type { GetStaticProps, NextPage } from 'next';
 import Motion from '../components/Motion';
 import Table from '../components/Table';
-import { BRIDGED_VALUE_API_URL } from '../constants';
 import styles from '../styles/index.module.css';
-import type { ICsApiData } from '../utils';
+import { getSDK, INode } from '../utils';
 import { convertDataForGraph } from '../utils';
+import Layout from '../components/Layout';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+interface HomeProps {
+  data: INode[];
+}
 
-const Home: NextPage = () => {
-  const answer = useSWR(BRIDGED_VALUE_API_URL, fetcher);
-  if (answer.error)
-    return (
-      <div>
-        <p className={styles.status}>Fail</p>
-      </div>
-    );
-  if (!answer.data)
-    return (
-      <div>
-        <p className={styles.status}>Loading...</p>
-      </div>
-    );
-  const convertedData = convertDataForGraph(answer.data as ICsApiData);
+const Home: NextPage<HomeProps> = ({ data }) => {
+  const convertedData = convertDataForGraph(data);
+
   return (
-    <Motion key={'main'}>
-      <menu className={styles.menu}>
-        <Table
-          listsChains={false}
-          title={'bridges'}
-          tableContent={convertedData.nodes
-            .filter((node) => node.type === 'bridge')
-            .map((node) => ({
-              name: node.name,
-              logo: node.imageSrc,
-              bridgedIn: node.value,
-              bridgedOut: node.value,
-            }))}
-        />
-        <Table
-          listsChains={true}
-          title={'chains'}
-          tableContent={convertedData.nodes
-            .filter((node) => node.type === 'blockchain')
-            .map((node) => ({
-              name: node.name,
-              logo: node.imageSrc,
-              bridgedIn: node.value,
-              bridgedOut: node.value,
-            }))}
-        />
-      </menu>
-    </Motion>
+    <Layout data={data}>
+      <Motion key={'main'}>
+        <menu className={styles.menu}>
+          <Table
+            listsChains={false}
+            title={'bridges'}
+            tableContent={convertedData.nodes
+              .filter((node) => node.type === 'bridge')
+              .map((node) => ({
+                name: node.name,
+                logo: node.imageSrc,
+                bridgedIn: node.value,
+                bridgedOut: node.value,
+              }))}
+          />
+          <Table
+            listsChains={true}
+            title={'chains'}
+            tableContent={convertedData.nodes
+              .filter((node) => node.type === 'blockchain')
+              .map((node) => ({
+                name: node.name,
+                logo: node.imageSrc,
+                bridgedIn: node.value,
+                bridgedOut: node.value,
+              }))}
+          />
+        </menu>
+      </Motion>
+    </Layout>
   );
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const sdk = getSDK();
+  const collection = sdk.getCollection('bridged-value');
+  await collection.fetchAdapters();
+
+  const data = await collection.executeQueriesWithMetadata(['currentValueLocked']) as INode[];
+
+  return { props: { data }, revalidate: 5 * 60 };
+};

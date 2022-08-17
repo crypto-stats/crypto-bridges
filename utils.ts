@@ -1,3 +1,4 @@
+import { CryptoStatsSDK } from '@cryptostats/sdk';
 import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
 
 export interface IGraphNode {
@@ -34,9 +35,9 @@ type BridgeCategory =
   | 'native'
   | 'unknown';
 
-interface INode {
+export interface INode {
   id: string;
-  bundle: null;
+  bundle: string | null;
   results: { currentValueLocked: number };
   metadata: {
     name: string;
@@ -51,14 +52,13 @@ interface INode {
   errors: { [key: string]: string };
 }
 
-export interface ICsApiData {
-  success: boolean;
-  data: INode[];
-}
-
-export function convertDataForGraph(data: ICsApiData): IGraphData {
+export function convertDataForGraph(data: INode[]): IGraphData {
   const graphData: IGraphData = { nodes: [], links: [] };
-  data.data.forEach((apiNode) => {
+  data.forEach((apiNode) => {
+    if (apiNode.errors?.currentValueLocked) {
+      return;
+    }
+
     const isBridge = apiNode.metadata.toChain === undefined;
 
     const nodeName = apiNode.metadata.name.toLowerCase();
@@ -157,4 +157,26 @@ export function findLinearParameters(
   const A = (maxOutput - minOutput) / (maxInput - minInput);
   const B = maxOutput - maxInput * A;
   return [A, B];
+}
+
+export function getSDK() {
+  const sdk = new CryptoStatsSDK({
+    mongoConnectionString: process.env.MONGO_CONNECTION_STRING,
+    redisConnectionString: process.env.REDIS_URL,
+  });
+
+  sdk
+    .getCollection('bridged-value')
+    .setCacheKeyResolver((_id: string, query: string, params: string[]) =>
+      query === 'currentValueLocked' ? Math.floor(Date.now() / 1000 / 60 / 60).toString() : null
+    );
+
+    if (process.env.ALCHEMY_ETH_KEY) {
+    const rpc = `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_ETH_KEY}`
+    sdk.ethers.addProvider('ethereum', rpc, { archive: true });
+  } else {
+    console.error('Alchemy key not set');
+  }
+
+  return sdk;
 }
