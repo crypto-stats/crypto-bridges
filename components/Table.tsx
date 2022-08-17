@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ReactElement, ReactNode } from 'react';
 import styles from '../styles/Table.module.css';
 import { addLeadingZero } from '../utils';
@@ -24,6 +24,9 @@ const Table = ({
   title,
   listsChains,
 }: ITableProps): ReactElement => {
+  const router = useRouter();
+  const navigateTo = (url: string) =>
+    router.push(url, undefined, { scroll: false });
   return (
     <div className={styles.table}>
       <div className={styles.titleBox}>
@@ -46,27 +49,27 @@ const Table = ({
             .map(({ name, logo, bridgedIn, bridgedOut }, index) => {
               return (
                 <li key={index} className={styles.item}>
-                  <Link
-                    href={`/${listsChains ? 'chain' : 'bridge'}/${name
-                      .split(' ')
-                      .join('-')}`}
-                    scroll={false}
-                    passHref={true}
+                  <a
+                    onClick={() =>
+                      navigateTo(
+                        `/${listsChains ? 'chain' : 'bridge'}/${name
+                          .split(' ')
+                          .join('-')}`,
+                      )
+                    }
                   >
-                    <a>
-                      <p className={styles.nameBox}>
-                        <span className={styles.vAlign}>
-                          {addLeadingZero(index + 1)}
-                        </span>
-                        <span className={styles.vAlign}>
-                          <Image src={logo} width="20" height="20" alt="" />
-                        </span>
-                        <span className={styles.vAlign}>{name}</span>
-                      </p>
-                      <p>{bridgedOut?.toFixed(0)}</p>
-                      <p>{bridgedIn?.toFixed(0)}</p>
-                    </a>
-                  </Link>
+                    <p className={styles.nameBox}>
+                      <span className={styles.vAlign}>
+                        {addLeadingZero(index + 1)}
+                      </span>
+                      <span className={styles.vAlign}>
+                        <Image src={logo} width="20" height="20" alt="" />
+                      </span>
+                      <span className={styles.vAlign}>{name}</span>
+                    </p>
+                    <p>{bridgedOut?.toFixed(0)}</p>
+                    <p>{bridgedIn?.toFixed(0)}</p>
+                  </a>
                 </li>
               );
             })}

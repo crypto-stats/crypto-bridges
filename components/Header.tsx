@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 import { HEADER_HEIGHT, PANEL_WIDTH } from '../constants';
 import styles from '../styles/Header.module.css';
 import { needsLandscape } from '../utils';
 
 export default function Header() {
+  const router = useRouter();
   const el = useRef<HTMLDivElement>(null);
   if (el.current !== null) {
     el.current.style.height = `${HEADER_HEIGHT}px`;
@@ -25,14 +26,12 @@ export default function Header() {
   }, []);
   return (
     <header className={styles.header} ref={el}>
-      <Link href={'/'} passHref={true} scroll={false}>
-        <a>
-          <span className={styles.verticalAlign}>
-            <Image src="/logo.png" width={45} height={45} alt="" />
-          </span>
-          <h1>Cryptobridges.info</h1>
-        </a>
-      </Link>
+      <a onClick={() => router.push('/', undefined, { scroll: false })}>
+        <span className={styles.verticalAlign}>
+          <Image src="/logo.png" width={45} height={45} alt="" />
+        </span>
+        <h1>Cryptobridges.info</h1>
+      </a>
       <p className={styles.baseline}>
         <span className={styles.poweredBy}>Powered by</span>{' '}
         <a
