@@ -113,12 +113,14 @@ interface IDimensions {
 }
 
 export function getDiagramDimensions(): IDimensions {
-  const isLandscape = needsLandscape();
+  const useLandscape = needsLandscape();
   return {
-    width: isLandscape ? window.innerWidth - PANEL_WIDTH : window.innerWidth,
-    height: isLandscape
-      ? window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT
-      : window.innerWidth * 0.6,
+    width: useLandscape
+      ? document.body.clientWidth - PANEL_WIDTH
+      : document.body.clientWidth,
+    height: useLandscape
+      ? document.body.clientHeight - HEADER_HEIGHT - FOOTER_HEIGHT
+      : document.body.clientWidth * 0.6,
   };
 }
 

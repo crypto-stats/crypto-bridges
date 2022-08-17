@@ -142,7 +142,7 @@ export function drawGraph(
     .style('cursor', 'pointer')
     .attr('font-size', '1em')
     .on('click', function (e: MouseEvent, d: any) {
-      console.log(d);
+      // console.log(d);
     });
   text.append('tspan');
   //.text((d) => d.name.split(' ')[0]);
