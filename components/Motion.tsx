@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react';
 const ANIMATIONS: Variants = {
   initial: {
     opacity: 0,
-    x: 10,
+    x: 100,
   },
   animate: {
     opacity: 1,
@@ -13,7 +13,7 @@ const ANIMATIONS: Variants = {
   },
   exit: {
     opacity: 0,
-    x: 10,
+    x: 100,
   },
 };
 
