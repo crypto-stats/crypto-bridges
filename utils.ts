@@ -114,11 +114,14 @@ interface IDimensions {
 
 export function getDiagramDimensions(): IDimensions {
   const isLandscape = needsLandscape();
+  const isMobile = devicePixelRatio > 1.5;
+  const usedWidth = isMobile ? screen.availWidth : innerWidth;
+  const usedHeight = isMobile ? screen.availHeight : innerHeight;
   return {
-    width: isLandscape ? window.innerWidth - PANEL_WIDTH : window.innerWidth,
+    width: isLandscape ? usedWidth - PANEL_WIDTH : usedWidth,
     height: isLandscape
-      ? window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT
-      : window.innerWidth * 0.6,
+      ? usedHeight - HEADER_HEIGHT - FOOTER_HEIGHT
+      : usedWidth * 0.6,
   };
 }
 
