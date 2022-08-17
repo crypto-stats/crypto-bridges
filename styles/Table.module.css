@@ -1,4 +1,7 @@
 .table {
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
 }
 
 .table h2 {
@@ -9,35 +12,55 @@
   line-height: 17px;
   letter-spacing: 0.16em;
   color: #d750c8;
-  padding-left: 10px;
+  text-transform: uppercase;
 }
 
 .titleBox {
 }
 
+.tableContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   padding: 0;
+  margin: 0;
 }
 
 .item {
   list-style-type: none;
+  padding: 0 16px;
 }
-.item .head {
-  padding: 15px 10px;
+.head {
+  padding: 0 26px;
   display: flex;
-  flex-direction: row;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 15px 10px;
   text-transform: uppercase;
   background: linear-gradient(
     90deg,
     rgba(215, 80, 200, 0.2) 0%,
     rgba(215, 80, 200, 0.084) 100%
   );
+}
+.head p {
+  width: 160px;
+  text-align: right;
+}
+.head p:first-of-type {
+  display: flex;
+  gap: 8px;
+}
+.imageGap {
+  width: 22px;
 }
 .item a {
   padding: 15px 10px;
@@ -47,12 +70,23 @@
   box-sizing: border-box;
   transition: all 600ms ease;
   scale: 1;
-  align-items: flex-end;
+  align-items: center;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
   text-transform: capitalize;
+  border-radius: 10px;
+}
+.item a > p {
+  width: 160px;
+  text-align: right;
+}
+.nameBox {
+  text-align: left;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 .item a:hover {
   background: rgba(215, 80, 200, 0.5);

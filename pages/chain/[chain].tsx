@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
 import Motion from '../../components/Motion';
+import Table from '../../components/Table';
 import { BRIDGED_VALUE_API_URL } from '../../constants';
 import styles from '../../styles/page.module.css';
 import type { IGraphData } from '../../utils';
@@ -9,15 +10,19 @@ import { convertDataForGraph } from '../../utils';
 
 interface IChainProps {
   chain: string;
-  value?: number;
+  data: IGraphData;
 }
 
 interface IChainPath {
   params: { chain: string };
 }
 
-const Chain: NextPage<IChainProps> = ({ chain, value }: IChainProps) => {
+const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
   const router = useRouter();
+  const chainName = chain.split('-').join(' ');
+  const value = data.nodes
+    .filter((node) => node.type === 'blockchain')
+    .find((chainNode) => chainNode.name === chainName)?.value;
   return (
     <Motion key={router.asPath}>
       <section className={styles.section}>
@@ -25,7 +30,28 @@ const Chain: NextPage<IChainProps> = ({ chain, value }: IChainProps) => {
         <p>
           This is the page about the {chain} chain, with a tvl of {value}.
         </p>
-        <p>More details soon.</p>
+        <Table
+          listsChains={true}
+          title={'connected bridges'}
+          tableContent={data.nodes
+            .filter((node) => {
+              for (const link of data.links) {
+                if (
+                  (link.target === chainName && link.source === node.name) ||
+                  (link.source === chainName && link.target === node.name)
+                ) {
+                  return node.type === 'bridge';
+                }
+              }
+              return false;
+            })
+            .map((node) => ({
+              name: node.name,
+              logo: node.imageSrc,
+              bridgedIn: node.value,
+              bridgedOut: node.value,
+            }))}
+        />
       </section>
     </Motion>
   );
@@ -52,11 +78,8 @@ export async function getStaticProps({
   const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
     .then((r) => r.json())
     .then(convertDataForGraph);
-  const value = data.nodes
-    .filter((node) => node.type === 'blockchain')
-    .find((chain) => chain.name === params.chain.split('-').join(' '))?.value;
   return {
-    props: { ...params, value },
+    props: { ...params, data },
   };
 }
 

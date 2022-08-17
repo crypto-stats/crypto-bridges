@@ -24,7 +24,6 @@ const Home: NextPage = () => {
           title={'bridges'}
           tableContent={convertedData.nodes
             .filter((node) => node.type === 'bridge')
-            .sort((a, b) => b.value - a.value)
             .map((node) => ({
               name: node.name,
               logo: node.imageSrc,
@@ -37,7 +36,6 @@ const Home: NextPage = () => {
           title={'chains'}
           tableContent={convertedData.nodes
             .filter((node) => node.type === 'blockchain')
-            .sort((a, b) => b.value - a.value)
             .map((node) => ({
               name: node.name,
               logo: node.imageSrc,

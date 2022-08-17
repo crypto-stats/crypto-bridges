@@ -13,7 +13,7 @@ export interface ITableItem {
 
 export interface ITableProps {
   tableContent: ITableItem[];
-  children: ReactNode;
+  children?: ReactNode;
   title: string;
   listsChains: boolean;
 }
@@ -26,46 +26,52 @@ const Table = ({
 }: ITableProps): ReactElement => {
   return (
     <div className={styles.table}>
-      <h2>{title}</h2>
-      <div className={children === undefined ? '' : styles.titleBox}>
-        {children}
+      <div className={styles.titleBox}>
+        <h2>{title}</h2>
+        {children !== undefined ? <div>{children}</div> : ''}
       </div>
-      <ol className={styles.tableBox}>
-        <li className={styles.item} key={0}>
-          <div className={styles.head}>
-            <p>## name</p>
-            <p>value out</p>
-            <p>value in</p>
-          </div>
-        </li>
-        {tableContent
-          .sort((a, b) => a.bridgedIn - b.bridgedIn)
-          .map(({ name, logo, bridgedIn, bridgedOut }, index) => {
-            return (
-              <li key={index} className={styles.item}>
-                <Link
-                  href={`${listsChains ? 'chain' : 'bridge'}/${name
-                    .split(' ')
-                    .join('-')}`}
-                  scroll={false}
-                  passHref={true}
-                >
-                  <a>
-                    <p>{addLeadingZero(index + 1)}</p>
-                    <p>
-                      <p>
-                        <Image src={logo} width="20" height="20" alt="" />
+      <div className={styles.tableContent}>
+        <div className={styles.head}>
+          <p>
+            <span>##</span>
+            <span className={styles.imageGap}></span>
+            <span>name</span>
+          </p>
+          <p>value out</p>
+          <p>value in</p>
+        </div>
+        <ol className={styles.list}>
+          {tableContent
+            .sort((a, b) => b.bridgedIn - a.bridgedIn)
+            .map(({ name, logo, bridgedIn, bridgedOut }, index) => {
+              return (
+                <li key={index} className={styles.item}>
+                  <Link
+                    href={`/${listsChains ? 'chain' : 'bridge'}/${name
+                      .split(' ')
+                      .join('-')}`}
+                    scroll={false}
+                    passHref={true}
+                  >
+                    <a>
+                      <p className={styles.nameBox}>
+                        <span className={styles.vAlign}>
+                          {addLeadingZero(index + 1)}
+                        </span>
+                        <span className={styles.vAlign}>
+                          <Image src={logo} width="20" height="20" alt="" />
+                        </span>
+                        <span className={styles.vAlign}>{name}</span>
                       </p>
-                      <p>{name}</p>
-                    </p>
-                    <p>{bridgedOut}</p>
-                    <p>{bridgedIn}</p>
-                  </a>
-                </Link>
-              </li>
-            );
-          })}
-      </ol>
+                      <p>{bridgedOut?.toFixed(0)}</p>
+                      <p>{bridgedIn?.toFixed(0)}</p>
+                    </a>
+                  </Link>
+                </li>
+              );
+            })}
+        </ol>
+      </div>
     </div>
   );
 };
