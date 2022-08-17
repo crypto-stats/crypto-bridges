@@ -27,7 +27,7 @@ const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
         <BackButton />
         <ChainSpecifics data={data} name={chain} />
         <Table
-          listsChains={true}
+          listsChains={false}
           title={'connected bridges'}
           tableContent={data.nodes
             .filter((node) => {

@@ -11,7 +11,7 @@ const ANIMATIONS: Variants = {
     opacity: 1,
     x: 0,
   },
-  exit2: {
+  exit: {
     opacity: 0,
     x: 10,
   },
@@ -22,7 +22,7 @@ export default function Motion(props: PropsWithChildren) {
     <m.div
       initial={'initial'}
       animate={'animate'}
-      exit={'exit2'}
+      exit={'exit'}
       variants={ANIMATIONS}
       transition={{ duration: 0.5 }}
     >
