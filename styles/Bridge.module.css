@@ -1,0 +1,78 @@
+.bridgeSpecifics {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.bridgeItem h2,
+.bridgeDataItem h2 {
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.16em;
+  color: #d750c8;
+  margin: 0;
+}
+.bridgeInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.bridgeInfo p {
+  margin: 0;
+}
+.bridgeName {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  color: #ffffff;
+  text-transform: capitalize;
+}
+.bridgeCategory {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.16em;
+  color: #6178b0;
+  padding: 4px 8px;
+  display: block;
+  background: rgba(69, 100, 178, 0.2);
+  border-radius: 4px;
+}
+.bridgeDataItem {
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+}
+.bridgeAudits {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bridgeAudit {
+  padding: 4px 8px;
+  background: rgba(30, 36, 51, 0.8);
+  width: 78px;
+  height: 47px;
+}
+.bridgeAudit a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.auditYear {
+  margin: 0;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 150%;
+  color: #868686;
+}
+.auditFirm {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  color: #b5c7f7;
+}

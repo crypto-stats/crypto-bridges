@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
+import BridgeSpecifics from '../../components/Bridge';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
 import { BRIDGED_VALUE_API_URL } from '../../constants';
@@ -20,16 +21,11 @@ interface IBridgePath {
 const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
   const router = useRouter();
   const bridgeName = bridge.split('-').join(' ');
-  const value = data.nodes
-    .filter((node) => node.type === 'bridge')
-    .find((bridgeNode) => bridgeNode.name === bridgeName)?.value;
   return (
     <Motion key={router.asPath}>
       <section className={styles.section}>
         <BackButton />
-        <p>
-          This is the page about the {bridge} bridge, with a tvl of {value}.
-        </p>
+        <BridgeSpecifics data={data} name={bridge} />
         <Table
           listsChains={true}
           title={'connected chains'}

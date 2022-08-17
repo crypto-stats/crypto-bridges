@@ -5,6 +5,8 @@ export interface IGraphNode {
   value: number;
   imageSrc: string;
   type: 'blockchain' | 'bridge';
+  audits: IAudit[] | null;
+  category: BridgeCategory | null;
 }
 
 export interface IGraphLink {
@@ -18,6 +20,20 @@ export interface IGraphData {
   links: IGraphLink[];
 }
 
+export interface IAudit {
+  name: string;
+  url: string;
+  date: string;
+}
+
+type BridgeCategory =
+  | 'multisig-dynamic'
+  | 'multisig-hardware'
+  | 'multisig'
+  | 'light-client'
+  | 'native'
+  | 'unknown';
+
 interface INode {
   id: string;
   bundle: null;
@@ -26,16 +42,11 @@ interface INode {
     name: string;
     toChain?: string;
     website?: string;
-    category:
-      | 'multisig-dynamic'
-      | 'multisig-hardware'
-      | 'multisig'
-      | 'light-client'
-      | 'native'
-      | 'unknown';
+    category: BridgeCategory;
     subtitle: string;
     icon: string | 0;
     fromChain: string;
+    audits?: IAudit[];
   };
   errors: { [key: string]: string };
 }
@@ -59,6 +70,8 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
         value: apiNode.results.currentValueLocked,
         imageSrc:
           apiNode.metadata.icon === 0 ? '/logo.png' : apiNode.metadata.icon,
+        audits: apiNode.metadata.audits ?? null,
+        category: isBridge ? apiNode.metadata.category : null,
       });
     } else {
       graphData.nodes[nodeIndex].value += apiNode.results.currentValueLocked;
@@ -73,6 +86,8 @@ export function convertDataForGraph(data: ICsApiData): IGraphData {
         value: apiNode.results.currentValueLocked,
         imageSrc:
           apiNode.metadata.icon === 0 ? '/logo.png' : apiNode.metadata.icon,
+        audits: null,
+        category: null,
       });
     } else {
       graphData.nodes[fromIndex].value += apiNode.results.currentValueLocked;
