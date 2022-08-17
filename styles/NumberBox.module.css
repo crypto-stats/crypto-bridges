@@ -1,0 +1,24 @@
+.numberBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  height: 47px;
+}
+.numberBox p {
+  margin: 0;
+}
+.numberBoxCaption {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a7a7a7;
+}
+.numberBoxValue {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+}

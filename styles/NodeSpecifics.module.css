@@ -1,10 +1,17 @@
-.nodeSpecifics {
+.nodeSpecifics,
+.nodeItem {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
+.nodeItemGap8 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .nodeItem h2,
-.nodeDataItem h2 {
+.nodeDataItem h2,
+.nodeItemGap8 h2 {
   text-transform: uppercase;
   font-weight: 300;
   font-size: 14px;
@@ -13,12 +20,37 @@
   color: #d750c8;
   margin: 0;
 }
+.specialInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 150%;
+  color: #dddddd;
+}
+.byImmunefi {
+  text-transform: none;
+  color: #6073a3;
+  letter-spacing: normal;
+}
+.bugButton {
+  padding: 8px 0;
+  background: rgba(69, 100, 178, 0.5);
+  border: 1px solid #2a3c6b;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+}
 .nodeInfo {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.nodeInfo p {
+.nodeSpecifics p {
   margin: 0;
 }
 .nodeName {

@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
+import BoxRow, { BoxAlign } from '../../components/BoxRow';
 import ChainSpecifics from '../../components/Chain';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
@@ -47,7 +48,15 @@ const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
               bridgedIn: node.value,
               bridgedOut: node.value,
             }))}
-        />
+        >
+          <BoxRow
+            data={[
+              { caption: 'tvl', value: '$ 40bn' },
+              { caption: 'bridged out', value: '$ 40bn' },
+            ]}
+            align={BoxAlign.Center}
+          ></BoxRow>
+        </Table>
       </section>
     </Motion>
   );

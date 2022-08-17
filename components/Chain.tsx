@@ -2,6 +2,7 @@ import Image from 'next/image';
 import type { ReactElement } from 'react';
 import styles from '../styles/NodeSpecifics.module.css';
 import { IGraphData } from '../utils';
+import BoxRow, { BoxAlign } from './BoxRow';
 
 interface IBridgeProps {
   data: IGraphData;
@@ -26,6 +27,15 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
+      </div>
+      <div className={styles.nodeItem}>
+        <BoxRow
+          data={[
+            { caption: 'Bridge TVL', value: '$ 500mln' },
+            { caption: 'Bridge TVL', value: '$ 500mln' },
+          ]}
+          align={BoxAlign.Left}
+        />
       </div>
     </div>
   );

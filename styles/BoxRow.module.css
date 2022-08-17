@@ -1,0 +1,14 @@
+.boxCenter {
+  display: flex;
+  justify-content: space-between;
+}
+.boxLeft {
+  display: flex;
+  gap: 60px;
+  justify-content: flex-start;
+}
+.boxRight {
+  display: flex;
+  gap: 60px;
+  justify-content: flex-end;
+}
