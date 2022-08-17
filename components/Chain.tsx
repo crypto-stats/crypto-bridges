@@ -1,5 +1,7 @@
 import type { ReactElement } from 'react';
 
-interface IChainProps {}
+const Chain = (): ReactElement => {
+  return <p></p>;
+};
 
-const Chain = ({}: IChainProps): ReactElement => {};
+export default Chain;
