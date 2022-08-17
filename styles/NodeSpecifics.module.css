@@ -1,10 +1,10 @@
-.bridgeSpecifics {
+.nodeSpecifics {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-.bridgeItem h2,
-.bridgeDataItem h2 {
+.nodeItem h2,
+.nodeDataItem h2 {
   text-transform: uppercase;
   font-weight: 300;
   font-size: 14px;
@@ -13,22 +13,22 @@
   color: #d750c8;
   margin: 0;
 }
-.bridgeInfo {
+.nodeInfo {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.bridgeInfo p {
+.nodeInfo p {
   margin: 0;
 }
-.bridgeName {
+.nodeName {
   font-weight: 500;
   font-size: 24px;
   line-height: 29px;
   color: #ffffff;
   text-transform: capitalize;
 }
-.bridgeCategory {
+.nodeCategory {
   text-transform: uppercase;
   font-weight: 400;
   font-size: 12px;
@@ -40,26 +40,26 @@
   background: rgba(69, 100, 178, 0.2);
   border-radius: 4px;
 }
-.bridgeDataItem {
+.nodeDataItem {
   display: flex;
   gap: 24px;
   flex-direction: column;
 }
-.bridgeAudits {
+.nodeAudits {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
-.bridgeAudit {
+.nodeAudit {
   padding: 4px 8px;
   background: rgba(30, 36, 51, 0.8);
   min-width: 78px;
   transition: background 400ms ease;
 }
-.bridgeAudit:hover {
+.nodeAudit:hover {
   background: rgb(41, 49, 70);
 }
-.bridgeAudits a {
+.nodeAudits a {
   text-decoration: none;
 }
 .auditYear {

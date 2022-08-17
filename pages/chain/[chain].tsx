@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import BackButton from '../../components/BackButton';
+import ChainSpecifics from '../../components/Chain';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
 import { BRIDGED_VALUE_API_URL } from '../../constants';
@@ -20,16 +21,11 @@ interface IChainPath {
 const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
   const router = useRouter();
   const chainName = chain.split('-').join(' ');
-  const value = data.nodes
-    .filter((node) => node.type === 'blockchain')
-    .find((chainNode) => chainNode.name === chainName)?.value;
   return (
     <Motion key={router.asPath}>
       <section className={styles.section}>
         <BackButton />
-        <p>
-          This is the page about the {chain} chain, with a tvl of {value}.
-        </p>
+        <ChainSpecifics data={data} name={chain} />
         <Table
           listsChains={true}
           title={'connected bridges'}
