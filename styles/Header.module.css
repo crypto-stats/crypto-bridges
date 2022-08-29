@@ -1,13 +1,12 @@
 .header {
-  padding-top: 20px;
+  padding: 20px 30px 0 30px;
   box-sizing: border-box;
-  text-align: center;
 }
 .header a {
   text-decoration: none;
 }
 .header h1 {
-  margin: 0 20px;
+  margin: 0 20px 0 0;
   display: inline-block;
   vertical-align: middle;
 }
@@ -24,4 +23,24 @@
   text-transform: uppercase;
   vertical-align: middle;
   color: #beddff;
+}
+.oneline {
+  justify-content: center;
+  display: flex;
+  align-items: baseline;
+}
+.onelineHorizontal {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+}
+.question {
+  color: #90a0ce;
+  margin: 10px 0 0 0;
+  text-align: center;
+}
+.questionHorizontal {
+  color: #90a0ce;
+  margin: 10px 0 0 0;
+  text-align: left;
 }
