@@ -8,6 +8,7 @@
 }
 .header {
   flex-direction: column;
+  padding: 20px 20px 0 20px;
 }
 .header a {
   text-decoration: none;
@@ -56,17 +57,20 @@
   text-align: center;
   margin: 5px 0;
 }
-.toggle {
+.toggle,
+.toggleVertical {
   padding: 4px;
   background: #311c42;
   border-radius: 30px;
   display: inline-flex;
   gap: 4px;
 }
-.toggle button.selected {
+.toggle button.selected,
+.toggleVertical button.selected {
   background: rgba(215, 80, 200, 1);
 }
-.toggle button {
+.toggle button,
+.toggleVertical button {
   border: none;
   outline: none;
   cursor: pointer;
@@ -76,6 +80,10 @@
   color: #fff;
   background: rgba(215, 80, 200, 0);
   border-radius: 30px;
+}
+.toggleVertical button {
+  height: 20px;
+  padding: 0 16px;
 }
 .vertical {
   width: 100%;

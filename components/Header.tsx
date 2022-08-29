@@ -11,9 +11,6 @@ export default function Header() {
   const selectBridge = () => setFlowView(false);
   const selectFlow = () => setFlowView(true);
   const el = useRef<HTMLDivElement>(null);
-  if (el.current !== null) {
-    el.current.style.height = `${HEADER_HEIGHT}px`;
-  }
   useEffect(() => {
     const updateToSidePanel = () => {
       const isLandscape = needsLandscape();
@@ -22,6 +19,7 @@ export default function Header() {
         el.current.style.width = `calc(100% - ${
           isLandscape ? PANEL_WIDTH : 0
         }px)`;
+        el.current.style.height = isLandscape ? `${HEADER_HEIGHT}px` : 'auto';
       }
     };
     updateToSidePanel();
@@ -70,7 +68,7 @@ export default function Header() {
           Where does value flow in crypto?
         </p>
       </div>
-      <div className={styles.toggle}>
+      <div className={isHorizontal ? styles.toggle : styles.toggleVertical}>
         <button
           onClick={selectFlow}
           className={isFlowView ? styles.selected : ''}
