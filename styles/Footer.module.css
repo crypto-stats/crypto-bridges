@@ -1,33 +1,42 @@
-.footer {
+.footer,
+.footerVertical {
   box-sizing: border-box;
   color: #aaa;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
-  background: linear-gradient(
-    90deg,
-    rgba(6, 14, 35, 0.9) 0%,
-    rgba(0, 0, 0, 0.108) 100%
-  );
+  padding: 0 30px 20px 30px;
 }
 
-.footer p {
+.footerVertical {
+  padding: 50px 20px 30px 20px;
+  gap: 20px;
+  flex-flow: column-reverse;
+}
+
+.footer p,
+.footerVertical p {
   margin: 0;
 }
 
 .footer > p:last-of-type {
   text-align: right;
 }
+.footerVertical > p:last-of-type {
+  text-align: center;
+}
 
-.footer p span {
+.footer p span,
+.footerVertical p span {
   display: block;
 }
 
-.footer a {
+.footer a,
+.footerVertical a {
   color: #aaa;
 }
-.footer p:first-of-type a {
+.footer p:first-of-type a,
+.footerVertical p:first-of-type a {
   margin-right: 10px;
 }

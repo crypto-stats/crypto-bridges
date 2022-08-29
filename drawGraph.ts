@@ -386,6 +386,7 @@ export function drawGraph(
   }
 
   function findSelected(path: string): IGraphNode | undefined {
+    console.log(path);
     return path.length === 1
       ? undefined
       : data.nodes.find(
@@ -394,7 +395,8 @@ export function drawGraph(
   }
 
   function updateSelected(path: string) {
-    const selected = findSelected(path);
+    const pathWithoutQuery = path.split('?')[0];
+    const selected = findSelected(pathWithoutQuery);
     if (selected !== undefined) {
       highlightNode(selected);
     } else {

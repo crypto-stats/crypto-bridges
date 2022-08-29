@@ -1,14 +1,16 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FOOTER_HEIGHT, PANEL_WIDTH } from '../constants';
 import styles from '../styles/Footer.module.css';
 import { needsLandscape } from '../utils';
 
 export default function Footer() {
+  const [isHorizontal, setHorizontal] = useState(false);
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const updateToSidePanel = () => {
       const isLandscape = needsLandscape();
+      setHorizontal(isLandscape);
       if (el.current !== null) {
         el.current.style.width = `calc(100% - ${
           isLandscape ? PANEL_WIDTH : 0
@@ -23,9 +25,9 @@ export default function Footer() {
     <footer
       ref={el}
       style={{
-        height: `${FOOTER_HEIGHT}px`,
+        height: isHorizontal ? `${FOOTER_HEIGHT}px` : 'auto',
       }}
-      className={styles.footer}
+      className={isHorizontal ? styles.footer : styles.footerVertical}
     >
       <p>
         <a
