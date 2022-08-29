@@ -51,12 +51,12 @@ export default function Footer() {
         </a>
       </p>
       <p>
-        <a href="https://cryptofees.info/">cryptofees.info</a> |{' '}
-        <a href="https://money-movers.info/">money-movers.info</a> |{' '}
-        <a href="https://openorgs.info/">open-orgs.info</a> |{' '}
-        <a href="https://l2fees.info/">l2fees.info</a> |{' '}
-        <a href="https://stakers.info/">stakers.info</a> |{' '}
-        <a href="https://moneyprinter.info/">moneyprinter.info</a>
+        <a href="https://cryptofees.info/">CryptoFees.info</a> |{' '}
+        <a href="https://money-movers.info/">MoneyMovers.info</a> |{' '}
+        <a href="https://openorgs.info/">OpenOrgs.info</a> |{' '}
+        <a href="https://l2fees.info/">L2Fees.info</a> |{' '}
+        <a href="https://stakers.info/">Stakers.info</a> |{' '}
+        <a href="https://moneyprinter.info/">MoneyPrinter.info</a>
       </p>
     </footer>
   );

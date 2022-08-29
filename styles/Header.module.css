@@ -1,46 +1,82 @@
+.headerHorizontal,
 .header {
   padding: 20px 30px 0 30px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header {
+  flex-direction: column;
 }
 .header a {
   text-decoration: none;
 }
-.header h1 {
+.header h1,
+.headerHorizontal h1 {
   margin: 0 20px 0 0;
   display: inline-block;
   vertical-align: middle;
+  font-size: 24px;
 }
 .verticalAlign {
   vertical-align: middle;
 }
 .baseline {
   margin: 0;
+  font-size: 8px;
 }
 .poweredBy {
   font-weight: 400;
-  font-size: 9px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   vertical-align: middle;
   color: #beddff;
 }
-.oneline {
-  justify-content: center;
-  display: flex;
-  align-items: baseline;
-}
-.onelineHorizontal {
-  display: flex;
-  align-items: baseline;
+.oneline,
+.onelineVertical {
   justify-content: flex-start;
+  display: flex;
+  align-items: baseline;
 }
-.question {
-  color: #90a0ce;
-  margin: 10px 0 0 0;
-  text-align: center;
+.onelineVertical {
+  justify-content: space-between;
+  align-items: center;
 }
-.questionHorizontal {
+.onelineVertical .poweredBy {
+  display: block;
+}
+.question,
+.questionVertical {
   color: #90a0ce;
   margin: 10px 0 0 0;
   text-align: left;
+}
+.questionVertical {
+  text-align: center;
+  margin: 5px 0;
+}
+.toggle {
+  padding: 4px;
+  background: #311c42;
+  border-radius: 30px;
+  display: inline-flex;
+  gap: 4px;
+}
+.toggle button.selected {
+  background: rgba(215, 80, 200, 1);
+}
+.toggle button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 4px 16px;
+  height: 29px;
+  color: #fff;
+  background: rgba(215, 80, 200, 0);
+  border-radius: 30px;
+}
+.vertical {
+  width: 100%;
 }
