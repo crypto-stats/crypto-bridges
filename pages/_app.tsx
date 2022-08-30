@@ -44,7 +44,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           <NetworkDiagram />
           <Panel>
             <AnimatePresence exitBeforeEnter>
-              <Component {...pageProps} key={router.basePath} />
+              <Component {...pageProps} key={router.asPath} />
             </AnimatePresence>
           </Panel>
           <Footer />

@@ -25,7 +25,7 @@ const Home: NextPage = () => {
     );
   const convertedData = convertDataForGraph(answer.data as ICsApiData);
   return (
-    <Motion key={'main'}>
+    <Motion>
       <menu className={styles.menu}>
         <Table
           listsChains={false}

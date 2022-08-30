@@ -10,7 +10,7 @@
 }
 
 .footerVertical {
-  padding: 50px 20px 30px 20px;
+  padding: 50px 10px 30px 10px;
   gap: 20px;
   flex-flow: column-reverse;
 }

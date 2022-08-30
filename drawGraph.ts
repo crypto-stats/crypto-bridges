@@ -386,17 +386,15 @@ export function drawGraph(
   }
 
   function findSelected(path: string): IGraphNode | undefined {
-    console.log(path);
     return path.length === 1
       ? undefined
       : data.nodes.find(
-          (node) => node.name === path.split('/')[2].split('-').join(' '),
+          (node) => node.name === path.split('/')[2]?.split('-').join(' '),
         );
   }
 
   function updateSelected(path: string) {
-    const pathWithoutQuery = path.split('?')[0];
-    const selected = findSelected(pathWithoutQuery);
+    const selected = findSelected(path);
     if (selected !== undefined) {
       highlightNode(selected);
     } else {

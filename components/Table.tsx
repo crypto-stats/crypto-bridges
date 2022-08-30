@@ -47,9 +47,12 @@ const Table = ({
               return (
                 <li key={index} className={styles.item}>
                   <Link
-                    href={`/${listsChains ? 'chain' : 'bridge'}/${name
-                      .split(' ')
-                      .join('-')}`}
+                    href={{
+                      pathname: `/${listsChains ? 'chain' : 'bridges'}/${name
+                        .split(' ')
+                        .join('-')}`,
+                      query: listsChains ? { view: 'imports' } : {},
+                    }}
                     scroll={false}
                     passHref={true}
                   >
