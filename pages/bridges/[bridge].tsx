@@ -1,16 +1,16 @@
 import type { NextPage } from 'next';
 import BackButton from '../../components/BackButton';
-import BridgeSpecifics from '../../components/Bridge';
 import Motion from '../../components/Motion';
-import Table from '../../components/Table';
-import { BRIDGED_VALUE_API_URL } from '../../constants';
 import styles from '../../styles/page.module.css';
-import type { IGraphData } from '../../utils';
-import { convertDataForGraph } from '../../utils';
+import {
+  convertDummyDataForGraph,
+  IDummyData,
+  IFlowBridgesGraphData,
+} from '../../utils';
 
 interface IBridgeProps {
   bridge: string;
-  data: IGraphData;
+  data: IFlowBridgesGraphData;
 }
 
 interface IBridgePath {
@@ -19,11 +19,15 @@ interface IBridgePath {
 
 const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
   const bridgeName = bridge.split('-').join(' ');
+  const bridgeData = data.links.find((link) => link.bridge === bridgeName);
+  if (bridgeData === undefined) {
+    return <p>Empty!</p>;
+  }
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <BridgeSpecifics data={data} name={bridge} />
+        {/* <BridgeSpecifics data={bridgeData} name={bridge} />
         <Table
           listsChains={true}
           title={'connected chains'}
@@ -45,33 +49,37 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
               bridgedIn: node.value,
               bridgedOut: node.value,
             }))}
-        />
+        /> */}
       </section>
     </Motion>
   );
 };
 
+import fsPromises from 'fs/promises';
+import path from 'path';
 export async function getStaticPaths(): Promise<{
   fallback: boolean;
   paths: IBridgePath[];
 }> {
-  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
-    .then((r) => r.json())
-    .then(convertDataForGraph);
-  const paths = data.nodes
-    .filter((node) => node.type === 'bridge')
-    .map(({ name }): IBridgePath => {
-      return { params: { bridge: name.split(' ').join('-') } };
-    });
+  const filePath = path.join(process.cwd(), 'public/dummy.json');
+  const jsonData = (await fsPromises.readFile(filePath)) as any as string;
+  const data: IFlowBridgesGraphData = convertDummyDataForGraph(
+    JSON.parse(jsonData) as IDummyData,
+  );
+  const paths = data.nodes.map(({ chain }): IBridgePath => {
+    return { params: { bridge: chain.split(' ').join('-') } };
+  });
   return { paths, fallback: false };
 }
 
 export async function getStaticProps({
   params,
 }: IBridgePath): Promise<{ props: IBridgeProps }> {
-  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
-    .then((r) => r.json())
-    .then(convertDataForGraph);
+  const filePath = path.join(process.cwd(), 'public/dummy.json');
+  const jsonData = (await fsPromises.readFile(filePath)) as any as string;
+  const data: IFlowBridgesGraphData = convertDummyDataForGraph(
+    JSON.parse(jsonData) as IDummyData,
+  );
   return {
     props: { ...params, data },
   };

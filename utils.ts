@@ -20,6 +20,29 @@ export interface IGraphData {
   links: IGraphLink[];
 }
 
+export interface IFlowBridgesGraphLink {
+  source: string;
+  target: string;
+  bridge: string;
+  logo: string;
+  website: string;
+  flow: number;
+  type: BridgeCategory | null;
+  audits: IAudit[] | null;
+}
+
+export interface IFlowBridgesGraphNode {
+  chain: string;
+  logo: string;
+  tvl: number;
+  in: number;
+}
+
+export interface IFlowBridgesGraphData {
+  nodes: IFlowBridgesGraphNode[];
+  links: IFlowBridgesGraphLink[];
+}
+
 export interface IAudit {
   name: string;
   url: string;
@@ -54,6 +77,104 @@ interface INode {
 export interface ICsApiData {
   success: boolean;
   data: INode[];
+}
+
+export interface IDummyData {
+  flows: IDummyFlow[];
+  chains: IDummyChain[];
+  bridges: IDummyBridge[];
+}
+
+interface IDummyFlow {
+  a: string;
+  b: string;
+  aToB: number;
+  bToA: number;
+  bridge: string;
+}
+
+interface IDummyChain {
+  name: string;
+  logo: string;
+}
+
+interface IDummyBridge {
+  name: string;
+  logo: string;
+  website: string;
+  type: BridgeCategory;
+  audits?: IAudit[];
+}
+
+export function convertDummyDataForGraph(
+  data: IDummyData,
+): IFlowBridgesGraphData {
+  const graphData: IFlowBridgesGraphData = { nodes: [], links: [] };
+  data.flows.forEach((flow) => {
+    const chainA = graphData.nodes.findIndex((node) => node.chain === flow.a);
+    if (chainA === -1) {
+      const chain = data.chains.find((chain) => chain.name === flow.a);
+      if (chain === undefined) {
+        console.error('Data error: no matching chain in data');
+        return;
+      }
+      graphData.nodes.push({
+        chain: flow.a,
+        logo: chain.logo,
+        tvl: flow.aToB,
+        in: flow.bToA,
+      });
+    } else {
+      graphData.nodes[chainA].tvl += flow.aToB;
+      graphData.nodes[chainA].in += flow.bToA;
+    }
+    const chainBIndex = graphData.nodes.findIndex(
+      (node) => node.chain === flow.b,
+    );
+    if (chainBIndex === -1) {
+      const chain = data.chains.find((chain) => chain.name === flow.b);
+      if (chain === undefined) {
+        console.error('Data error: no matching chain in data');
+        return;
+      }
+      graphData.nodes.push({
+        chain: flow.b,
+        logo: chain.logo,
+        tvl: flow.bToA,
+        in: flow.aToB,
+      });
+    } else {
+      graphData.nodes[chainBIndex].tvl += flow.bToA;
+      graphData.nodes[chainBIndex].in += flow.aToB;
+    }
+
+    const bridge = data.bridges.find((bridge) => bridge.name === flow.bridge);
+    if (bridge === undefined) {
+      console.error('Data error: no matching bridge in data');
+      return;
+    }
+    graphData.links.push({
+      source: flow.a,
+      target: flow.b,
+      website: bridge.website,
+      audits: bridge.audits ?? null,
+      type: bridge.type,
+      flow: flow.aToB,
+      bridge: flow.bridge,
+      logo: bridge.logo,
+    });
+    graphData.links.push({
+      source: flow.b,
+      target: flow.a,
+      website: bridge.website,
+      audits: bridge.audits ?? null,
+      type: bridge.type,
+      flow: flow.bToA,
+      bridge: flow.bridge,
+      logo: bridge.logo,
+    });
+  });
+  return graphData;
 }
 
 export function convertDataForGraph(data: ICsApiData): IGraphData {

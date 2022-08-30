@@ -7,8 +7,8 @@ import { addLeadingZero } from '../utils';
 export interface ITableItem {
   name: string;
   logo: string;
-  bridgedOut: number;
-  bridgedIn: number;
+  tvl: number;
+  in: number;
 }
 
 export interface ITableProps {
@@ -16,6 +16,7 @@ export interface ITableProps {
   children?: ReactNode;
   title: string;
   listsChains: boolean;
+  valueIn?: boolean;
 }
 
 const Table = ({
@@ -23,6 +24,7 @@ const Table = ({
   children,
   title,
   listsChains,
+  valueIn = false,
 }: ITableProps): ReactElement => {
   return (
     <div className={styles.table}>
@@ -37,22 +39,19 @@ const Table = ({
             <span className={styles.imageGap}></span>
             <span>name</span>
           </p>
-          <p>value out</p>
-          <p>value in</p>
+          <p>{valueIn ? 'value in' : 'value out'}</p>
+          <p>{valueIn ? 'value out' : 'value in'}</p>
         </div>
         <ol className={styles.list}>
           {tableContent
-            .sort((a, b) => b.bridgedIn - a.bridgedIn)
-            .map(({ name, logo, bridgedIn, bridgedOut }, index) => {
+            .sort((a, b) => (valueIn ? b.in - a.in : b.tvl - a.tvl))
+            .map((content, index) => {
               return (
                 <li key={index} className={styles.item}>
                   <Link
-                    href={{
-                      pathname: `/${listsChains ? 'chain' : 'bridges'}/${name
-                        .split(' ')
-                        .join('-')}`,
-                      query: listsChains ? { view: 'imports' } : {},
-                    }}
+                    href={`/${listsChains ? 'chain' : 'bridges'}/${content.name
+                      .split(' ')
+                      .join('-')}`}
                     scroll={false}
                     passHref={true}
                   >
@@ -62,12 +61,29 @@ const Table = ({
                           {addLeadingZero(index + 1)}
                         </span>
                         <span className={styles.vAlign}>
-                          <Image src={logo} width="20" height="20" alt="" />
+                          <Image
+                            src={content.logo}
+                            width="20"
+                            height="20"
+                            alt=""
+                          />
                         </span>
-                        <span className={styles.vAlign}>{name}</span>
+                        <span className={styles.vAlign}>{content.name}</span>
                       </p>
-                      <p>{bridgedOut?.toFixed(0)}</p>
-                      <p>{bridgedIn?.toFixed(0)}</p>
+                      <p>
+                        {`$${
+                          valueIn
+                            ? content.in?.toFixed(0)
+                            : content.tvl?.toFixed(0)
+                        }`}
+                      </p>
+                      <p>
+                        {`$${
+                          valueIn
+                            ? content.tvl?.toFixed(0)
+                            : content.in?.toFixed(0)
+                        }`}
+                      </p>
                     </a>
                   </Link>
                 </li>

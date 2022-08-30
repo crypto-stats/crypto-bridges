@@ -17,9 +17,9 @@ import {
   findLinearParameters,
   findLogParameters,
   getDiagramDimensions,
-  IGraphData,
-  IGraphLink,
-  IGraphNode,
+  IFlowBridgesGraphData,
+  IFlowBridgesGraphLink,
+  IFlowBridgesGraphNode,
 } from './utils';
 
 const PADDING = 30;
@@ -43,7 +43,7 @@ enum DISTRIBUTION {
 // surface, so that the proportions are consistent on all possible resizes.
 export function drawGraph(
   svgRef: RefObject<SVGSVGElement>,
-  data: IGraphData,
+  data: IFlowBridgesGraphData,
   navigateTo: (path: string) => void,
 ): INetworkGraph {
   let width = 0,
@@ -54,20 +54,20 @@ export function drawGraph(
     | undefined = undefined;
 
   const distribution: DISTRIBUTION = DISTRIBUTION.LINEAR;
-  const sortedNodes = data.nodes.sort((a, b) => a.value - b.value);
+  const sortedNodes = data.nodes.sort((a, b) => a.tvl - b.tvl);
   const [kLogAN, kLogBN] = findLogParameters(
-    sortedNodes[0].value,
-    sortedNodes[sortedNodes.length - 1].value,
+    sortedNodes[0].tvl,
+    sortedNodes[sortedNodes.length - 1].tvl,
     NODE_AREAS_SHARE.MIN,
     NODE_AREAS_SHARE.MAX,
   );
   const [kLinAN, kLinBN] = findLinearParameters(
-    sortedNodes[0].value,
-    sortedNodes[sortedNodes.length - 1].value,
+    sortedNodes[0].tvl,
+    sortedNodes[sortedNodes.length - 1].tvl,
     NODE_AREAS_SHARE.MIN,
     NODE_AREAS_SHARE.MAX,
   );
-  const sortedLinks = data.links.sort((a, b) => a.tvl - b.tvl);
+  const sortedLinks = data.links.sort((a, b) => a.flow - b.flow);
   let [kAP, kBP] = getPathWidthParameters();
 
   const svg = select(svgRef.current);
@@ -84,9 +84,9 @@ export function drawGraph(
     .style('stroke-opacity', 0)
     .on('mouseover', onMouseOverLink)
     .on('mouseout', onMouseOut)
-    .on('click', function (e: MouseEvent, path: IGraphLink) {
+    .on('click', function (e: MouseEvent, path: IFlowBridgesGraphLink) {
       e.preventDefault();
-      const targetNode: IGraphNode = path.target as any;
+      const targetNode: IFlowBridgesGraphNode = path.target as any;
       navigateTo(getPathFromNode(targetNode));
     });
 
@@ -112,7 +112,9 @@ export function drawGraph(
   const tvlCircles = circleGroups
     .append('circle')
     .attr('r', getTvlRadius)
-    .style('fill', 'none')
+    .style('fill', '#311c42')
+    .style('stroke', '#334272')
+    .style('stroke-width', '4')
     .style('cursor', 'pointer')
     .on('click', onClick)
     .on('mouseover', onMouseOver)
@@ -122,7 +124,7 @@ export function drawGraph(
 
   const blurredImages = circleGroups
     .append('image')
-    .attr('href', (d: any) => d.imageSrc as string)
+    .attr('href', (d: any) => d.logo as string)
     .style('cursor', 'pointer')
     .style('filter', `url(#${IMAGE_GLOW_ID})`)
     .classed('highlight', true)
@@ -130,7 +132,7 @@ export function drawGraph(
 
   const images = circleGroups
     .append('image')
-    .attr('href', (d: any) => d.imageSrc as string)
+    .attr('href', (d: any) => d.logo as string)
     .style('cursor', 'pointer')
     .on('mouseover', onMouseOver)
     .on('mouseout', onMouseOut)
@@ -142,22 +144,22 @@ export function drawGraph(
     .style('cursor', 'pointer')
     .attr('font-size', '1em');
   text.append('tspan');
-  //.text((d) => d.name.split(' ')[0]);
+  //.text((d) => d.chain.split(' ')[0]);
   text
     .append('tspan')
-    //.text((d) => d.name.split(' ')[1] ?? '')
+    //.text((d) => d.chain.split(' ')[1] ?? '')
     .attr('dy', '20')
-    .attr('dx', (d: any) => -d.name.split(' ')[1]?.length * 9 || '0');
+    .attr('dx', (d: any) => -d.chain.split(' ')[1]?.length * 9 || '0');
 
   resize();
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
 
-  function highlightNode(node: IGraphNode) {
+  function highlightNode(node: IFlowBridgesGraphNode) {
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-selected', (d: any) => {
-        if (d.source.name === node.name || d.target.name === node.name) {
+        if (d.source.name === node.chain || d.target.name === node.chain) {
           connectedNodeNames.push(d.source.name as string);
           connectedNodeNames.push(d.target.name as string);
           return true;
@@ -165,7 +167,7 @@ export function drawGraph(
         return false;
       })
       .style('filter', (d: any) =>
-        d.source.name === node.name || d.target.name === node.name
+        d.source.name === node.chain || d.target.name === node.chain
           ? `url(#${GLOW_ID})`
           : 'none',
       );
@@ -189,15 +191,15 @@ export function drawGraph(
     blurredImages.classed('blurred-image-hovered', false);
   }
 
-  function onMouseOverLink(e: MouseEvent, path: IGraphLink) {
-    onMouseOver(e, path.target as any as IGraphNode);
+  function onMouseOverLink(e: MouseEvent, path: IFlowBridgesGraphLink) {
+    onMouseOver(e, path.target as any as IFlowBridgesGraphNode);
   }
 
-  function onMouseOver(e: MouseEvent, node: IGraphNode) {
+  function onMouseOver(e: MouseEvent, node: IFlowBridgesGraphNode) {
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-hovered', (d: any) => {
-        if (d.source.name === node.name || d.target.name === node.name) {
+        if (d.source.name === node.chain || d.target.name === node.chain) {
           connectedNodeNames.push(d.source.name as string);
           connectedNodeNames.push(d.target.name as string);
           return true;
@@ -205,8 +207,8 @@ export function drawGraph(
         return false;
       })
       .style('filter', function (d: any) {
-        return d.source.name === node.name ||
-          d.target.name === node.name ||
+        return d.source.name === node.chain ||
+          d.target.name === node.chain ||
           select(this).classed('path-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
@@ -221,7 +223,7 @@ export function drawGraph(
     );
   }
 
-  function onClick(e: MouseEvent, node: IGraphNode) {
+  function onClick(e: MouseEvent, node: IFlowBridgesGraphNode) {
     e.preventDefault();
     highlightNode(node);
     navigateTo(getPathFromNode(node));
@@ -231,22 +233,22 @@ export function drawGraph(
     const maxNodeArea = NODE_AREAS_SHARE.MAX * availableArea;
     const maxNodeRadius = Math.sqrt(maxNodeArea / Math.PI);
     const maxPathWidthNodeRadiusRatio =
-      sortedLinks[sortedLinks.length - 1].tvl /
-      sortedNodes[sortedNodes.length - 1].value;
+      sortedLinks[sortedLinks.length - 1].flow /
+      sortedNodes[sortedNodes.length - 1].tvl;
     const maxPathWidth = maxNodeRadius * maxPathWidthNodeRadiusRatio;
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
         return findLinearParameters(
-          sortedLinks[0].tvl,
-          sortedLinks[sortedLinks.length - 1].tvl,
+          sortedLinks[0].flow,
+          sortedLinks[sortedLinks.length - 1].flow,
           MIN_PATH_WIDTH,
           maxPathWidth,
         );
       }
       case DISTRIBUTION.LOGARITHMIC: {
         return findLogParameters(
-          sortedLinks[0].tvl,
-          sortedLinks[sortedLinks.length - 1].tvl,
+          sortedLinks[0].flow,
+          sortedLinks[sortedLinks.length - 1].flow,
           MIN_PATH_WIDTH,
           maxPathWidth,
         );
@@ -255,13 +257,14 @@ export function drawGraph(
   }
 
   function getPathWidth(d: any): number {
+    if (d.flow === 0) return 0;
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const width = kAP * d.tvl + kBP;
+        const width = kAP * d.flow + kBP;
         return width;
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const width = kAP * Math.log(kBP * d.tvl);
+        const width = kAP * Math.log(kBP * d.flow);
         return width;
       }
     }
@@ -270,22 +273,20 @@ export function drawGraph(
   function getTvlRadius(d: any): number {
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const areaShare = kLinAN * d.value + kLinBN;
+        const areaShare = kLinAN * d.tvl + kLinBN;
         const area = availableArea * areaShare;
         return Math.sqrt(area / Math.PI);
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const areaShare = kLogAN * Math.log(kLogBN * d.value);
+        const areaShare = kLogAN * Math.log(kLogBN * d.tvl);
         const area = availableArea * areaShare;
         return Math.sqrt(area / Math.PI);
       }
     }
   }
 
-  function getPathFromNode(n: IGraphNode) {
-    return `/${n.type === 'bridge' ? 'bridge' : 'chain'}/${n.name
-      .split(' ')
-      .join('-')}`;
+  function getPathFromNode(n: IFlowBridgesGraphNode) {
+    return `/chain/${n.chain.split(' ').join('-')}`;
   }
 
   function resize() {
@@ -316,31 +317,42 @@ export function drawGraph(
       .force(
         'link',
         forceLink()
-          .id((d: any) => (d as IGraphNode).name)
+          .id((d: any) => (d as IFlowBridgesGraphNode).chain)
           .links(data.links),
       )
       .force('center', forceCenter(width / 2, height / 2))
       .on('tick', ticked)
       .on('end', ticked);
 
+    const LOGO_SIZE =
+      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
+      2 *
+      Math.cos(Math.PI / 4) *
+      0.8;
+
     tvlCircles.attr('r', getTvlRadius);
     images
-      .attr('width', (d: any) => getTvlRadius(d) * 2)
-      .attr('height', (d: any) => getTvlRadius(d) * 2)
-      .attr('x', (d: any) => d.x - getTvlRadius(d))
-      .attr('y', (d: any) => d.y - getTvlRadius(d));
+      .attr('width', LOGO_SIZE)
+      .attr('height', LOGO_SIZE)
+      .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
+      .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
     blurredImages
-      .attr('width', (d: any) => getTvlRadius(d) * 2)
-      .attr('height', (d: any) => getTvlRadius(d) * 2)
-      .attr('x', (d: any) => d.x - getTvlRadius(d))
-      .attr('y', (d: any) => d.y - getTvlRadius(d));
+      .attr('width', LOGO_SIZE)
+      .attr('height', LOGO_SIZE)
+      .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
+      .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
     paths.style('stroke-width', getPathWidth);
     clickablePaths.style('stroke-width', (d: any) =>
-      Math.max(MIN_PATH_CLICK_WIDTH, getPathWidth(d)),
+      d.flow === 0 ? 0 : Math.max(MIN_PATH_CLICK_WIDTH, getPathWidth(d)),
     );
   }
 
   function ticked() {
+    const LOGO_SIZE =
+      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
+      2 *
+      Math.cos(Math.PI / 4) *
+      0.8;
     tvlCircles
       .attr('cx', (d: any) => {
         const radius = getTvlRadius(d);
@@ -361,14 +373,14 @@ export function drawGraph(
         return coord;
       });
     text
-      .attr('dx', (d: any) => d.x - d.name.split(' ')[0].length * 4.7)
+      .attr('dx', (d: any) => d.x - d.chain.split(' ')[0].length * 4.7)
       .attr('dy', (d: any) => (d.y as number) + 5);
     images
-      .attr('x', (d: any) => d.x - getTvlRadius(d))
-      .attr('y', (d: any) => d.y - getTvlRadius(d));
+      .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
+      .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
     blurredImages
-      .attr('x', (d: any) => d.x - getTvlRadius(d))
-      .attr('y', (d: any) => d.y - getTvlRadius(d));
+      .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
+      .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
     const getPath = (d: any) => {
       const dx = d.target.x - d.source.x;
       const dy = d.target.y - d.source.y;
@@ -385,11 +397,11 @@ export function drawGraph(
     clickablePaths.attr('d', getPath);
   }
 
-  function findSelected(path: string): IGraphNode | undefined {
+  function findSelected(path: string): IFlowBridgesGraphNode | undefined {
     return path.length === 1
       ? undefined
       : data.nodes.find(
-          (node) => node.name === path.split('/')[2]?.split('-').join(' '),
+          (node) => node.chain === path.split('/')[2]?.split('-').join(' '),
         );
   }
 

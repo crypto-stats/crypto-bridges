@@ -9,7 +9,7 @@
   text-align: left;
   font-weight: 300;
   font-size: 14px;
-  line-height: 17px;
+  line-height: 35px; /*17px*/
   letter-spacing: 0.16em;
   color: #d750c8;
   text-transform: uppercase;
@@ -37,10 +37,10 @@
 
 .item {
   list-style-type: none;
-  padding: 0 16px;
+  padding: 0 3px;
 }
 .head {
-  padding: 0 26px;
+  padding: 0 13px;
   display: flex;
   font-weight: 400;
   font-size: 12px;
@@ -72,7 +72,7 @@
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
-  transition: all 600ms ease;
+  transition: all 200ms ease;
   scale: 1;
   align-items: center;
   font-style: normal;
@@ -80,7 +80,6 @@
   font-size: 14px;
   line-height: 17px;
   text-transform: capitalize;
-  border-radius: 10px;
 }
 .item a > p {
   width: 160px;
@@ -94,8 +93,7 @@
 }
 .item a:hover {
   background: rgba(215, 80, 200, 0.5);
-  border-radius: 10px;
-  scale: 1.01;
+  scale: 1.006;
 }
 .item > a > div {
   display: flex;

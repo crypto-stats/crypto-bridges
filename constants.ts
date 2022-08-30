@@ -3,7 +3,7 @@ export const BRIDGED_VALUE_API_URL =
 
 export const HEADER_HEIGHT = 90;
 export const PANEL_WIDTH = 600;
-export const FOOTER_HEIGHT = 65;
+export const FOOTER_HEIGHT = 50;
 
 export enum GRAPH_COLORS {
   DEFAULT = '#304273',
@@ -11,8 +11,8 @@ export enum GRAPH_COLORS {
 }
 
 export enum NODE_AREAS_SHARE {
-  MIN = 0.001,
-  MAX = 0.015,
+  MIN = 0.003,
+  MAX = 0.04,
 }
 
 export const MIN_PATH_WIDTH = 4;

@@ -1,17 +1,16 @@
 import type { NextPage } from 'next';
 import BackButton from '../../components/BackButton';
-import BoxRow, { BoxAlign } from '../../components/BoxRow';
-import ChainSpecifics from '../../components/Chain';
 import Motion from '../../components/Motion';
-import Table from '../../components/Table';
-import { BRIDGED_VALUE_API_URL } from '../../constants';
 import styles from '../../styles/page.module.css';
-import type { IGraphData } from '../../utils';
-import { convertDataForGraph } from '../../utils';
+import {
+  convertDummyDataForGraph,
+  IDummyData,
+  IFlowBridgesGraphData,
+} from '../../utils';
 
 interface IChainProps {
   chain: string;
-  data: IGraphData;
+  data: IFlowBridgesGraphData;
 }
 
 interface IChainPath {
@@ -24,16 +23,16 @@ const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <ChainSpecifics data={data} name={chain} />
+        {/* <ChainSpecifics data={data} name={chain} />
         <Table
           listsChains={false}
           title={'connected bridges'}
-          tableContent={data.nodes
-            .filter((node) => {
+          tableContent={data.links
+            .filter((link) => {
               for (const link of data.links) {
                 if (
-                  (link.target === chainName && link.source === node.name) ||
-                  (link.source === chainName && link.target === node.name)
+                  (link.target === chainName && link.source === node.chain) ||
+                  (link.source === chainName && link.target === node.chain)
                 ) {
                   return node.type === 'bridge';
                 }
@@ -41,10 +40,9 @@ const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
               return false;
             })
             .map((node) => ({
-              name: node.name,
-              logo: node.imageSrc,
-              bridgedIn: node.value,
-              bridgedOut: node.value,
+              name: node.chain,
+              logo: node.logo,
+              tvl: node.tvl
             }))}
         >
           <BoxRow
@@ -54,33 +52,37 @@ const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
             ]}
             align={BoxAlign.Center}
           ></BoxRow>
-        </Table>
+        </Table> */}
       </section>
     </Motion>
   );
 };
 
+import fsPromises from 'fs/promises';
+import path from 'path';
 export async function getStaticPaths(): Promise<{
   fallback: boolean;
   paths: IChainPath[];
 }> {
-  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
-    .then((r) => r.json())
-    .then(convertDataForGraph);
-  const paths = data.nodes
-    .filter((node) => node.type === 'blockchain')
-    .map(({ name }) => {
-      return { params: { chain: name.split(' ').join('-') } };
-    });
+  const filePath = path.join(process.cwd(), 'public/dummy.json');
+  const jsonData = (await fsPromises.readFile(filePath)) as any as string;
+  const data: IFlowBridgesGraphData = convertDummyDataForGraph(
+    JSON.parse(jsonData) as IDummyData,
+  );
+  const paths = data.nodes.map(({ chain }) => {
+    return { params: { chain: chain.split(' ').join('-') } };
+  });
   return { paths, fallback: false };
 }
 
 export async function getStaticProps({
   params,
 }: IChainPath): Promise<{ props: IChainProps }> {
-  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
-    .then((r) => r.json())
-    .then(convertDataForGraph);
+  const filePath = path.join(process.cwd(), 'public/dummy.json');
+  const jsonData = (await fsPromises.readFile(filePath)) as any as string;
+  const data: IFlowBridgesGraphData = convertDummyDataForGraph(
+    JSON.parse(jsonData) as IDummyData,
+  );
   return {
     props: { ...params, data },
   };

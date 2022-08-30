@@ -1,17 +1,17 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import styles from '../styles/NodeSpecifics.module.css';
-import { IGraphData } from '../utils';
+import { IFlowBridgesGraphData } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
 
 interface IBridgeProps {
-  data: IGraphData;
+  data: IFlowBridgesGraphData;
   name: string;
 }
 
 const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const chainName = name.split('-').join(' ');
-  const node = data.nodes.find((node) => node.name === chainName);
+  const node = data.nodes.find((node) => node.chain === chainName);
   if (node === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
@@ -20,7 +20,7 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       </div>
       <div className={styles.nodeItem}>
         <div className={styles.nodeInfo}>
-          <Image src={node.imageSrc} width={30} height={30} alt="logo" />
+          <Image src={node.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{chainName}</p>
         </div>
         <p>

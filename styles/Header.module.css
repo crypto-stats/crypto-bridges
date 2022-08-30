@@ -52,16 +52,15 @@
 .question,
 .questionVertical {
   color: #90a0ce;
-  margin: 10px 0 0 0;
+  margin: 0;
   text-align: left;
 }
 .questionVertical {
   text-align: center;
-  margin: 5px 0;
+  margin: 10px 0 12px;
 }
 .toggle,
 .toggleVertical {
-  padding: 4px;
   background: #311c42;
   border-radius: 30px;
   display: inline-flex;
@@ -70,6 +69,7 @@
   box-sizing: border-box;
 }
 .toggleVertical {
+  padding: 3px;
   height: auto;
 }
 .toggle button.selected,
@@ -89,8 +89,8 @@
   border-radius: 30px;
 }
 .toggleVertical button {
-  height: 20px;
-  padding: 0 16px;
+  height: 25px;
+  padding: 0 10px;
 }
 .vertical {
   width: 100%;

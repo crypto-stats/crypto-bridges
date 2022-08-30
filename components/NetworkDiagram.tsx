@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { BRIDGED_VALUE_API_URL, GLOW_ID, IMAGE_GLOW_ID } from '../constants';
+import { GLOW_ID, IMAGE_GLOW_ID } from '../constants';
 import { drawGraph, INetworkGraph } from '../drawGraph';
 import style from '../styles/NetworkDiagram.module.css';
-import { convertDataForGraph, ICsApiData } from '../utils';
+import { convertDummyDataForGraph, IDummyData } from '../utils';
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -14,7 +14,7 @@ const fetcher = (url: string) =>
 export default function NetworkDiagram() {
   const router = useRouter();
   const [graph, setGraph] = useState<INetworkGraph>();
-  const { data } = useSWR(BRIDGED_VALUE_API_URL, fetcher);
+  const { data } = useSWR('/dummy.json', fetcher);
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
     if (data === undefined || graph !== undefined) return;
@@ -46,7 +46,7 @@ export default function NetworkDiagram() {
     }
     const navigateTo = (path: string) =>
       router.push(path, undefined, { scroll: false });
-    const convertedData = convertDataForGraph(data as ICsApiData);
+    const convertedData = convertDummyDataForGraph(data as IDummyData);
     const g = drawGraph(svg, convertedData, navigateTo);
     setGraph(g);
     const updateUrl = (path: string) => g.updateSelected(path);

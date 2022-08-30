@@ -1,0 +1,374 @@
+{
+  "flows": [
+    {
+      "a": "bsc",
+      "b": "ethereum",
+      "aToB": 9900000000,
+      "bToA": 1200000000,
+      "bridge": "BSC Bridge"
+    },
+    {
+      "a": "bitcoin",
+      "b": "ethereum",
+      "aToB": 5000000000,
+      "bToA": 0,
+      "bridge": "wBTC"
+    },
+    {
+      "a": "ethereum",
+      "b": "polygon",
+      "aToB": 4200000000,
+      "bToA": 0,
+      "bridge": "Polygon Bridge"
+    },
+    {
+      "a": "ethereum",
+      "b": "arbitrum",
+      "aToB": 2500000000,
+      "bToA": 0,
+      "bridge": "Arbitrum Bridge"
+    },
+    {
+      "a": "ethereum",
+      "b": "optimism",
+      "aToB": 1200000000,
+      "bToA": 0,
+      "bridge": "Optimism Bridge"
+    },
+    {
+      "a": "ethereum",
+      "b": "near",
+      "aToB": 540000000,
+      "bToA": 190000000,
+      "bridge": "Rainbow Bridge"
+    },
+    {
+      "a": "polygon",
+      "b": "avalanche",
+      "aToB": 1600000000,
+      "bToA": 80000000,
+      "bridge": "Avalanche Bridge"
+    },
+    {
+      "a": "ethereum",
+      "b": "avalanche",
+      "aToB": 288000000,
+      "bToA": 0,
+      "bridge": "Multichain"
+    },
+    {
+      "a": "avalanche",
+      "b": "near",
+      "aToB": 255000000,
+      "bToA": 0,
+      "bridge": "Multichain"
+    },
+    {
+      "a": "arbitrum",
+      "b": "bsc",
+      "aToB": 230000000,
+      "bToA": 0,
+      "bridge": "Multichain"
+    },
+    {
+      "a": "bsc",
+      "b": "ethereum",
+      "aToB": 187000000,
+      "bToA": 0,
+      "bridge": "Multichain"
+    },
+    {
+      "a": "polygon",
+      "b": "bsc",
+      "aToB": 59000000,
+      "bToA": 10000000,
+      "bridge": "Multichain"
+    },
+    {
+      "a": "ethereum",
+      "b": "bsc",
+      "aToB": 400000000,
+      "bToA": 50000000,
+      "bridge": "Portal"
+    },
+    {
+      "a": "bsc",
+      "b": "near",
+      "aToB": 24000000,
+      "bToA": 5000000,
+      "bridge": "Portal"
+    },
+    {
+      "a": "avalanche",
+      "b": "polygon",
+      "aToB": 12000000,
+      "bToA": 5000000,
+      "bridge": "Portal"
+    },
+    {
+      "a": "solana",
+      "b": "arbitrum",
+      "aToB": 13000000,
+      "bToA": 5000000,
+      "bridge": "Portal"
+    }
+  ],
+  "chains": [
+    {
+      "name": "bitcoin",
+      "logo": "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"
+    },
+    {
+      "name": "bsc",
+      "logo": "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=023"
+    },
+    {
+      "name": "ethereum",
+      "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"
+    },
+    {
+      "name": "arbitrum",
+      "logo": "https://l2beat.com/icons/arbitrum.png"
+    },
+    {
+      "name": "optimism",
+      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023"
+    },
+    {
+      "name": "polygon",
+      "logo": "https://cryptologos.cc/logos/polygon-matic-logo.png?v=023"
+    },
+    {
+      "name": "multichain",
+      "logo": "https://defillama.com/_next/image?url=https%3A%2F%2Ficons.llama.fi%2Fmultichain.jpg&w=32&q=75"
+    },
+    {
+      "name": "avalanche",
+      "logo": "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=023"
+    },
+    {
+      "name": "fantom",
+      "logo": "https://cryptologos.cc/logos/fantom-ftm-logo.png?v=023"
+    },
+    {
+      "name": "ripple",
+      "logo": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=023"
+    },
+    {
+      "name": "cardano",
+      "logo": "https://cryptologos.cc/logos/cardano-ada-logo.png?v=023"
+    },
+    {
+      "name": "solana",
+      "logo": "https://cryptologos.cc/logos/solana-sol-logo.png?v=023"
+    },
+    {
+      "name": "near",
+      "logo": "https://cryptologos.cc/logos/near-protocol-near-logo.png?v=023"
+    },
+    {
+      "name": "polkadot",
+      "logo": "https://cryptologos.cc/logos/polkadot-new-dot-logo.png?v=023"
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Arbitrum Bridge",
+      "logo": "https://l2beat.com/icons/arbitrum.png",
+      "website": "https://bridge.arbitrum.io/",
+      "type": "multisig",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Optimism Bridge",
+      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023",
+      "website": "https://app.optimism.io/bridge/deposit",
+      "type": "multisig",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Polygon Bridge",
+      "logo": "https://cryptologos.cc/logos/polygon-matic-logo.png?v=023",
+      "website": "https://wallet-dev.polygon.technology/bridge/",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "wBTC",
+      "logo": "https://cryptologos.cc/logos/wrapped-bitcoin-wbtc-logo.png?v=023",
+      "website": "https://wbtc.network/",
+      "type": "multisig",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Rainbow Bridge",
+      "logo": "https://openocean.finance/img/rainbowbridge.39184861.png",
+      "website": "https://rainbowbridge.app/",
+      "type": "light-client",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Gravity Bridge",
+      "logo": "https://commonwealth-uploads.s3.us-east-2.amazonaws.com/c98b9a74-094c-4b8e-91a3-fe4e74baf8e3.png",
+      "website": "https://www.gravitybridge.net/",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Multichain",
+      "logo": "https://cryptologos.cc/logos/wrapped-bitcoin-wbtc-logo.png?v=023",
+      "website": "https://multichain.xyz/",
+      "type": "multisig",
+      "audits": [
+        {
+          "name": "MultiChain Contract veMulti Audit Report by BlockSec",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2022"
+        },
+        {
+          "name": "Multichain Contract V6 Audit Report by Dedaub",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/DEDAUB/Multichain%20Contract%20V6%20Audit%20Report%20by%20Dedaub.pdf",
+          "date": "03/2022"
+        }
+      ]
+    },
+    {
+      "name": "Hop Protocol",
+      "logo": "https://images.prismic.io/uphold/d7f1744a-cb88-478d-8cb5-05223e4e7a9e_HOP%402x.png?auto=compress,format",
+      "website": "https://hop.exchange/",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Portal",
+      "logo": "https://alphagrowth.io/media/images/logo/wormhole-d6a00972.png",
+      "website": "https://www.portalbridge.com/#/transfer",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Axelar Bridge",
+      "logo": "https://images.ctfassets.net/mjqoq33y05of/6eCdgxArb4F62MPUb4hqnr/9f701bb72329dfffa0f0f43f2d8915b3/Axelar_Logo_Symbol_Black-min.png",
+      "website": "https://axelar.network/",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Layerzero",
+      "logo": "https://kronosresearch.com/assets/image/ambrosia/portfolio/layer_zero.png",
+      "website": "https://layerzero.network/",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    }
+  ]
+}

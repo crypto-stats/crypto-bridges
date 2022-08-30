@@ -1,26 +1,26 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import styles from '../styles/NodeSpecifics.module.css';
-import { IGraphData } from '../utils';
+import { IFlowBridgesGraphData } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
 
 interface IBridgeProps {
-  data: IGraphData;
+  data: IFlowBridgesGraphData;
   name: string;
 }
 
 const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const bridgeName = name.split('-').join(' ');
-  const node = data.nodes.find((node) => node.name === bridgeName);
+  const node = data.nodes.find((node) => node.chain === bridgeName);
   if (node === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
       <div className={styles.nodeItem}>
         <h2>bridge</h2>
         <div className={styles.nodeInfo}>
-          <Image src={node.imageSrc} width={30} height={30} alt="logo" />
+          <Image src={node.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{bridgeName}</p>
-          <p className={styles.nodeCategory}>{node.category}</p>
+          <p className={styles.nodeCategory}>{'multisig'}</p>
         </div>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

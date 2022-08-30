@@ -2,15 +2,13 @@ import type { NextPage } from 'next';
 import useSWR from 'swr';
 import Motion from '../components/Motion';
 import Table from '../components/Table';
-import { BRIDGED_VALUE_API_URL } from '../constants';
 import styles from '../styles/index.module.css';
-import type { ICsApiData } from '../utils';
-import { convertDataForGraph } from '../utils';
+import { convertDummyDataForGraph, IDummyData } from '../utils';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home: NextPage = () => {
-  const answer = useSWR(BRIDGED_VALUE_API_URL, fetcher);
+  const answer = useSWR('/dummy.json', fetcher);
   if (answer.error)
     return (
       <div>
@@ -23,33 +21,30 @@ const Home: NextPage = () => {
         <p className={styles.status}>Loading...</p>
       </div>
     );
-  const convertedData = convertDataForGraph(answer.data as ICsApiData);
+  const convertedData = convertDummyDataForGraph(answer.data as IDummyData);
   return (
     <Motion>
       <menu className={styles.menu}>
         <Table
-          listsChains={false}
-          title={'bridges'}
-          tableContent={convertedData.nodes
-            .filter((node) => node.type === 'bridge')
-            .map((node) => ({
-              name: node.name,
-              logo: node.imageSrc,
-              bridgedIn: node.value,
-              bridgedOut: node.value,
-            }))}
+          listsChains={true}
+          title={'exporters'}
+          tableContent={convertedData.nodes.map((node) => ({
+            name: node.chain,
+            logo: node.logo,
+            tvl: node.tvl,
+            in: node.in,
+          }))}
         />
         <Table
+          valueIn
           listsChains={true}
-          title={'chains'}
-          tableContent={convertedData.nodes
-            .filter((node) => node.type === 'blockchain')
-            .map((node) => ({
-              name: node.name,
-              logo: node.imageSrc,
-              bridgedIn: node.value,
-              bridgedOut: node.value,
-            }))}
+          title={'importers'}
+          tableContent={convertedData.nodes.map((node) => ({
+            name: node.chain,
+            logo: node.logo,
+            tvl: node.tvl,
+            in: node.in,
+          }))}
         />
       </menu>
     </Motion>
