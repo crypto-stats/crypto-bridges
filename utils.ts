@@ -1,4 +1,5 @@
 import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
+import { BridgeCategory, IAudit, IDummyData } from './data/types';
 
 export interface IGraphNode {
   name: string;
@@ -43,20 +44,6 @@ export interface IFlowBridgesGraphData {
   links: IFlowBridgesGraphLink[];
 }
 
-export interface IAudit {
-  name: string;
-  url: string;
-  date: string;
-}
-
-type BridgeCategory =
-  | 'multisig-dynamic'
-  | 'multisig-hardware'
-  | 'multisig'
-  | 'light-client'
-  | 'native'
-  | 'unknown';
-
 interface INode {
   id: string;
   bundle: null;
@@ -77,33 +64,6 @@ interface INode {
 export interface ICsApiData {
   success: boolean;
   data: INode[];
-}
-
-export interface IDummyData {
-  flows: IDummyFlow[];
-  chains: IDummyChain[];
-  bridges: IDummyBridge[];
-}
-
-interface IDummyFlow {
-  a: string;
-  b: string;
-  aToB: number;
-  bToA: number;
-  bridge: string;
-}
-
-interface IDummyChain {
-  name: string;
-  logo: string;
-}
-
-interface IDummyBridge {
-  name: string;
-  logo: string;
-  website: string;
-  type: BridgeCategory;
-  audits?: IAudit[];
 }
 
 export function convertDummyDataForGraph(
@@ -179,7 +139,7 @@ export function convertDummyDataForGraph(
 
 export function convertDataForGraph(data: ICsApiData): IGraphData {
   const graphData: IGraphData = { nodes: [], links: [] };
-  data.data.forEach((apiNode) => {
+  data.data.forEach((apiNode: INode) => {
     const isBridge = apiNode.metadata.toChain === undefined;
 
     const nodeName = apiNode.metadata.name.toLowerCase();
