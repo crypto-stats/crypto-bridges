@@ -4,33 +4,35 @@ import BoxRow, { BoxAlign } from '../../components/BoxRow';
 import ChainSpecifics from '../../components/Chain';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
-import { BRIDGED_VALUE_API_URL } from '../../constants';
+import { loadData } from '../../data/load-data';
+import { GetStaticBridgeProps, IDataContext } from '../../data/types';
 import styles from '../../styles/page.module.css';
 import type { IGraphData } from '../../utils';
 import { convertDataForGraph } from '../../utils';
 
 interface IChainProps {
   chain: string;
-  data: IGraphData;
+  data: IDataContext;
 }
 
 interface IChainPath {
   params: { chain: string };
 }
 
-const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
+const Chain: NextPage<IChainProps> = ({ data, chain }: IChainProps) => {
   const chainName = chain.split('-').join(' ');
+  const convertedData = convertDataForGraph(data.subBridges);
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <ChainSpecifics data={data} name={chain} />
+        <ChainSpecifics data={convertedData} name={chain} />
         <Table
           listsChains={false}
           title={'connected bridges'}
-          tableContent={data.nodes
+          tableContent={convertedData.nodes
             .filter((node) => {
-              for (const link of data.links) {
+              for (const link of convertedData.links) {
                 if (
                   (link.target === chainName && link.source === node.name) ||
                   (link.source === chainName && link.target === node.name)
@@ -64,10 +66,10 @@ export async function getStaticPaths(): Promise<{
   fallback: boolean;
   paths: IChainPath[];
 }> {
-  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
-    .then((r) => r.json())
-    .then(convertDataForGraph);
-  const paths = data.nodes
+  const data = await loadData();
+  const convertedData = convertDataForGraph(data.subBridges);
+
+  const paths = convertedData.nodes
     .filter((node) => node.type === 'blockchain')
     .map(({ name }) => {
       return { params: { chain: name.split(' ').join('-') } };
@@ -75,15 +77,10 @@ export async function getStaticPaths(): Promise<{
   return { paths, fallback: false };
 }
 
-export async function getStaticProps({
-  params,
-}: IChainPath): Promise<{ props: IChainProps }> {
-  const data: IGraphData = await fetch(BRIDGED_VALUE_API_URL)
-    .then((r) => r.json())
-    .then(convertDataForGraph);
-  return {
-    props: { ...params, data },
-  };
-}
+export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
+  const data = await loadData();
+
+  return { props: { data, ...params }, revalidate: 5 * 60 };
+};
 
 export default Chain;

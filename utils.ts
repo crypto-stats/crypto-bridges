@@ -1,4 +1,5 @@
 import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
+import { SubBridge } from './data/types';
 
 export interface IGraphNode {
   name: string;
@@ -51,14 +52,9 @@ interface INode {
   errors: { [key: string]: string };
 }
 
-export interface ICsApiData {
-  success: boolean;
-  data: INode[];
-}
-
-export function convertDataForGraph(data: ICsApiData): IGraphData {
+export function convertDataForGraph(data: SubBridge[]): IGraphData {
   const graphData: IGraphData = { nodes: [], links: [] };
-  data.data.forEach((apiNode) => {
+  data.forEach((apiNode: SubBridge) => {
     const isBridge = apiNode.metadata.toChain === undefined;
 
     const nodeName = apiNode.metadata.name.toLowerCase();

@@ -10,6 +10,7 @@ import { GRAPH_COLORS } from '../constants';
 import '../styles/globals.css';
 
 import Router from 'next/router';
+import { DataProvider } from '../data/data-context';
 
 const routeChange = () => {
   // Temporary fix to avoid flash of unstyled content
@@ -40,14 +41,16 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
         >
-          <Header />
-          <NetworkDiagram />
-          <Panel>
-            <AnimatePresence exitBeforeEnter>
-              <Component {...pageProps} key={router.asPath} />
-            </AnimatePresence>
-          </Panel>
-          <Footer />
+          <DataProvider data={pageProps.data}>
+            <Header />
+            <NetworkDiagram />
+            <Panel>
+              <AnimatePresence exitBeforeEnter>
+                <Component {...pageProps} key={router.asPath} />
+              </AnimatePresence>
+            </Panel>
+            <Footer />
+          </DataProvider>
         </m.main>
       </LazyMotion>
     </>

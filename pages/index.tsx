@@ -1,29 +1,17 @@
 import type { NextPage } from 'next';
-import useSWR from 'swr';
 import Motion from '../components/Motion';
 import Table from '../components/Table';
-import { BRIDGED_VALUE_API_URL } from '../constants';
+import { loadData } from '../data/load-data';
+import { GetStaticBridgeProps, IDataContext } from '../data/types';
 import styles from '../styles/index.module.css';
-import type { ICsApiData } from '../utils';
 import { convertDataForGraph } from '../utils';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+interface HomePageProps {
+  data: IDataContext
+}
 
-const Home: NextPage = () => {
-  const answer = useSWR(BRIDGED_VALUE_API_URL, fetcher);
-  if (answer.error)
-    return (
-      <div>
-        <p className={styles.status}>Fail</p>
-      </div>
-    );
-  if (!answer.data)
-    return (
-      <div>
-        <p className={styles.status}>Loading...</p>
-      </div>
-    );
-  const convertedData = convertDataForGraph(answer.data as ICsApiData);
+const Home: NextPage<HomePageProps> = ({ data }) => {
+  const convertedData = convertDataForGraph(data.subBridges);
   return (
     <Motion>
       <menu className={styles.menu}>
@@ -57,3 +45,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticBridgeProps = async () => {
+  const data = await loadData();
+
+  return { props: { data }, revalidate: 5 * 60 };
+};
