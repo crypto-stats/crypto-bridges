@@ -62,7 +62,7 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
           Submit bug
         </a>
       </div>
-      {node.audits && (
+      {/* {node.audits && (
         <div className={styles.nodeItem}>
           <div className={styles.nodeDataItem}>
             <h2>security audits</h2>
@@ -85,7 +85,7 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
