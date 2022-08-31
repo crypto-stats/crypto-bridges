@@ -1,18 +1,18 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import { IDummyData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
-import { IFlowBridgesGraphData } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
 
 interface IBridgeProps {
-  data: IFlowBridgesGraphData;
+  data: IDummyData;
   name: string;
 }
 
 const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const chainName = name.split('-').join(' ');
-  const node = data.nodes.find((node) => node.chain === chainName);
-  if (node === undefined) return <div>Empty!</div>;
+  const chain = data.chains.find((chain) => chain.name === chainName);
+  if (chain === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
       <div className={styles.nodeItem}>
@@ -20,7 +20,7 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       </div>
       <div className={styles.nodeItem}>
         <div className={styles.nodeInfo}>
-          <Image src={node.logo} width={30} height={30} alt="logo" />
+          <Image src={chain.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{chainName}</p>
         </div>
         <p>
@@ -31,8 +31,8 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       <div className={styles.nodeItem}>
         <BoxRow
           data={[
-            { caption: 'Bridge TVL', value: '$ 500mln' },
-            { caption: 'Bridge TVL', value: '$ 500mln' },
+            { caption: 'Total TVL', value: '$ 500mln' },
+            { caption: 'Total inflow', value: '$ 500mln' },
           ]}
           align={BoxAlign.Left}
         />

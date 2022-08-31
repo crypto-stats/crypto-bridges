@@ -1,24 +1,26 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import { IDummyData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
-import { IFlowBridgesGraphData } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
 
 interface IBridgeProps {
-  data: IFlowBridgesGraphData;
+  data: IDummyData;
   name: string;
 }
 
 const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const bridgeName = name.split('-').join(' ');
-  const node = data.nodes.find((node) => node.chain === bridgeName);
-  if (node === undefined) return <div>Empty!</div>;
+  const bridge = data.bridges.find(
+    (bridge) => bridge.name.toLowerCase() === bridgeName,
+  );
+  if (bridge === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
       <div className={styles.nodeItem}>
         <h2>bridge</h2>
         <div className={styles.nodeInfo}>
-          <Image src={node.logo} width={30} height={30} alt="logo" />
+          <Image src={bridge.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{bridgeName}</p>
           <p className={styles.nodeCategory}>{'multisig'}</p>
         </div>
@@ -62,12 +64,12 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
           Submit bug
         </a>
       </div>
-      {/* {node.audits && (
+      {bridge.audits && (
         <div className={styles.nodeItem}>
           <div className={styles.nodeDataItem}>
             <h2>security audits</h2>
             <div className={styles.nodeAudits}>
-              {node.audits.map((audit, index) => (
+              {bridge.audits.map((audit, index) => (
                 <a
                   key={index}
                   href={audit.url}
@@ -85,7 +87,7 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

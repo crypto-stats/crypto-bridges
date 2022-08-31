@@ -1,12 +1,11 @@
 import type { NextPage } from 'next';
-import { useMemo } from 'react';
 import BackButton from '../../components/BackButton';
+import BridgeSpecifics from '../../components/Bridge';
 import Motion from '../../components/Motion';
-// import Table from '../../components/Table';
+import Table from '../../components/Table';
 import { loadData } from '../../data/load-data';
 import { GetStaticBridgeProps, IDummyData } from '../../data/types';
 import styles from '../../styles/page.module.css';
-import { convertDummyDataForGraph, IFlowBridgesGraphData } from '../../utils';
 
 interface IBridgeProps {
   bridge: string;
@@ -18,39 +17,47 @@ interface IBridgePath {
 }
 
 const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
-  const convertedData = useMemo(() => convertDummyDataForGraph(data), [data]);
   const bridgeName = bridge.split('-').join(' ');
-  const bridgeData = convertedData.links.find((link) => link.bridge === bridgeName);
-  if (bridgeData === undefined) {
-    return <p>Empty!</p>;
-  }
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        {/* <BridgeSpecifics data={bridgeData} name={bridge} />
+        <BridgeSpecifics data={data} name={bridge} />
         <Table
           listsChains={true}
           title={'connected chains'}
-          tableContent={convertedData.nodes
-            .filter((node) => {
-              for (const link of convertedData.links) {
+          tableContent={data.chains
+            .filter((chain) => {
+              for (const flow of data.flows) {
                 if (
-                  (link.target === bridgeName && link.source === node.name) ||
-                  (link.source === bridgeName && link.target === node.name)
+                  flow.bridge.toLowerCase() === bridgeName &&
+                  (flow.a === chain.name || flow.b === chain.name)
                 ) {
-                  return node.type === 'blockchain';
+                  return true;
                 }
               }
               return false;
             })
-            .map((node) => ({
-              name: node.name,
-              logo: node.imageSrc,
-              bridgedIn: node.value,
-              bridgedOut: node.value,
-            }))}
-        /> */}
+            .map((chain) => {
+              let flowIn = 0;
+              let flowOut = 0;
+              for (const flow of data.flows) {
+                if (flow.a === chain.name) {
+                  flowIn += flow.bToA;
+                  flowOut += flow.aToB;
+                } else if (flow.b === chain.name) {
+                  flowIn += flow.aToB;
+                  flowOut += flow.bToA;
+                }
+              }
+              return {
+                name: chain.name,
+                logo: chain.logo,
+                in: flowIn,
+                tvl: flowOut,
+              };
+            })}
+        />
       </section>
     </Motion>
   );
@@ -61,10 +68,8 @@ export async function getStaticPaths(): Promise<{
   paths: IBridgePath[];
 }> {
   const data = await loadData();
-  const convertedData: IFlowBridgesGraphData = convertDummyDataForGraph(data);
-
-  const paths = convertedData.nodes.map(({ chain }): IBridgePath => {
-    return { params: { bridge: chain.split(' ').join('-') } };
+  const paths = data.bridges.map(({ name }): IBridgePath => {
+    return { params: { bridge: name.split(' ').join('-').toLowerCase() } };
   });
   return { paths, fallback: false };
 }

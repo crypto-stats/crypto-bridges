@@ -75,11 +75,11 @@ export function convertDummyDataForGraph(
     if (chainA === -1) {
       const chain = data.chains.find((chain) => chain.name === flow.a);
       if (chain === undefined) {
-        console.error('Data error: no matching chain in data');
+        console.error('Data error: no matching chain in data for ' + flow.a);
         return;
       }
       graphData.nodes.push({
-        chain: flow.a,
+        chain: flow.a.toLowerCase(),
         logo: chain.logo,
         tvl: flow.aToB,
         in: flow.bToA,
@@ -94,11 +94,11 @@ export function convertDummyDataForGraph(
     if (chainBIndex === -1) {
       const chain = data.chains.find((chain) => chain.name === flow.b);
       if (chain === undefined) {
-        console.error('Data error: no matching chain in data');
+        console.error('Data error: no matching chain in data for ' + flow.b);
         return;
       }
       graphData.nodes.push({
-        chain: flow.b,
+        chain: flow.b.toLowerCase(),
         logo: chain.logo,
         tvl: flow.bToA,
         in: flow.aToB,
@@ -110,27 +110,29 @@ export function convertDummyDataForGraph(
 
     const bridge = data.bridges.find((bridge) => bridge.name === flow.bridge);
     if (bridge === undefined) {
-      console.error('Data error: no matching bridge in data');
+      console.error(
+        'Data error: no matching bridge in data for ' + flow.bridge,
+      );
       return;
     }
     graphData.links.push({
-      source: flow.a,
-      target: flow.b,
+      source: flow.a.toLowerCase(),
+      target: flow.b.toLowerCase(),
       website: bridge.website,
       audits: bridge.audits ?? null,
       type: bridge.type,
       flow: flow.aToB,
-      bridge: flow.bridge,
+      bridge: flow.bridge.toLowerCase(),
       logo: bridge.logo,
     });
     graphData.links.push({
-      source: flow.b,
-      target: flow.a,
+      source: flow.b.toLowerCase(),
+      target: flow.a.toLowerCase(),
       website: bridge.website,
       audits: bridge.audits ?? null,
       type: bridge.type,
       flow: flow.bToA,
-      bridge: flow.bridge,
+      bridge: flow.bridge.toLowerCase(),
       logo: bridge.logo,
     });
   });
@@ -238,4 +240,12 @@ export function findLinearParameters(
   const A = (maxOutput - minOutput) / (maxInput - minInput);
   const B = maxOutput - maxInput * A;
   return [A, B];
+}
+
+export function format(x: number): string {
+  return x.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  });
 }

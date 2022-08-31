@@ -179,12 +179,12 @@
       "type": "multisig",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -197,12 +197,12 @@
       "type": "multisig",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -215,12 +215,12 @@
       "type": "multisig-dynamic",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -233,12 +233,12 @@
       "type": "multisig",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -251,12 +251,12 @@
       "type": "light-client",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -269,12 +269,12 @@
       "type": "multisig-dynamic",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -305,12 +305,12 @@
       "type": "multisig-dynamic",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -323,12 +323,12 @@
       "type": "multisig-dynamic",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -341,12 +341,12 @@
       "type": "multisig-dynamic",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }
@@ -359,12 +359,48 @@
       "type": "multisig-dynamic",
       "audits": [
         {
-          "name": "Vitalik",
+          "name": "by Vitalik",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2020"
         },
         {
-          "name": "Satoshi",
+          "name": "by Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "BSC Bridge",
+      "logo": "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=023",
+      "website": "https://www.bnbchain.org/en/bridge",
+      "type": "multisig-dynamic",
+      "audits": [
+        {
+          "name": "by Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "by Satoshi",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2018"
+        }
+      ]
+    },
+    {
+      "name": "Avalanche Bridge",
+      "logo": "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=023",
+      "website": "https://bridge.avax.network/",
+      "type": "multisig",
+      "audits": [
+        {
+          "name": "by Vitalik",
+          "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
+          "date": "04/2020"
+        },
+        {
+          "name": "by Satoshi",
           "url": "https://github.com/anyswap/Anyswap-Audit/blob/master/BlockSec/blocksec_audit_multichain_v1.0-signed.pdf",
           "date": "04/2018"
         }

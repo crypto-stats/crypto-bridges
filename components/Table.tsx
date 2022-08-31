@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ReactElement, ReactNode } from 'react';
 import styles from '../styles/Table.module.css';
-import { addLeadingZero } from '../utils';
+import { addLeadingZero, format } from '../utils';
 
 export interface ITableItem {
   name: string;
@@ -70,20 +70,8 @@ const Table = ({
                         </span>
                         <span className={styles.vAlign}>{content.name}</span>
                       </p>
-                      <p>
-                        {`$${
-                          valueIn
-                            ? content.in?.toFixed(0)
-                            : content.tvl?.toFixed(0)
-                        }`}
-                      </p>
-                      <p>
-                        {`$${
-                          valueIn
-                            ? content.tvl?.toFixed(0)
-                            : content.in?.toFixed(0)
-                        }`}
-                      </p>
+                      <p>{`${format(valueIn ? content.in : content.tvl)}`}</p>
+                      <p>{`${format(valueIn ? content.tvl : content.in)}`}</p>
                     </a>
                   </Link>
                 </li>

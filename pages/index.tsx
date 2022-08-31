@@ -7,7 +7,7 @@ import styles from '../styles/index.module.css';
 import { convertDummyDataForGraph } from '../utils';
 
 interface HomePageProps {
-  data: IDummyData
+  data: IDummyData;
 }
 
 const Home: NextPage<HomePageProps> = ({ data }) => {
@@ -30,6 +30,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
         <Table
           listsChains={true}
           title={'importers'}
+          valueIn
           tableContent={convertedData.nodes.map((node) => ({
             name: node.chain,
             logo: node.logo,

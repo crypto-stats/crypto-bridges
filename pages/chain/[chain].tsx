@@ -2,10 +2,12 @@ import type { NextPage } from 'next';
 import BackButton from '../../components/BackButton';
 import Motion from '../../components/Motion';
 // import Table from '../../components/Table';
+import { useMemo } from 'react';
+import ChainSpecifics from '../../components/Chain';
 import { loadData } from '../../data/load-data';
 import { GetStaticBridgeProps, IDummyData } from '../../data/types';
 import styles from '../../styles/page.module.css';
-import { convertDummyDataForGraph,  IFlowBridgesGraphData } from '../../utils';
+import { convertDummyDataForGraph } from '../../utils';
 
 interface IChainProps {
   chain: string;
@@ -18,58 +20,24 @@ interface IChainPath {
 
 const Chain: NextPage<IChainProps> = ({ data, chain }: IChainProps) => {
   const convertedData = useMemo(() => convertDummyDataForGraph(data), [data]);
-  // const chainName = chain.split('-').join(' ');
+  const chainName = chain.split('-').join(' ');
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        {/* <ChainSpecifics data={data} name={chain} />
-        <Table
-          listsChains={false}
-          title={'connected bridges'}
-          tableContent={data.links
-            .filter((link) => {
-              for (const link of data.links) {
-                if (
-                  (link.target === chainName && link.source === node.chain) ||
-                  (link.source === chainName && link.target === node.chain)
-                ) {
-                  return node.type === 'bridge';
-                }
-              }
-              return false;
-            })
-            .map((node) => ({
-              name: node.chain,
-              logo: node.logo,
-              tvl: node.tvl
-            }))}
-        >
-          <BoxRow
-            data={[
-              { caption: 'tvl', value: '$ 40bn' },
-              { caption: 'bridged out', value: '$ 40bn' },
-            ]}
-            align={BoxAlign.Center}
-          ></BoxRow>
-        </Table> */}
+        <ChainSpecifics data={data} name={chain} />
       </section>
     </Motion>
   );
 };
 
-import fsPromises from 'fs/promises';
-import path from 'path';
-import { useMemo } from 'react';
 export async function getStaticPaths(): Promise<{
   fallback: boolean;
   paths: IChainPath[];
 }> {
   const data = await loadData();
-  const convertedData = convertDummyDataForGraph(data);
-
-  const paths = convertedData.nodes.map(({ chain }) => {
-    return { params: { chain: chain.split(' ').join('-') } };
+  const paths = data.chains.map(({ name }) => {
+    return { params: { chain: name.split(' ').join('-').toLowerCase() } };
   });
   return { paths, fallback: false };
 }
