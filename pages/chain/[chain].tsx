@@ -1,24 +1,24 @@
 import type { NextPage } from 'next';
 import BackButton from '../../components/BackButton';
 import Motion from '../../components/Motion';
+// import Table from '../../components/Table';
+import { loadData } from '../../data/load-data';
+import { GetStaticBridgeProps, IDummyData } from '../../data/types';
 import styles from '../../styles/page.module.css';
-import {
-  convertDummyDataForGraph,
-  IDummyData,
-  IFlowBridgesGraphData,
-} from '../../utils';
+import { convertDummyDataForGraph,  IFlowBridgesGraphData } from '../../utils';
 
 interface IChainProps {
   chain: string;
-  data: IFlowBridgesGraphData;
+  data: IDummyData;
 }
 
 interface IChainPath {
   params: { chain: string };
 }
 
-const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
-  const chainName = chain.split('-').join(' ');
+const Chain: NextPage<IChainProps> = ({ data, chain }: IChainProps) => {
+  const convertedData = useMemo(() => convertDummyDataForGraph(data), [data]);
+  // const chainName = chain.split('-').join(' ');
   return (
     <Motion>
       <section className={styles.section}>
@@ -60,32 +60,24 @@ const Chain: NextPage<IChainProps> = ({ chain, data }: IChainProps) => {
 
 import fsPromises from 'fs/promises';
 import path from 'path';
+import { useMemo } from 'react';
 export async function getStaticPaths(): Promise<{
   fallback: boolean;
   paths: IChainPath[];
 }> {
-  const filePath = path.join(process.cwd(), 'public/dummy.json');
-  const jsonData = (await fsPromises.readFile(filePath)) as any as string;
-  const data: IFlowBridgesGraphData = convertDummyDataForGraph(
-    JSON.parse(jsonData) as IDummyData,
-  );
-  const paths = data.nodes.map(({ chain }) => {
+  const data = await loadData();
+  const convertedData = convertDummyDataForGraph(data);
+
+  const paths = convertedData.nodes.map(({ chain }) => {
     return { params: { chain: chain.split(' ').join('-') } };
   });
   return { paths, fallback: false };
 }
 
-export async function getStaticProps({
-  params,
-}: IChainPath): Promise<{ props: IChainProps }> {
-  const filePath = path.join(process.cwd(), 'public/dummy.json');
-  const jsonData = (await fsPromises.readFile(filePath)) as any as string;
-  const data: IFlowBridgesGraphData = convertDummyDataForGraph(
-    JSON.parse(jsonData) as IDummyData,
-  );
-  return {
-    props: { ...params, data },
-  };
-}
+export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
+  const data = await loadData();
+
+  return { props: { data, ...params }, revalidate: 5 * 60 };
+};
 
 export default Chain;
