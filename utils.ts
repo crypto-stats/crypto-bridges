@@ -190,7 +190,6 @@ export function convertDummyDataForGraph(
     }
   });
   graphData.links.push(...aggregatedFlows);
-  console.log(graphData);
   return graphData;
 }
 

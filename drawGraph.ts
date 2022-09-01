@@ -133,7 +133,8 @@ export function drawGraph(
     .selectAll('circle')
     .data(data.nodes)
     .enter()
-    .append('g');
+    .append('g')
+    .classed('highlight', true);
 
   const tvlCircles = circleGroups
     .append('circle')
@@ -216,14 +217,30 @@ export function drawGraph(
     paths
       .classed(
         'path-selected',
-        (d: any) => d.bridge === link.bridge && d.bridge !== undefined,
+        (d: any) => d.bridge === link.bridge && d.type !== undefined,
       )
+      .classed('transparent', (d: any) => d.bridge !== link.bridge)
       .style('filter', (d: any) =>
         d.bridge === link.bridge && d.bridge !== undefined
           ? `url(#${GLOW_ID})`
           : 'none',
       );
     tvlCircles.classed('circle-selected', false);
+    const chainsServed: string[] = [];
+    data.links
+      .filter(
+        (path) => (path as IFlowBridgesGraphBridgeLink).bridge === link.bridge,
+      )
+      .forEach((path) => {
+        const source = (path.source as any).chain as string;
+        chainsServed.includes(source) ? true : chainsServed.push(source);
+        const target = (path.target as any).chain as string;
+        chainsServed.includes(target) ? true : chainsServed.push(target);
+      });
+    circleGroups.classed(
+      'transparent',
+      (d: any) => !chainsServed.includes(d.chain as string),
+    );
     blurredImages.classed('blurred-image-selected', false);
   }
 
@@ -343,7 +360,7 @@ export function drawGraph(
 
   function setMode(newMode: GRAPH_MODES) {
     mode = newMode;
-    paths.classed('path-hidden', (d: any) => {
+    paths.classed('transparent', (d: any) => {
       if (
         (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
         (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
@@ -591,11 +608,13 @@ export function drawGraph(
   function findSelectedBridge(
     path: string,
   ): IFlowBridgesGraphBridgeLink | undefined {
-    return data.links.find(
+    const result = data.links.find(
       (link) =>
         (link as IFlowBridgesGraphBridgeLink).bridge ===
-        path.split('/')[2]?.split('-').join(' '),
+          path.split('/')[2]?.split('-').join(' ') &&
+        (link as IFlowBridgesGraphBridgeLink).type !== undefined,
     ) as IFlowBridgesGraphBridgeLink | undefined;
+    return result;
   }
 
   function updateSelected(path: string) {
@@ -612,12 +631,14 @@ export function drawGraph(
   }
 
   function unselectAll() {
+    circleGroups.classed('transparent', false);
     tvlCircles
       .classed('circle-selected', false)
       .classed('circle-hovered', false);
     paths
       .classed('path-selected', false)
       .classed('path-hovered', false)
+      .classed('path-hidden', false)
       .style('filter', 'none');
     blurredImages
       .classed('blurred-image-selected', false)

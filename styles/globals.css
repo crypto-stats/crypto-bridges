@@ -57,6 +57,9 @@ svg text {
 .path-hidden {
   display: none;
 }
+.transparent {
+  opacity: 0;
+}
 .dash,
 .dash-reverse {
   pointer-events: none;
