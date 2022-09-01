@@ -242,6 +242,7 @@ export function drawGraph(
       (d: any) => !chainsServed.includes(d.chain as string),
     );
     blurredImages.classed('blurred-image-selected', false);
+    clickablePaths.classed('path-hidden', (d: any) => d.bridge !== link.bridge);
   }
 
   function onMouseOut() {
