@@ -57,13 +57,13 @@ svg text {
 .path-hidden {
   display: none;
 }
-.dash {
+.dash,
+.dash-reverse {
   pointer-events: none;
   animation: dash 3600s linear infinite;
 }
 .dash-reverse {
-  pointer-events: none;
-  animation: dash 3600s linear reverse infinite;
+  animation-direction: reverse;
 }
 
 @keyframes dash {

@@ -30,6 +30,7 @@ export interface IFlowBridgesGraphBridgeLink {
   flow: number;
   type: BridgeCategory | null;
   audits: IAudit[] | null;
+  bridgeIndex: number;
 }
 
 export interface IFlowBridgesGraphFlowLink {
@@ -134,6 +135,13 @@ export function convertDummyDataForGraph(
       flow: flow.aToB,
       bridge: flow.bridge.toLowerCase(),
       logo: bridge.logo,
+      bridgeIndex: graphData.links.filter(
+        (link) =>
+          (link.source === flow.a.toLowerCase() &&
+            link.target === flow.b.toLowerCase()) ||
+          (link.target === flow.a.toLowerCase() &&
+            link.source === flow.b.toLowerCase()),
+      ).length,
     });
     graphData.links.push({
       source: flow.b.toLowerCase(),
@@ -144,6 +152,13 @@ export function convertDummyDataForGraph(
       flow: flow.bToA,
       bridge: flow.bridge.toLowerCase(),
       logo: bridge.logo,
+      bridgeIndex: graphData.links.filter(
+        (link) =>
+          (link.source === flow.b.toLowerCase() &&
+            link.target === flow.a.toLowerCase()) ||
+          (link.target === flow.b.toLowerCase() &&
+            link.source === flow.a.toLowerCase()),
+      ).length,
     });
 
     const flowToIndex = aggregatedFlows.findIndex(
@@ -175,6 +190,7 @@ export function convertDummyDataForGraph(
     }
   });
   graphData.links.push(...aggregatedFlows);
+  console.log(graphData);
   return graphData;
 }
 

@@ -87,7 +87,14 @@ export function drawGraph(
     .append('path')
     .style('fill', 'none')
     .style('fill-opacity', 0)
-    .style('cursor', 'pointer')
+    .style(
+      'cursor',
+      (path: IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink) =>
+        (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink)
+          .type !== undefined
+          ? 'pointer'
+          : 'normal',
+    )
     .style('stroke', 'rgba(255,255,255,0)')
     .style('stroke-opacity', 0)
     .on('mouseover', onMouseOverPath)
@@ -105,10 +112,8 @@ export function drawGraph(
             .type !== undefined
         ) {
           link = getLinkFromBridgePath(path as IFlowBridgesGraphBridgeLink);
-        } else {
-          link = '/';
+          navigateTo(link);
         }
-        navigateTo(link);
       },
     );
 
@@ -121,7 +126,6 @@ export function drawGraph(
     .style('fill', 'none')
     .style('fill-opacity', 0)
     .style('stroke-width', getPathWidth)
-    .classed('dash', true)
     .classed('highlight', true)
     .classed('path-default', true);
 
@@ -524,24 +528,58 @@ export function drawGraph(
     blurredImages
       .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
       .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
-    const getPath = (d: any) => {
-      const dx = d.target.x - d.source.x;
-      const dy = d.target.y - d.source.y;
-      const dr = Math.sqrt(dx * dx + dy * dy);
-      const source = dx > 0 ? d.source : d.target;
-      const target = dx > 0 ? d.target : d.source;
-      const reverse = d.reverse === true;
-      const x1 = source.x as number;
-      const y1 = source.y as number;
-      const x2 = target.x as number;
-      const y2 = target.y as number;
-      return `M${x1},${y1}A${dr},${dr} 0 0,${reverse ? 0 : 1} ${x2},${y2}`;
-    };
     paths
-      .attr('d', getPath)
-      .classed('dash', (d: any) => d.target.x - d.source.x > 0)
-      .classed('dash-reverse', (d: any) => d.target.x - d.source.x <= 0);
-    clickablePaths.attr('d', getPath);
+      .attr('d', (d: any) =>
+        d.type === undefined ? getFlowPath(d) : getBridgePath(d),
+      )
+      .classed(
+        'dash',
+        (d: any) => d.target.x - d.source.x > 0 || d.type !== undefined,
+      )
+      .classed(
+        'dash-reverse',
+        (d: any) => d.target.x - d.source.x <= 0 && d.type === undefined,
+      );
+    clickablePaths.attr('d', (d: any) =>
+      d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
+    );
+  }
+
+  function getFlowPath(d: any) {
+    const dx = d.target.x - d.source.x;
+    const dy = d.target.y - d.source.y;
+    const dr = Math.sqrt(dx * dx + dy * dy);
+    const source = dx > 0 ? d.source : d.target;
+    const target = dx > 0 ? d.target : d.source;
+    const reverse = d.reverse === true;
+    const x1 = source.x as number;
+    const y1 = source.y as number;
+    const x2 = target.x as number;
+    const y2 = target.y as number;
+    return `M${x1},${y1}A${dr},${dr} 0 0,${reverse ? 0 : 1} ${x2},${y2}`;
+  }
+
+  function getBeziersPower(d: any, l: number) {
+    const COEFF = 1 / 4;
+    return Math.floor(((d.bridgeIndex as number) + 2) / 2) * COEFF * l;
+  }
+
+  function getBridgePath(d: any) {
+    const x1 = d.source.x as number;
+    const y1 = d.source.y as number;
+    const x2 = d.target.x as number;
+    const y2 = d.target.y as number;
+    const vector = [x2 - x1, y2 - y1];
+    const vectorLength = Math.sqrt(
+      vector[0] * vector[0] + vector[1] * vector[1],
+    );
+    const unitVector = [vector[0] / vectorLength, vector[1] / vectorLength];
+    const tangentVector = [unitVector[1], -unitVector[0]];
+    const x3 = x1 + tangentVector[0] * getBeziersPower(d, vectorLength);
+    const y3 = y1 + tangentVector[1] * getBeziersPower(d, vectorLength);
+    const x4 = x2 + tangentVector[0] * getBeziersPower(d, vectorLength);
+    const y4 = y2 + tangentVector[1] * getBeziersPower(d, vectorLength);
+    return `M${x1} ${y1} C${x3} ${y3}, ${x4} ${y4} ${x2} ${y2}`;
   }
 
   function findSelectedChain(path: string): IFlowBridgesGraphNode | undefined {
