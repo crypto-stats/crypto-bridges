@@ -6,13 +6,12 @@ import BoxRow, { BoxAlign } from './BoxRow';
 
 interface IBridgeProps {
   data: IDummyData;
-  name: string;
+  id: string;
 }
 
-const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
-  const bridgeName = name.split('-').join(' ');
+const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
   const bridge = data.bridges.find(
-    (bridge) => bridge.name.toLowerCase() === bridgeName,
+    (bridge) => bridge.id === id,
   );
   if (bridge === undefined) return <div>Empty!</div>;
   return (
@@ -20,9 +19,9 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       <div className={styles.nodeItem}>
         <h2>bridge</h2>
         <div className={styles.nodeInfo}>
-          <Image src={bridge.logo} width={30} height={30} alt="logo" />
-          <p className={styles.nodeName}>{bridgeName}</p>
-          <p className={styles.nodeCategory}>{'multisig'}</p>
+          <Image src={bridge.metadata.icon} width={30} height={30} alt="logo" />
+          <p className={styles.nodeName}>{bridge.metadata.name}</p>
+          <p className={styles.nodeCategory}>{bridge.metadata.category}</p>
         </div>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -64,12 +63,12 @@ const BridgeSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
           Submit bug
         </a>
       </div>
-      {bridge.audits && (
+      {bridge.metadata.audits && (
         <div className={styles.nodeItem}>
           <div className={styles.nodeDataItem}>
             <h2>security audits</h2>
             <div className={styles.nodeAudits}>
-              {bridge.audits.map((audit, index) => (
+              {bridge.metadata.audits.map((audit, index) => (
                 <a
                   key={index}
                   href={audit.url}
