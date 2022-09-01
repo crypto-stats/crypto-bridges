@@ -378,6 +378,7 @@ export function drawGraph(
       }
       return false;
     });
+    circleGroups.classed('transparent', false);
   }
 
   function onClick(e: MouseEvent, node: IFlowBridgesGraphNode) {
