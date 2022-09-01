@@ -100,7 +100,6 @@ export function drawGraph(
       ) {
         e.preventDefault();
         let link;
-        console.log(path);
         if (
           (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink)
             .type !== undefined
@@ -430,7 +429,6 @@ export function drawGraph(
 
   function getLinkFromBridgePath(p: IFlowBridgesGraphBridgeLink): string {
     const link = `/bridges/${p.bridge.split(' ').join('-')}`;
-    console.log(link);
     return link;
   }
 
@@ -556,8 +554,10 @@ export function drawGraph(
     path: string,
   ): IFlowBridgesGraphBridgeLink | undefined {
     return data.links.find(
-      (link) => link.bridge === path.split('/')[2]?.split('-').join(' '),
-    );
+      (link) =>
+        (link as IFlowBridgesGraphBridgeLink).bridge ===
+        path.split('/')[2]?.split('-').join(' '),
+    ) as IFlowBridgesGraphBridgeLink | undefined;
   }
 
   function updateSelected(path: string) {
