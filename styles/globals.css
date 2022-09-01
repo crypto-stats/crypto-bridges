@@ -26,12 +26,15 @@ svg text {
 }
 .circle-default {
   fill: #304273;
+  stroke: #334272;
 }
 .circle-hovered {
   fill: #712ebb;
+  stroke: #732ebb;
 }
 .circle-selected {
   fill: #d750c8;
+  stroke: #da50c8;
 }
 .blurred-image-default {
   opacity: 0;
@@ -46,10 +49,13 @@ svg text {
   stroke: #304273;
 }
 .path-hovered {
-  stroke: #712ebb;
+  stroke: #501b8a;
 }
 .path-selected {
   stroke: #d750c8;
+}
+.path-hidden {
+  display: none;
 }
 .dash {
   pointer-events: none;

@@ -35,7 +35,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     <>
       <HtmlHead />
       <LazyMotion features={domAnimation}>
-        <NextNProgress color={GRAPH_COLORS.DEFAULT} height={4} />
+        <NextNProgress
+          color={GRAPH_COLORS.DEFAULT}
+          height={4}
+          options={{ trickle: false, showSpinner: false }}
+        />
         <m.main
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

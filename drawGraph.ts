@@ -17,14 +17,21 @@ import {
   findLinearParameters,
   findLogParameters,
   getDiagramDimensions,
+  IFlowBridgesGraphBridgeLink,
   IFlowBridgesGraphData,
-  IFlowBridgesGraphLink,
+  IFlowBridgesGraphFlowLink,
   IFlowBridgesGraphNode,
 } from './utils';
 
 const PADDING = 30;
 
 const MIN_PATH_CLICK_WIDTH = 40;
+
+export enum GRAPH_MODES {
+  FLOWS,
+  BRIDGES,
+  SANKEY,
+}
 
 export interface INetworkGraph {
   updateSelected: (path: string) => void;
@@ -46,6 +53,7 @@ export function drawGraph(
   data: IFlowBridgesGraphData,
   navigateTo: (path: string) => void,
 ): INetworkGraph {
+  let mode = GRAPH_MODES.FLOWS;
   let width = 0,
     height = 0;
   let availableArea = (width - PADDING) * (height - PADDING);
@@ -82,12 +90,28 @@ export function drawGraph(
     .style('cursor', 'pointer')
     .style('stroke', 'rgba(255,255,255,0)')
     .style('stroke-opacity', 0)
-    .on('mouseover', onMouseOverLink)
+    .on('mouseover', onMouseOverPath)
     .on('mouseout', onMouseOut)
-    .on('click', function (e: MouseEvent, path: IFlowBridgesGraphLink) {
-      e.preventDefault();
-      navigateTo(getLinkFromPath(path));
-    });
+    .on(
+      'click',
+      function (
+        e: MouseEvent,
+        path: IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink,
+      ) {
+        e.preventDefault();
+        let link;
+        console.log(path);
+        if (
+          (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink)
+            .type !== undefined
+        ) {
+          link = getLinkFromBridgePath(path as IFlowBridgesGraphBridgeLink);
+        } else {
+          link = '/';
+        }
+        navigateTo(link);
+      },
+    );
 
   const paths = svg
     .selectAll('line')
@@ -112,7 +136,6 @@ export function drawGraph(
     .append('circle')
     .attr('r', getTvlRadius)
     .style('fill', '#311c42')
-    .style('stroke', '#334272')
     .style('stroke-width', '4')
     .style('cursor', 'pointer')
     .on('click', onClick)
@@ -154,7 +177,10 @@ export function drawGraph(
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
 
-  function highlightNode(node: IFlowBridgesGraphNode) {
+  function highlightChain(node?: IFlowBridgesGraphNode) {
+    if (node === undefined) {
+      return unselectAll();
+    }
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-selected', (d: any) => {
@@ -180,6 +206,24 @@ export function drawGraph(
     );
   }
 
+  function highlightBridge(link?: IFlowBridgesGraphBridgeLink) {
+    if (link === undefined) {
+      return unselectAll();
+    }
+    paths
+      .classed(
+        'path-selected',
+        (d: any) => d.bridge === link.bridge && d.bridge !== undefined,
+      )
+      .style('filter', (d: any) =>
+        d.bridge === link.bridge && d.bridge !== undefined
+          ? `url(#${GLOW_ID})`
+          : 'none',
+      );
+    tvlCircles.classed('circle-selected', false);
+    blurredImages.classed('blurred-image-selected', false);
+  }
+
   function onMouseOut() {
     tvlCircles.classed('circle-hovered', false).style('filter', function () {
       return select(this).classed('circle-selected')
@@ -194,8 +238,70 @@ export function drawGraph(
     blurredImages.classed('blurred-image-hovered', false);
   }
 
-  function onMouseOverLink(e: MouseEvent, path: IFlowBridgesGraphLink) {
-    onMouseOverNode(e, path.target as any as IFlowBridgesGraphNode);
+  function onMouseOverPath(
+    e: MouseEvent,
+    path: IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink,
+  ) {
+    if (
+      (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink).type !==
+      undefined
+    ) {
+      onMouseOverBridge((path as IFlowBridgesGraphBridgeLink).bridge);
+    } else {
+      onMouseOverFlow(path as IFlowBridgesGraphFlowLink);
+    }
+  }
+
+  function onMouseOverFlow(path: IFlowBridgesGraphFlowLink) {
+    paths
+      .classed(
+        'path-hovered',
+        (d: any) =>
+          (d.source.chain === (path.source as any).chain &&
+            d.target.chain === (path.target as any).chain) ||
+          (d.target.chain === (path.source as any).chain &&
+            d.source.chain === (path.target as any).chain),
+      )
+      .style('filter', function (d: any) {
+        return (d.source.chain === (path.source as any).chain &&
+          d.target.chain === (path.target as any).chain) ||
+          (d.target.chain === (path.source as any).chain &&
+            d.source.chain === (path.target as any).chain) ||
+          select(this).classed('path-selected')
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
+
+    tvlCircles
+      .classed('circle-hovered', function (c: any) {
+        return (
+          (path.source as any).chain === c.chain ||
+          (path.target as any).chain === c.chain
+        );
+      })
+      .style('filter', function (d: any) {
+        return (path.source as any).chain === d.chain ||
+          (path.target as any).chain === d.chain ||
+          select(this).classed('circle-selected')
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
+    blurredImages.classed(
+      'blurred-image-hovered',
+      (c: any) =>
+        (path.source as any).chain === c.chain ||
+        (path.target as any).chain === c.chain,
+    );
+  }
+
+  function onMouseOverBridge(bridge: string) {
+    paths
+      .classed('path-hovered', (d: any) => d.bridge === bridge)
+      .style('filter', function (d: any) {
+        return d.bridge === bridge || select(this).classed('path-selected')
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
   }
 
   function onMouseOverNode(e: MouseEvent, node: IFlowBridgesGraphNode) {
@@ -232,9 +338,31 @@ export function drawGraph(
     );
   }
 
+  function setMode(newMode: GRAPH_MODES) {
+    mode = newMode;
+    paths.classed('path-hidden', (d: any) => {
+      if (
+        (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
+        (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
+      ) {
+        return true;
+      }
+      return false;
+    });
+    clickablePaths.classed('path-hidden', (d: any) => {
+      if (
+        (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
+        (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
+      ) {
+        return true;
+      }
+      return false;
+    });
+  }
+
   function onClick(e: MouseEvent, node: IFlowBridgesGraphNode) {
     e.preventDefault();
-    highlightNode(node);
+    highlightChain(node);
     navigateTo(getLinkFromNode(node));
   }
 
@@ -266,7 +394,9 @@ export function drawGraph(
   }
 
   function getPathWidth(d: any): number {
-    if (d.flow === 0) return 0;
+    if (d.flow === 0) {
+      return 0;
+    }
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
         const width = kAP * d.flow + kBP;
@@ -298,8 +428,10 @@ export function drawGraph(
     return `/chain/${n.chain.split(' ').join('-')}`;
   }
 
-  function getLinkFromPath(p: IFlowBridgesGraphLink): string {
-    return `/bridges/${p.bridge.split(' ').join('-')}`;
+  function getLinkFromBridgePath(p: IFlowBridgesGraphBridgeLink): string {
+    const link = `/bridges/${p.bridge.split(' ').join('-')}`;
+    console.log(link);
+    return link;
   }
 
   function resize() {
@@ -400,8 +532,12 @@ export function drawGraph(
       const dr = Math.sqrt(dx * dx + dy * dy);
       const source = dx > 0 ? d.source : d.target;
       const target = dx > 0 ? d.target : d.source;
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
+      const reverse = d.reverse === true;
+      const x1 = source.x as number;
+      const y1 = source.y as number;
+      const x2 = target.x as number;
+      const y2 = target.y as number;
+      return `M${x1},${y1}A${dr},${dr} 0 0,${reverse ? 0 : 1} ${x2},${y2}`;
     };
     paths
       .attr('d', getPath)
@@ -410,23 +546,44 @@ export function drawGraph(
     clickablePaths.attr('d', getPath);
   }
 
-  function findSelected(path: string): IFlowBridgesGraphNode | undefined {
-    return path.length === 1
-      ? undefined
-      : data.nodes.find(
-          (node) => node.chain === path.split('/')[2]?.split('-').join(' '),
-        );
+  function findSelectedChain(path: string): IFlowBridgesGraphNode | undefined {
+    return data.nodes.find(
+      (node) => node.chain === path.split('/')[2]?.split('-').join(' '),
+    );
+  }
+
+  function findSelectedBridge(
+    path: string,
+  ): IFlowBridgesGraphBridgeLink | undefined {
+    return data.links.find(
+      (link) => link.bridge === path.split('/')[2]?.split('-').join(' '),
+    );
   }
 
   function updateSelected(path: string) {
-    const selected = findSelected(path);
-    if (selected !== undefined) {
-      highlightNode(selected);
-    } else {
-      tvlCircles.classed('circle-selected', false);
-      paths.classed('path-selected', false).style('filter', 'none');
-      blurredImages.classed('blurred-image-selected', false);
+    if (path === '/') {
+      unselectAll();
+      setMode(GRAPH_MODES.FLOWS);
+    } else if (path.includes('bridges')) {
+      setMode(GRAPH_MODES.BRIDGES);
+      highlightBridge(findSelectedBridge(path));
+    } else if (path.includes('chain')) {
+      setMode(GRAPH_MODES.FLOWS);
+      highlightChain(findSelectedChain(path));
     }
+  }
+
+  function unselectAll() {
+    tvlCircles
+      .classed('circle-selected', false)
+      .classed('circle-hovered', false);
+    paths
+      .classed('path-selected', false)
+      .classed('path-hovered', false)
+      .style('filter', 'none');
+    blurredImages
+      .classed('blurred-image-selected', false)
+      .classed('blurred-image-hovered', false);
   }
 
   return { updateSelected };

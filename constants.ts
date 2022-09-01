@@ -12,7 +12,7 @@ export enum GRAPH_COLORS {
 
 export enum NODE_AREAS_SHARE {
   MIN = 0.003,
-  MAX = 0.04,
+  MAX = 0.017,
 }
 
 export const MIN_PATH_WIDTH = 4;

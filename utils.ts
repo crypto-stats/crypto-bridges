@@ -21,7 +21,7 @@ export interface IGraphData {
   links: IGraphLink[];
 }
 
-export interface IFlowBridgesGraphLink {
+export interface IFlowBridgesGraphBridgeLink {
   source: string;
   target: string;
   bridge: string;
@@ -30,6 +30,13 @@ export interface IFlowBridgesGraphLink {
   flow: number;
   type: BridgeCategory | null;
   audits: IAudit[] | null;
+}
+
+export interface IFlowBridgesGraphFlowLink {
+  source: string;
+  target: string;
+  flow: number;
+  reverse: boolean;
 }
 
 export interface IFlowBridgesGraphNode {
@@ -41,7 +48,7 @@ export interface IFlowBridgesGraphNode {
 
 export interface IFlowBridgesGraphData {
   nodes: IFlowBridgesGraphNode[];
-  links: IFlowBridgesGraphLink[];
+  links: (IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink)[];
 }
 
 interface INode {
@@ -70,9 +77,12 @@ export function convertDummyDataForGraph(
   data: IDummyData,
 ): IFlowBridgesGraphData {
   const graphData: IFlowBridgesGraphData = { nodes: [], links: [] };
+  const aggregatedFlows: IFlowBridgesGraphFlowLink[] = [];
   data.flows.forEach((flow) => {
-    const chainA = graphData.nodes.findIndex((node) => node.chain === flow.a);
-    if (chainA === -1) {
+    const chainAIndex = graphData.nodes.findIndex(
+      (node) => node.chain === flow.a,
+    );
+    if (chainAIndex === -1) {
       const chain = data.chains.find((chain) => chain.name === flow.a);
       if (chain === undefined) {
         console.error('Data error: no matching chain in data for ' + flow.a);
@@ -85,8 +95,8 @@ export function convertDummyDataForGraph(
         in: flow.bToA,
       });
     } else {
-      graphData.nodes[chainA].tvl += flow.aToB;
-      graphData.nodes[chainA].in += flow.bToA;
+      graphData.nodes[chainAIndex].tvl += flow.aToB;
+      graphData.nodes[chainAIndex].in += flow.bToA;
     }
     const chainBIndex = graphData.nodes.findIndex(
       (node) => node.chain === flow.b,
@@ -135,7 +145,36 @@ export function convertDummyDataForGraph(
       bridge: flow.bridge.toLowerCase(),
       logo: bridge.logo,
     });
+
+    const flowToIndex = aggregatedFlows.findIndex(
+      (f) => f.source === flow.a && f.target === flow.b,
+    );
+    if (flowToIndex === -1) {
+      aggregatedFlows.push({
+        source: flow.a.toLowerCase(),
+        target: flow.b.toLowerCase(),
+        flow: flow.aToB,
+        reverse: false,
+      });
+    } else {
+      aggregatedFlows[flowToIndex].flow += flow.aToB;
+    }
+
+    const flowFrom = aggregatedFlows.findIndex(
+      (f) => f.target === flow.a && f.source === flow.b,
+    );
+    if (flowFrom === -1) {
+      aggregatedFlows.push({
+        target: flow.a.toLowerCase(),
+        source: flow.b.toLowerCase(),
+        flow: flow.bToA,
+        reverse: true,
+      });
+    } else {
+      aggregatedFlows[flowFrom].flow += flow.bToA;
+    }
   });
+  graphData.links.push(...aggregatedFlows);
   return graphData;
 }
 

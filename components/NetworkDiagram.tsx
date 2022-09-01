@@ -4,20 +4,19 @@ import { GLOW_ID, IMAGE_GLOW_ID } from '../constants';
 import { useData } from '../data/data-context';
 import { drawGraph, INetworkGraph } from '../drawGraph';
 import style from '../styles/NetworkDiagram.module.css';
-import { convertDummyDataForGraph, IGraphNode } from '../utils';
+import { convertDummyDataForGraph } from '../utils';
 
 export default function NetworkDiagram() {
   const router = useRouter();
   const [graph, setGraph] = useState<INetworkGraph>();
   const data = useData();
   const svg = useRef<SVGSVGElement>(null);
-
   useEffect(() => {
     if (data === undefined || graph !== undefined) return;
     if (svg.current !== null) {
       svg.current.innerHTML = `
       <defs>
-      <filter id="${GLOW_ID}" width="200%" height="200%" x="-50%" y="-50%">
+      <filter id="${GLOW_ID}" width="300%" height="300%" x="-100%" y="-100%">
         <fegaussianblur
           class="blur"
           result="coloredBlur"
@@ -28,7 +27,7 @@ export default function NetworkDiagram() {
           <femergenode in="SourceGraphic"></femergenode>
         </femerge>
       </filter>
-      <filter id="${IMAGE_GLOW_ID}" width="200%" height="200%" x="-50%" y="-50%">
+      <filter id="${IMAGE_GLOW_ID}" width="300%" height="300%" x="-100%" y="-100%">
         <fegaussianblur
           class="blur"
           result="coloredBlur"
