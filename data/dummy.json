@@ -1,9 +1,93 @@
 {
   "flows": [
     {
+      "id": "wormhole-ethereum-solana",
+      "results": {
+        "currentValueBridgedAToB": 160175547.2641107,
+        "currentValueBridgedBToA": 2532994.6298468113
+      },
+      "errors": {},
+      "metadata": {
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K",
+        "chainA": "ethereum",
+        "chainB": "solana"
+      },
+      "bundle": "wormhole"
+    },
+    {
+      "id": "wormhole-ethereum-bsc",
+      "results": {
+        "currentValueBridgedAToB": 620944.2083178391,
+        "currentValueBridgedBToA": 1041113.150432003
+      },
+      "errors": {},
+      "metadata": {
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K",
+        "chainA": "ethereum",
+        "chainB": "bsc"
+      },
+      "bundle": "wormhole"
+    },
+    {
+      "id": "wormhole-ethereum-avalanche",
+      "results": {
+        "currentValueBridgedAToB": 809142.6013496051,
+        "currentValueBridgedBToA": 560518.054600316
+      },
+      "errors": {},
+      "metadata": {
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K",
+        "chainA": "ethereum",
+        "chainB": "avalanche"
+      },
+      "bundle": "wormhole"
+    },
+    {
+      "id": "wormhole-solana-bsc",
+      "results": {
+        "currentValueBridgedAToB": 586853.769861624,
+        "currentValueBridgedBToA": 6433810.112833824
+      },
+      "errors": {},
+      "metadata": {
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K",
+        "chainA": "solana",
+        "chainB": "bsc"
+      },
+      "bundle": "wormhole"
+    },
+    {
+      "id": "wormhole-solana-avalanche",
+      "results": {
+        "currentValueBridgedAToB": 589618.2795274559,
+        "currentValueBridgedBToA": 3598450.686437771
+      },
+      "errors": {},
+      "metadata": {
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K",
+        "chainA": "solana",
+        "chainB": "avalanche"
+      },
+      "bundle": "wormhole"
+    },
+    {
+      "id": "wormhole-bsc-avalanche",
+      "results": {
+        "currentValueBridgedAToB": 865.1202046994001,
+        "currentValueBridgedBToA": 549085.540172789
+      },
+      "errors": {},
+      "metadata": {
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K",
+        "chainA": "bsc",
+        "chainB": "avalanche"
+      },
+      "bundle": "wormhole"
+    },
+    {
       "id": "wbtc",
       "results": {
-        "currentValueBridgedAToB": 4982427677.158632,
+        "currentValueBridgedAToB": 5034683976.983688,
         "currentValueBridgedBToA": 0
       },
       "errors": {},
@@ -19,8 +103,8 @@
     {
       "id": "osmosis-cosmoshub",
       "results": {
-        "currentValueBridgedAToB": 184783.83947366,
-        "currentValueBridgedBToA": 65904669.44576959
+        "currentValueBridgedAToB": 187962.11628532002,
+        "currentValueBridgedBToA": 65832014.734147474
       },
       "errors": {},
       "metadata": {
@@ -35,8 +119,8 @@
     {
       "id": "osmosis-juno",
       "results": {
-        "currentValueBridgedAToB": 995450.23336182,
-        "currentValueBridgedBToA": 10177224.50130728
+        "currentValueBridgedAToB": 986308.8731691199,
+        "currentValueBridgedBToA": 10144120.92363202
       },
       "errors": {},
       "metadata": {
@@ -51,8 +135,8 @@
     {
       "id": "cosmoshub-juno",
       "results": {
-        "currentValueBridgedAToB": 5926636.1519999,
-        "currentValueBridgedBToA": 854.2095480800001
+        "currentValueBridgedAToB": 5931127.69973542,
+        "currentValueBridgedBToA": 849.96152449
       },
       "errors": {},
       "metadata": {
@@ -67,8 +151,8 @@
     {
       "id": "osmosis-secretnetwork",
       "results": {
-        "currentValueBridgedAToB": 71649.87522972,
-        "currentValueBridgedBToA": 2961912.412333612
+        "currentValueBridgedAToB": 72888.33673652,
+        "currentValueBridgedBToA": 3038559.2769444003
       },
       "errors": {},
       "metadata": {
@@ -83,7 +167,7 @@
     {
       "id": "arbitrum",
       "results": {
-        "currentValueBridgedAToB": 1719848194.3657134,
+        "currentValueBridgedAToB": 2884913743.770706,
         "currentValueBridgedBToA": 0
       },
       "errors": {},
@@ -100,7 +184,7 @@
       "id": "avalanche-ethereum",
       "results": {
         "currentValueBridgedAToB": 0,
-        "currentValueBridgedBToA": 999487695.0608952
+        "currentValueBridgedBToA": 1003198874.1707749
       },
       "errors": {},
       "metadata": {
@@ -117,7 +201,7 @@
       "id": "avalanche-bitcoin",
       "results": {
         "currentValueBridgedAToB": 0,
-        "currentValueBridgedBToA": 37110049.32426054
+        "currentValueBridgedBToA": 37568729.62943011
       },
       "errors": {},
       "metadata": {
@@ -133,7 +217,7 @@
     {
       "id": "gnosis-chain",
       "results": {
-        "currentValueBridgedAToB": 236414902.33811185,
+        "currentValueBridgedAToB": 239278799.5192067,
         "currentValueBridgedBToA": 0
       },
       "errors": {},
@@ -152,7 +236,7 @@
     {
       "id": "optimism",
       "results": {
-        "currentValueBridgedAToB": 1081811182.4481869,
+        "currentValueBridgedAToB": 1099164520.8602123,
         "currentValueBridgedBToA": 0
       },
       "errors": {},
@@ -168,8 +252,8 @@
     {
       "id": "gravitybridge-ethereum",
       "results": {
-        "currentValueBridgedAToB": 15820826.758631581,
-        "currentValueBridgedBToA": 64717380.76747167
+        "currentValueBridgedAToB": 15525314.172571782,
+        "currentValueBridgedBToA": 69337471.75513957
       },
       "errors": {},
       "metadata": {
@@ -184,8 +268,8 @@
     {
       "id": "gravitybridge-osmosis",
       "results": {
-        "currentValueBridgedAToB": 776008.8603790496,
-        "currentValueBridgedBToA": 292.09171680000003
+        "currentValueBridgedAToB": 772578.0103712246,
+        "currentValueBridgedBToA": 309.4041056
       },
       "errors": {},
       "metadata": {
@@ -200,8 +284,8 @@
     {
       "id": "gravitybridge-cosmoshub",
       "results": {
-        "currentValueBridgedAToB": 2080.1373263741098,
-        "currentValueBridgedBToA": 6978.1980832
+        "currentValueBridgedAToB": 2136.9124288802323,
+        "currentValueBridgedBToA": 7000.176659840001
       },
       "errors": {},
       "metadata": {
@@ -216,8 +300,8 @@
     {
       "id": "rainbow-ethereum",
       "results": {
-        "currentValueBridgedAToB": 528148433.12703407,
-        "currentValueBridgedBToA": 14864316.472456345
+        "currentValueBridgedAToB": 420517787.47086775,
+        "currentValueBridgedBToA": 10328913.028029772
       },
       "errors": {},
       "metadata": {
@@ -231,6 +315,13 @@
     }
   ],
   "bridges": [
+    {
+      "id": "wormhole",
+      "metadata": {
+        "name": "Wormhole",
+        "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTEuODgyIDI1MS44ODIiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTEuMjk2IC0zNDM0Ljg1MykiPgogICAgPHBhdGggZD0iTTEyNS45NDEsMjUxLjg4MkExMjUuOTQxLDEyNS45NDEsMCwxLDEsMjUxLjg4MiwxMjUuOTQxLDEyNi4wODYsMTI2LjA4NiwwLDAsMSwxMjUuOTQxLDI1MS44ODJtMC0yNDYuMjk1QTEyMC4zNTQsMTIwLjM1NCwwLDEsMCwyNDYuMjk1LDEyNS45NDEsMTIwLjQ5MSwxMjAuNDkxLDAsMCwwLDEyNS45NDEsNS41ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMS4yOTYgMzQzNC44NTMpIi8+CiAgICA8cGF0aCBkPSJNMTIxLjYsMjMxLjE2M0ExMTMuMTYsMTEzLjE2LDAsMSwxLDIzNC43NjEsMTE4LDExMy4yODgsMTEzLjI4OCwwLDAsMSwxMjEuNiwyMzEuMTYzbTAtMjIxLjQ3NkExMDguMzE2LDEwOC4zMTYsMCwxLDAsMjI5LjkyLDExOCwxMDguNDM3LDEwOC40MzcsMCwwLDAsMTIxLjYsOS42ODciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyNS45NDUgMzQ0My4yNTUpIi8+CiAgICA8cGF0aCBkPSJNMTE3LjI2NCwyMTAuNDM4QTEwMC4zNzYsMTAwLjM3NiwwLDEsMSwyMTcuNjM2LDExMC4wNjUsMTAwLjQ4NSwxMDAuNDg1LDAsMCwxLDExNy4yNjQsMjEwLjQzOG0wLTE5Ni42NTRhOTYuMjgsOTYuMjgsMCwxLDAsOTYuMjc2LDk2LjI4MSw5Ni4zODcsOTYuMzg3LDAsMCwwLTk2LjI3Ni05Ni4yODEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MC41OTQgMzQ1MS42NTcpIi8+CiAgICA8cGF0aCBkPSJNMTEyLjkyNiwxODkuNzIyYTg3LjYsODcuNiwwLDEsMSw4Ny41OS04Ny42LDg3LjY5NCw4Ny42OTQsMCwwLDEtODcuNTksODcuNm0wLTE3MS44MzhhODQuMjQyLDg0LjI0MiwwLDEsMCw4NC4yNCw4NC4yNDIsODQuMzM5LDg0LjMzOSwwLDAsMC04NC4yNC04NC4yNDIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NS4yNDEgMzQ2MC4wNjMpIi8+CiAgICA8cGF0aCBkPSJNMTA4LjU4NywxNjlBNzQuODEzLDc0LjgxMywwLDEsMSwxODMuNCw5NC4xODgsNzQuOSw3NC45LDAsMCwxLDEwOC41ODcsMTY5bTAtMTQ3LjAxNmE3Mi4yLDcyLjIsMCwxLDAsNzIuMiw3Mi4yLDcyLjI4NCw3Mi4yODQsMCwwLDAtNzIuMi03Mi4yIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjkuODg3IDM0NjguNDY4KSIvPgogICAgPHBhdGggZD0iTTEwNC4yNDgsMTQ4LjI3OGE2Mi4wMyw2Mi4wMywwLDEsMSw2Mi4wMy02Mi4wMyw2Mi4xLDYyLjEsMCwwLDEtNjIuMDMsNjIuMDNtMC0xMjIuMTk0YTYwLjE2Niw2MC4xNjYsMCwxLDAsNjAuMTY3LDYwLjE2NSw2MC4yMzMsNjAuMjMzLDAsMCwwLTYwLjE2Ny02MC4xNjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4NC41MzYgMzQ3Ni44NjcpIi8+CiAgPC9nPgo8L3N2Zz4K"
+      }
+    },
     {
       "id": "wbtc",
       "metadata": {
@@ -298,88 +389,6 @@
         "icon": "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzMgNDYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTM1LjUwNiAyMC43MDNjOC43MjYgMCAxNS44IDcuMDczIDE1LjggMTUuOGgyMC43MDNDNzIuMDA4IDE2LjM0MiA1NS42NjUgMCAzNS41MDUgMHYyMC43MDNaIiBmaWxsPSJjdXJyZW50Q29sb3IiLz4KICA8cGF0aCBmaWxsPSIjMDA3MkNFIiBkPSJNMzUuNTA2IDEwLjM1NkgyNS4xNXYxMC4zNTZoMTAuMzU2eiIvPgogIDxwYXRoIGZpbGw9IiMzN0RCRjQiIGQ9Ik0yNS4xNSAxMC4zNTZIMTQuNzk0djEwLjM1NkgyNS4xNXoiLz4KICA8cGF0aCBmaWxsPSIjRjJFRTgzIiBkPSJNMTAuMzU2IDE2LjI3NEgwVjI2LjYzaDEwLjM1NnoiLz4KICA8cGF0aCBmaWxsPSIjMDBDMDhCIiBkPSJNMjUuMTUgMjAuNzEySDE0Ljc5NHYxMC4zNTZIMjUuMTV6Ii8+CiAgPHBhdGggZmlsbD0iI0ZGQjI1OSIgZD0iTTE0Ljc5NCAzMS4wNjhINC40Mzh2MTAuMzU2aDEwLjM1NnoiLz4KICA8cGF0aCBmaWxsPSIjRkY1ODVEIiBkPSJNMjkuNTg4IDM1LjUwNkgxOS4yMzN2MTAuMzU2aDEwLjM1NXoiLz4KICA8cGF0aCBmaWxsPSIjOEZDREZGIiBkPSJNMzUuNTA2IDBIMjUuMTV2MTAuMzU2aDEwLjM1NnoiLz4KPC9zdmc+",
         "category": "light-client"
       }
-    }
-  ],
-  "chains": [
-    {
-      "name": "bitcoin",
-      "logo": "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"
-    },
-    {
-      "name": "bsc",
-      "logo": "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=023"
-    },
-    {
-      "name": "ethereum",
-      "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"
-    },
-    {
-      "name": "arbitrum",
-      "logo": "https://l2beat.com/icons/arbitrum.png"
-    },
-    {
-      "name": "optimism",
-      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023"
-    },
-    {
-      "name": "polygon",
-      "logo": "https://cryptologos.cc/logos/polygon-matic-logo.png?v=023"
-    },
-    {
-      "name": "multichain",
-      "logo": "https://defillama.com/_next/image?url=https%3A%2F%2Ficons.llama.fi%2Fmultichain.jpg&w=32&q=75"
-    },
-    {
-      "name": "avalanche",
-      "logo": "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=023"
-    },
-    {
-      "name": "fantom",
-      "logo": "https://cryptologos.cc/logos/fantom-ftm-logo.png?v=023"
-    },
-    {
-      "name": "ripple",
-      "logo": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=023"
-    },
-    {
-      "name": "cardano",
-      "logo": "https://cryptologos.cc/logos/cardano-ada-logo.png?v=023"
-    },
-    {
-      "name": "solana",
-      "logo": "https://cryptologos.cc/logos/solana-sol-logo.png?v=023"
-    },
-    {
-      "name": "near",
-      "logo": "https://cryptologos.cc/logos/near-protocol-near-logo.png?v=023"
-    },
-    {
-      "name": "polkadot",
-      "logo": "https://cryptologos.cc/logos/polkadot-new-dot-logo.png?v=023"
-    },
-    {
-      "name": "osmosis",
-      "logo": "https://ipfs.io/ipfs/QmaPe4CFwjoN3orMzYUhrXYfYdsbpJn497i2bHJJjzEgPL"
-    },
-    {
-      "name": "cosmoshub",
-      "logo": "https://cryptologos.cc/logos/cosmos-atom-logo.png?v=023"
-    },
-    {
-      "name": "gnosis-chain",
-      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4"
-    },
-    {
-      "name": "gravitybridge",
-      "logo": "https://ipfs.io/ipfs/QmXuNeBVkrfc3zNesdvv9BrWHBsE475uCGcEo3hBgHXLXM"
-    },
-    {
-      "name": "juno",
-      "logo": "https://ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
-    },
-    {
-      "name": "secretnetwork",
-      "logo": "https://ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St"
     }
   ]
 }
