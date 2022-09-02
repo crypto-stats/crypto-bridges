@@ -1,12 +1,13 @@
 import { getSDK } from './sdk';
 import dummyData from './dummy.json';
+import chainData from './chains.json';
 import { IDummyData } from './types';
 
-const useDummy = true
+const useDummy = process.env.NODE_ENV !== 'production'
 
 export async function loadData(): Promise<IDummyData> {
   if (useDummy) {
-    return dummyData as any;
+    return { ...dummyData, ...chainData } as any;
   }
   const sdk = getSDK();
   const collection = sdk.getCollection('bridged-value');
@@ -15,7 +16,6 @@ export async function loadData(): Promise<IDummyData> {
   const flows: any = await collection.executeQueriesWithMetadata(['currentValueBridgedAToB', 'currentValueBridgedBToA']);
 
   const bridges: any = await collection.getBundles();
-  console.log(JSON.stringify(bridges))
 
-  return { flows, bridges, chains: dummyData.chains as any };
+  return { flows, bridges, chains: chainData.chains as any };
 }

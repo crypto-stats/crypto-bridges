@@ -1,0 +1,88 @@
+{
+  "chains": [
+    {
+      "name": "axelar",
+      "logo": "https://ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki"
+    },
+    {
+      "name": "bitcoin",
+      "logo": "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"
+    },
+    {
+      "name": "bsc",
+      "logo": "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=023"
+    },
+    {
+      "name": "ethereum",
+      "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"
+    },
+    {
+      "name": "arbitrum",
+      "logo": "https://l2beat.com/icons/arbitrum.png"
+    },
+    {
+      "name": "optimism",
+      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023"
+    },
+    {
+      "name": "polygon",
+      "logo": "https://cryptologos.cc/logos/polygon-matic-logo.png?v=023"
+    },
+    {
+      "name": "multichain",
+      "logo": "https://defillama.com/_next/image?url=https%3A%2F%2Ficons.llama.fi%2Fmultichain.jpg&w=32&q=75"
+    },
+    {
+      "name": "avalanche",
+      "logo": "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=023"
+    },
+    {
+      "name": "fantom",
+      "logo": "https://cryptologos.cc/logos/fantom-ftm-logo.png?v=023"
+    },
+    {
+      "name": "ripple",
+      "logo": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=023"
+    },
+    {
+      "name": "cardano",
+      "logo": "https://cryptologos.cc/logos/cardano-ada-logo.png?v=023"
+    },
+    {
+      "name": "solana",
+      "logo": "https://cryptologos.cc/logos/solana-sol-logo.png?v=023"
+    },
+    {
+      "name": "near",
+      "logo": "https://cryptologos.cc/logos/near-protocol-near-logo.png?v=023"
+    },
+    {
+      "name": "polkadot",
+      "logo": "https://cryptologos.cc/logos/polkadot-new-dot-logo.png?v=023"
+    },
+    {
+      "name": "osmosis",
+      "logo": "https://ipfs.io/ipfs/QmaPe4CFwjoN3orMzYUhrXYfYdsbpJn497i2bHJJjzEgPL"
+    },
+    {
+      "name": "cosmoshub",
+      "logo": "https://cryptologos.cc/logos/cosmos-atom-logo.png?v=023"
+    },
+    {
+      "name": "gnosis-chain",
+      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4"
+    },
+    {
+      "name": "gravitybridge",
+      "logo": "https://ipfs.io/ipfs/QmezADpEoBvneUXB9iopsUC4i1JSgW7kuhVF5jDebCsHBw"
+    },
+    {
+      "name": "juno",
+      "logo": "https://ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
+    },
+    {
+      "name": "secretnetwork",
+      "logo": "https://ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St"
+    }
+  ]
+}
