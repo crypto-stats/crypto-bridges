@@ -21,11 +21,18 @@ export interface IDummyData {
 }
 
 export interface IDummyFlow {
-  a: string;
-  b: string;
-  aToB: number;
-  bToA: number;
-  bridge: string;
+  id: string
+  results: {
+    currentValueBridgedAToB: number | null;
+    currentValueBridgedBToA: number | null;
+  },
+  bundle: string/*  | null */;
+  metadata: {
+    name: string;
+    subtitle?: string;
+    chainA: string;
+    chainB: string;
+  },
 }
 
 export interface IDummyChain {
@@ -34,11 +41,14 @@ export interface IDummyChain {
 }
 
 export interface IDummyBridge {
-  name: string;
-  logo: string;
-  website: string;
-  type: BridgeCategory;
-  audits?: IAudit[];
+  id: string
+  metadata: {
+    name: string
+    category: BridgeCategory
+    icon: string
+    website?: string
+    audits?: IAudit[];
+  }
 }
 
 export type GetStaticBridgeProps<T = any> = GetStaticProps<T & { data: IDummyData }>

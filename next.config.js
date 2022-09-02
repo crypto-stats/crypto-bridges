@@ -10,6 +10,7 @@ const nextConfig = {
       'openocean.finance',
       'commonwealth-uploads.s3.us-east-2.amazonaws.com',
       'images.prismic.io',
+      'ipfs.io',
       'alphagrowth.io',
       'images.ctfassets.net',
       'kronosresearch.com',

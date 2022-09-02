@@ -26,7 +26,7 @@ export interface IFlowBridgesGraphBridgeLink {
   target: string;
   bridge: string;
   logo: string;
-  website: string;
+  website?: string;
   flow: number;
   type: BridgeCategory | null;
   audits: IAudit[] | null;
@@ -81,112 +81,128 @@ export function convertDummyDataForGraph(
   const aggregatedFlows: IFlowBridgesGraphFlowLink[] = [];
   data.flows.forEach((flow) => {
     const chainAIndex = graphData.nodes.findIndex(
-      (node) => node.chain === flow.a,
+      (node) => node.chain === flow.metadata.chainA,
     );
     if (chainAIndex === -1) {
-      const chain = data.chains.find((chain) => chain.name === flow.a);
+      const chain = data.chains.find(
+        (chain) => chain.name === flow.metadata.chainA,
+      );
       if (chain === undefined) {
-        console.error('Data error: no matching chain in data for ' + flow.a);
+        console.error(
+          'Data error: no matching chain in data for ' + flow.metadata.chainA,
+        );
         return;
       }
       graphData.nodes.push({
-        chain: flow.a.toLowerCase(),
+        chain: flow.metadata.chainA,
         logo: chain.logo,
-        tvl: flow.aToB,
-        in: flow.bToA,
+        tvl: flow.results.currentValueBridgedAToB || 0,
+        in: flow.results.currentValueBridgedBToA || 0,
       });
     } else {
-      graphData.nodes[chainAIndex].tvl += flow.aToB;
-      graphData.nodes[chainAIndex].in += flow.bToA;
+      graphData.nodes[chainAIndex].tvl +=
+        flow.results.currentValueBridgedAToB || 0;
+      graphData.nodes[chainAIndex].in +=
+        flow.results.currentValueBridgedBToA || 0;
     }
     const chainBIndex = graphData.nodes.findIndex(
-      (node) => node.chain === flow.b,
+      (node) => node.chain === flow.metadata.chainB,
     );
     if (chainBIndex === -1) {
-      const chain = data.chains.find((chain) => chain.name === flow.b);
+      const chain = data.chains.find(
+        (chain) => chain.name === flow.metadata.chainB,
+      );
       if (chain === undefined) {
-        console.error('Data error: no matching chain in data for ' + flow.b);
+        console.error(
+          'Data error: no matching chain in data for ' + flow.metadata.chainB,
+        );
         return;
       }
       graphData.nodes.push({
-        chain: flow.b.toLowerCase(),
+        chain: flow.metadata.chainB,
         logo: chain.logo,
-        tvl: flow.bToA,
-        in: flow.aToB,
+        tvl: flow.results.currentValueBridgedBToA || 0,
+        in: flow.results.currentValueBridgedAToB || 0,
       });
     } else {
-      graphData.nodes[chainBIndex].tvl += flow.bToA;
-      graphData.nodes[chainBIndex].in += flow.aToB;
+      graphData.nodes[chainBIndex].tvl +=
+        flow.results.currentValueBridgedBToA || 0;
+      graphData.nodes[chainBIndex].in +=
+        flow.results.currentValueBridgedAToB || 0;
     }
 
-    const bridge = data.bridges.find((bridge) => bridge.name === flow.bridge);
+    const bridge = data.bridges.find((bridge) => bridge.id === flow.bundle);
     if (bridge === undefined) {
       console.error(
-        'Data error: no matching bridge in data for ' + flow.bridge,
+        'Data error: no matching bridge in data for ' + flow.bundle,
       );
       return;
     }
     graphData.links.push({
-      source: flow.a.toLowerCase(),
-      target: flow.b.toLowerCase(),
-      website: bridge.website,
-      audits: bridge.audits ?? null,
-      type: bridge.type,
-      flow: flow.aToB,
-      bridge: flow.bridge.toLowerCase(),
-      logo: bridge.logo,
+      source: flow.metadata.chainA,
+      target: flow.metadata.chainB,
+      website: bridge.metadata.website,
+      audits: bridge.metadata.audits ?? null,
+      type: bridge.metadata.category,
+      flow: flow.results.currentValueBridgedAToB || 0,
+      bridge: flow.bundle,
+      logo: bridge.metadata.icon,
       bridgeIndex: graphData.links.filter(
         (link) =>
-          (link.source === flow.a.toLowerCase() &&
-            link.target === flow.b.toLowerCase()) ||
-          (link.target === flow.a.toLowerCase() &&
-            link.source === flow.b.toLowerCase()),
+          (link.source === flow.metadata.chainA.toLowerCase() &&
+            link.target === flow.metadata.chainB.toLowerCase()) ||
+          (link.target === flow.metadata.chainA.toLowerCase() &&
+            link.source === flow.metadata.chainB.toLowerCase()),
       ).length,
     });
     graphData.links.push({
-      source: flow.b.toLowerCase(),
-      target: flow.a.toLowerCase(),
-      website: bridge.website,
-      audits: bridge.audits ?? null,
-      type: bridge.type,
-      flow: flow.bToA,
-      bridge: flow.bridge.toLowerCase(),
-      logo: bridge.logo,
+      source: flow.metadata.chainB,
+      target: flow.metadata.chainA,
+      website: bridge.metadata.website,
+      audits: bridge.metadata.audits ?? null,
+      type: bridge.metadata.category,
+      flow: flow.results.currentValueBridgedBToA || 0,
+      bridge: flow.bundle,
+      logo: bridge.metadata.icon,
       bridgeIndex: graphData.links.filter(
         (link) =>
-          (link.source === flow.b.toLowerCase() &&
-            link.target === flow.a.toLowerCase()) ||
-          (link.target === flow.b.toLowerCase() &&
-            link.source === flow.a.toLowerCase()),
+          (link.source === flow.metadata.chainB.toLowerCase() &&
+            link.target === flow.metadata.chainA.toLowerCase()) ||
+          (link.target === flow.metadata.chainB.toLowerCase() &&
+            link.source === flow.metadata.chainA.toLowerCase()),
       ).length,
     });
 
     const flowToIndex = aggregatedFlows.findIndex(
-      (f) => f.source === flow.a && f.target === flow.b,
+      (f) =>
+        f.source === flow.metadata.chainA && f.target === flow.metadata.chainB,
     );
     if (flowToIndex === -1) {
       aggregatedFlows.push({
-        source: flow.a.toLowerCase(),
-        target: flow.b.toLowerCase(),
-        flow: flow.aToB,
+        source: flow.metadata.chainA.toLowerCase(),
+        target: flow.metadata.chainB.toLowerCase(),
+        flow: flow.results.currentValueBridgedAToB || 0,
         reverse: false,
       });
     } else {
-      aggregatedFlows[flowToIndex].flow += flow.aToB;
+      aggregatedFlows[flowToIndex].flow +=
+        flow.results.currentValueBridgedAToB || 0;
     }
 
     const flowFrom = aggregatedFlows.findIndex(
-      (f) => f.target === flow.a && f.source === flow.b,
+      (f) =>
+        f.target === flow.metadata.chainA && f.source === flow.metadata.chainB,
     );
     if (flowFrom === -1) {
       aggregatedFlows.push({
-        target: flow.a.toLowerCase(),
-        source: flow.b.toLowerCase(),
-        flow: flow.bToA,
+        target: flow.metadata.chainA.toLowerCase(),
+        source: flow.metadata.chainB.toLowerCase(),
+        flow: flow.results.currentValueBridgedBToA || 0,
         reverse: true,
       });
     } else {
-      aggregatedFlows[flowFrom].flow += flow.bToA;
+      aggregatedFlows[flowFrom].flow +=
+        flow.results.currentValueBridgedBToA || 0;
     }
   });
   graphData.links.push(...aggregatedFlows);

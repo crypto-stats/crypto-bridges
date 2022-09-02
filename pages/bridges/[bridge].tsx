@@ -17,12 +17,11 @@ interface IBridgePath {
 }
 
 const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
-  const bridgeName = bridge.split('-').join(' ');
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <BridgeSpecifics data={data} name={bridge} />
+        <BridgeSpecifics data={data} id={bridge} />
         <Table
           listsChains={true}
           title={'connected chains'}
@@ -30,8 +29,8 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
             .filter((chain) => {
               for (const flow of data.flows) {
                 if (
-                  flow.bridge.toLowerCase() === bridgeName &&
-                  (flow.a === chain.name || flow.b === chain.name)
+                  flow.bundle === bridge &&
+                  (flow.metadata.chainA === chain.name || flow.metadata.chainB === chain.name)
                 ) {
                   return true;
                 }
@@ -42,12 +41,12 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
               let flowIn = 0;
               let flowOut = 0;
               for (const flow of data.flows) {
-                if (flow.a === chain.name) {
-                  flowIn += flow.bToA;
-                  flowOut += flow.aToB;
-                } else if (flow.b === chain.name) {
-                  flowIn += flow.aToB;
-                  flowOut += flow.bToA;
+                if (flow.metadata.chainA === chain.name) {
+                  flowIn += flow.results.currentValueBridgedBToA || 0;
+                  flowOut += flow.results.currentValueBridgedAToB || 0;
+                } else if (flow.metadata.chainB === chain.name) {
+                  flowIn += flow.results.currentValueBridgedAToB || 0;
+                  flowOut += flow.results.currentValueBridgedBToA || 0;
                 }
               }
               return {
@@ -68,8 +67,8 @@ export async function getStaticPaths(): Promise<{
   paths: IBridgePath[];
 }> {
   const data = await loadData();
-  const paths = data.bridges.map(({ name }): IBridgePath => {
-    return { params: { bridge: name.split(' ').join('-').toLowerCase() } };
+  const paths = data.bridges.map((bridge): IBridgePath => {
+    return { params: { bridge: bridge.id } };
   });
   return { paths, fallback: false };
 }
