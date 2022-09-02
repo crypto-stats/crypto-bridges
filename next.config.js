@@ -4,6 +4,7 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: [
+      'ipfs.io',
       'cryptologos.cc',
       'l2beat.com',
       'defillama.com',

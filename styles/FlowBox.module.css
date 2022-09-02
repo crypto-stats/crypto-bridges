@@ -1,0 +1,73 @@
+.flowsContainer {
+  display: flex;
+  gap: 40px;
+  flex-direction: column;
+}
+.flowBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.flowBox p {
+  margin: 0;
+}
+.flowBoxTitle {
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+.flowBoxChain {
+  display: flex;
+  gap: 8px;
+  text-transform: capitalize;
+}
+.flowBoxChains {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.flowBoxSpacer {
+  width: 32px;
+  height: 3px;
+  background-color: #ddd;
+}
+.flowBoxContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  align-self: stretch;
+}
+.flowBoxRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flowBoxRow a {
+  padding: 10px;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: all 200ms ease;
+  scale: 1;
+  align-items: center;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-transform: capitalize;
+  width: 100%;
+}
+.flowBoxRow a:hover {
+  background: rgba(215, 80, 200, 0.5);
+  scale: 1.006;
+}
+.flowBoxRowBridge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
