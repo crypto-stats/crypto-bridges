@@ -2,17 +2,17 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { GLOW_ID, IMAGE_GLOW_ID } from '../constants';
 import { useData } from '../data/data-context';
-import { drawGraph, INetworkGraph } from '../drawGraph';
+import { drawGraph } from '../drawGraph';
 import style from '../styles/NetworkDiagram.module.css';
 import { convertDummyDataForGraph } from '../utils';
 
 export default function NetworkDiagram() {
   const router = useRouter();
-  const [graph, setGraph] = useState<INetworkGraph>();
+  const [graphReady, setGraphReady] = useState(false);
   const data = useData();
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
-    if (data === undefined || graph !== undefined) return;
+    if (data === undefined || graphReady) return;
     if (svg.current !== null) {
       svg.current.innerHTML = `
       <defs>
@@ -39,14 +39,14 @@ export default function NetworkDiagram() {
       </filter>
       </defs>`;
     }
+    setGraphReady(true);
+    const convertedData = convertDummyDataForGraph(data);
     const navigateTo = (path: string) =>
       router.push(path, undefined, { scroll: false });
-    const convertedData = convertDummyDataForGraph(data);
-    const g = drawGraph(svg, convertedData, navigateTo);
-    setGraph(g);
-    const updateUrl = (path: string) => g.updateSelected(path);
+    const graph = drawGraph(svg, convertedData, navigateTo);
+    const updateUrl = (path: string) => graph.updateSelected(path);
     router.events.on('routeChangeStart', updateUrl);
-  }, [svg, data, router, graph]);
+  }, [svg, data, router, graphReady]);
 
   return (
     <div className={style.networkDiagram}>

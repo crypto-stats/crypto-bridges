@@ -23,6 +23,8 @@ import {
   IFlowBridgesGraphNode,
 } from './utils';
 
+let guiCreated = false;
+
 const PADDING = 30;
 
 const MIN_PATH_CLICK_WIDTH = 40;
@@ -47,7 +49,7 @@ enum DISTRIBUTION {
 // and the node repulsion force in the d3 simulation force.
 // Here we find the areas distribution curve parameters given min/max
 // input values and arbitrary min/max node areas as a share of the available
-// surface, so that the proportions are consistent on all possible resizes.
+// surface, so that the proportions are consistent on all possible resize,s.
 export function drawGraph(
   svgRef: RefObject<SVGSVGElement>,
   data: IFlowBridgesGraphData,
@@ -60,6 +62,11 @@ export function drawGraph(
   let currentSimulation:
     | d3.Simulation<d3.SimulationNodeDatum, undefined>
     | undefined = undefined;
+
+  const settings = {
+    'Run Simulation': resize,
+    distribution: DISTRIBUTION.LINEAR,
+  };
 
   const distribution: DISTRIBUTION = DISTRIBUTION.LINEAR;
   const sortedNodes = data.nodes.sort((a, b) => a.tvl - b.tvl);
@@ -79,6 +86,26 @@ export function drawGraph(
   let [kAP, kBP] = getPathWidthParameters();
 
   const svg = select(svgRef.current);
+
+  initGui();
+
+  async function initGui() {
+    if (guiCreated) {
+      return;
+    }
+    guiCreated = true;
+    const dat = await import('dat.gui');
+    const gui = new dat.GUI();
+    const simulation = gui.addFolder('Simulation');
+    simulation.open();
+    simulation
+      .add(settings, 'distribution', {
+        linear: DISTRIBUTION.LINEAR,
+        logarithmic: DISTRIBUTION.LOGARITHMIC,
+      })
+      .onChange(resize);
+    simulation.add(settings, 'Run Simulation');
+  }
 
   const clickablePaths = svg
     .selectAll('line')
