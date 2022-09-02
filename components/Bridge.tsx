@@ -10,9 +10,7 @@ interface IBridgeProps {
 }
 
 const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
-  const bridge = data.bridges.find(
-    (bridge) => bridge.id === id,
-  );
+  const bridge = data.bridges.find((bridge) => bridge.id === id);
   if (bridge === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
@@ -63,7 +61,7 @@ const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
           Submit bug
         </a>
       </div>
-      {bridge.metadata.audits && (
+      {bridge.metadata.audits?.length && (
         <div className={styles.nodeItem}>
           <div className={styles.nodeDataItem}>
             <h2>security audits</h2>

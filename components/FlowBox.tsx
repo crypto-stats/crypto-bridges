@@ -6,6 +6,7 @@ import { format } from '../utils';
 interface IBridgeFlow {
   name: string;
   logo: string;
+  bundle: string;
   value: number;
 }
 
@@ -47,10 +48,7 @@ const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
                 <Link
                   passHref
                   scroll={false}
-                  href={`/bridges/${bridge.name
-                    .split(' ')
-                    .join('-')
-                    .toLowerCase()}`}
+                  href={`/bridges/${bridge.bundle}`}
                 >
                   <a>
                     <div className={styles.flowBoxRowBridge}>

@@ -35,11 +35,10 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       }
       const bridge = {
         name: flow.metadata.name.toLowerCase(),
+        bundle: flow.bundle,
         logo:
-          data.bridges.find(
-            (bridge) =>
-              bridge.metadata.name.toLowerCase() === flow.metadata.name,
-          )?.metadata.icon ?? '',
+          data.bridges.find((bridge) => bridge.id === flow.bundle)?.metadata
+            .icon ?? '',
         value:
           (isA
             ? flow.results.currentValueBridgedAToB
