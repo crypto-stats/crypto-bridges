@@ -17,8 +17,16 @@
       "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"
     },
     {
+      "name": "evmos",
+      "logo": "https://ipfs.io/ipfs/QmXhPaHEpLakqEvhY36bzt3ffi9HheF8haPNdbf8RKJbko"
+    },
+    {
       "name": "arbitrum",
       "logo": "https://l2beat.com/icons/arbitrum.png"
+    },
+    {
+      "name": "moonbeam",
+      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4"
     },
     {
       "name": "optimism",
