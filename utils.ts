@@ -174,7 +174,8 @@ export function convertDummyDataForGraph(
     });
 
     const flowToIndex = aggregatedFlows.findIndex(
-      (f) => f.source === flow.a && f.target === flow.b,
+      (f) =>
+        f.source === flow.metadata.chainA && f.target === flow.metadata.chainB,
     );
     if (flowToIndex === -1) {
       aggregatedFlows.push({
@@ -189,7 +190,8 @@ export function convertDummyDataForGraph(
     }
 
     const flowFrom = aggregatedFlows.findIndex(
-      (f) => f.target === flow.a && f.source === flow.b,
+      (f) =>
+        f.target === flow.metadata.chainA && f.source === flow.metadata.chainB,
     );
     if (flowFrom === -1) {
       aggregatedFlows.push({
