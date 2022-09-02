@@ -1,13 +1,10 @@
 import type { NextPage } from 'next';
 import BackButton from '../../components/BackButton';
-import Motion from '../../components/Motion';
-// import Table from '../../components/Table';
-import { useMemo } from 'react';
 import ChainSpecifics from '../../components/Chain';
+import Motion from '../../components/Motion';
 import { loadData } from '../../data/load-data';
 import { GetStaticBridgeProps, IDummyData } from '../../data/types';
 import styles from '../../styles/page.module.css';
-import { convertDummyDataForGraph } from '../../utils';
 
 interface IChainProps {
   chain: string;
@@ -19,8 +16,6 @@ interface IChainPath {
 }
 
 const Chain: NextPage<IChainProps> = ({ data, chain }: IChainProps) => {
-  const convertedData = useMemo(() => convertDummyDataForGraph(data), [data]);
-  const chainName = chain.split('-').join(' ');
   return (
     <Motion>
       <section className={styles.section}>

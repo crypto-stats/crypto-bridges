@@ -13,14 +13,14 @@ interface IBridgeProps {
 
 const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const chainName = name.split('-').join(' ');
-  const chain = data.chains.find((chain) => chain.name === chainName);
+  const chain = data.chains.find((chain) => chain.name === name);
   if (chain === undefined) return <div>Empty!</div>;
   const computeTVLForChain = () => {
     let tvl = 0;
     data.flows.forEach((flow) => {
-      if (flow.metadata.chainA === chainName)
+      if (flow.metadata.chainA === name)
         tvl += flow.results.currentValueBridgedAToB ?? 0;
-      if (flow.metadata.chainB === chainName)
+      if (flow.metadata.chainB === name)
         tvl += flow.results.currentValueBridgedBToA ?? 0;
     });
     return format(tvl);
@@ -28,8 +28,8 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const computeChainFlows = () => {
     const flows: IChainFlow[] = [];
     data.flows.forEach((flow) => {
-      const isA = flow.metadata.chainA === chainName;
-      const isB = flow.metadata.chainB === chainName;
+      const isA = flow.metadata.chainA === name;
+      const isB = flow.metadata.chainB === name;
       if (!(isA || isB)) {
         return;
       }
