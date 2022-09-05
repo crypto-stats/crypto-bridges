@@ -34,7 +34,7 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
         return;
       }
       const bridge = {
-        name: flow.metadata.name.toLowerCase(),
+        name: flow.metadata.name?.toLowerCase(),
         bundle: flow.bundle,
         logo:
           data.bridges.find((bridge) => bridge.id === flow.bundle)?.metadata
