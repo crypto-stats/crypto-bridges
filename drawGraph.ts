@@ -87,6 +87,22 @@ export function drawGraph(
 
   const svg = select(svgRef.current);
 
+  /* const sankeyLayout = sankey()
+    .nodeWidth(100)
+    .nodePadding(30)
+    .extent([
+      [1, 5],
+      [300, 200],
+    ]);
+  const { nodes, links } = sankeyLayout({
+    nodes: [{ name: 'eth' }, { name: 'btc' }, { name: 'avax' }],
+    links: [
+      { source: 1, target: 0, value: 1 },
+      { source: 1, target: 2, value: 2 },
+    ],
+  });
+  console.log(nodes); */
+
   initGui();
 
   async function initGui() {
@@ -503,7 +519,7 @@ export function drawGraph(
       .force(
         'charge',
         forceManyBody().strength((d: any) => {
-          const force = getTvlRadius(d) / -5000;
+          const force = getTvlRadius(d) / -10000;
           return force * availableArea;
         }),
       )
@@ -629,9 +645,7 @@ export function drawGraph(
   }
 
   function findSelectedChain(path: string): IFlowBridgesGraphNode | undefined {
-    return data.nodes.find(
-      (node) => node.chain === path.split('/')[2]?.split('-').join(' '),
-    );
+    return data.nodes.find((node) => node.chain === path.split('/')[2]);
   }
 
   function findSelectedBridge(
