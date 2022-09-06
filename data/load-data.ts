@@ -1,9 +1,9 @@
-import { getSDK } from './sdk';
-import dummyData from './dummy.json';
 import chainData from './chains.json';
+import dummyData from './dummy.json';
+import { getSDK } from './sdk';
 import { IDummyData } from './types';
 
-const useDummy = process.env.NODE_ENV !== 'production'
+const useDummy = process.env.NODE_ENV !== 'production';
 
 function removeIcons(data: any[]) {
   for (const item of data) {
@@ -23,7 +23,10 @@ export async function loadData(): Promise<IDummyData> {
   const collection = sdk.getCollection('bridged-value');
   await collection.fetchAdapters();
 
-  const flows: any = await collection.executeQueriesWithMetadata(['currentValueBridgedAToB', 'currentValueBridgedBToA']);
+  const flows: any = await collection.executeQueriesWithMetadata([
+    'currentValueBridgedAToB',
+    'currentValueBridgedBToA',
+  ]);
   removeIcons(flows);
 
   const bridges: any = await collection.getBundles();

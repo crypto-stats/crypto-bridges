@@ -80,6 +80,12 @@ export function convertDummyDataForGraph(
   const graphData: IFlowBridgesGraphData = { nodes: [], links: [] };
   const aggregatedFlows: IFlowBridgesGraphFlowLink[] = [];
   data.flows.forEach((flow) => {
+    if (flow.metadata.name === undefined) {
+      console.warn(
+        'Data error: no bridge name given for flow entry: ' + flow.id,
+      );
+      flow.metadata.name = 'Undefined';
+    }
     const chainAIndex = graphData.nodes.findIndex(
       (node) => node.chain === flow.metadata.chainA,
     );
@@ -160,7 +166,7 @@ export function convertDummyDataForGraph(
       target: flow.metadata.chainA,
       website: bridge.metadata.website,
       audits: bridge.metadata.audits ?? null,
-      type: bridge.metadata.category,
+      type: bridge.metadata.category ?? null,
       flow: flow.results.currentValueBridgedBToA || 0,
       bridge: flow.bundle,
       logo: bridge.metadata.icon,
