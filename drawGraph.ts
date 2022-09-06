@@ -404,24 +404,18 @@ export function drawGraph(
 
   function setMode(newMode: GRAPH_MODES) {
     mode = newMode;
-    paths.classed('transparent', (d: any) => {
-      if (
+    paths.classed(
+      'transparent',
+      (d: any) =>
         (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
-        (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
-      ) {
-        return true;
-      }
-      return false;
-    });
-    clickablePaths.classed('path-hidden', (d: any) => {
-      if (
+        (mode === GRAPH_MODES.FLOWS && d.type !== undefined),
+    );
+    clickablePaths.classed(
+      'path-hidden',
+      (d: any) =>
         (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
-        (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
-      ) {
-        return true;
-      }
-      return false;
-    });
+        (mode === GRAPH_MODES.FLOWS && d.type !== undefined),
+    );
     circleGroups.classed('transparent', false);
   }
 

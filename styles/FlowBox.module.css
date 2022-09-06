@@ -23,6 +23,7 @@
   display: flex;
   gap: 8px;
   text-transform: capitalize;
+  align-items: center;
 }
 .flowBoxChains {
   display: flex;

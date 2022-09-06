@@ -58,7 +58,7 @@ const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
                         height={24}
                         alt="logo"
                       />
-                      <p>{bridge.name}</p>
+                      <p>{bridge.name ?? 'Undefined'}</p>
                     </div>
                     <p>{format(bridge.value)}</p>
                   </a>
