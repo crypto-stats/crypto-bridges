@@ -54,6 +54,13 @@
   align-items: center;
   gap: 16px;
 }
+.nodeInfo img {
+  background: radial-gradient(
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
 .nodeSpecifics p {
   margin: 0;
 }

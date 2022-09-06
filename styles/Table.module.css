@@ -91,6 +91,14 @@
   gap: 8px;
   align-items: center;
 }
+
+.nameBox img {
+  background: radial-gradient(
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
 .item a:hover {
   background: rgba(215, 80, 200, 0.5);
   scale: 1.006;
