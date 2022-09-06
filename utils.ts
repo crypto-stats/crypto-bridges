@@ -81,8 +81,8 @@ export function convertDummyDataForGraph(
   const aggregatedFlows: IFlowBridgesGraphFlowLink[] = [];
   data.flows.forEach((flow) => {
     if (flow.metadata.name === undefined) {
-      console.warn(
-        'Data error: no bridge name given for flow entry: ' + flow.id,
+      console.error(
+        'Data type error: no bridge name given for flow entry: ' + flow.id,
       );
       flow.metadata.name = 'Undefined';
     }
@@ -144,6 +144,12 @@ export function convertDummyDataForGraph(
       );
       return;
     }
+    if (typeof bridge.metadata.category !== 'string') {
+      console.error(
+        'Data type error: bridge category not defined for flow: ' + bridge.id,
+      );
+      bridge.metadata.category = 'unknown';
+    }
     graphData.links.push({
       source: flow.metadata.chainA,
       target: flow.metadata.chainB,
@@ -166,7 +172,7 @@ export function convertDummyDataForGraph(
       target: flow.metadata.chainA,
       website: bridge.metadata.website,
       audits: bridge.metadata.audits ?? null,
-      type: bridge.metadata.category ?? null,
+      type: bridge.metadata.category,
       flow: flow.results.currentValueBridgedBToA || 0,
       bridge: flow.bundle,
       logo: bridge.metadata.icon,
