@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { ReactElement } from 'react';
 import { IDummyData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
@@ -79,7 +78,7 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       </div>
       <div className={styles.nodeItem}>
         <div className={styles.nodeInfo}>
-          <Image src={chain.logo} width={30} height={30} alt="logo" />
+          <img src={chain.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{chainName}</p>
         </div>
         <p>

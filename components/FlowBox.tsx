@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/FlowBox.module.css';
 import { format } from '../utils';
@@ -31,12 +30,12 @@ const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
           <div className={styles.flowBoxTitle}>
             <div className={styles.flowBoxChains}>
               <div className={styles.flowBoxChain}>
-                <Image src={logo} width={16} height={16} alt="logo" />
+                <img src={logo} width={16} height={16} alt="logo" />
                 <p>{name}</p>
               </div>
               <div className={styles.flowBoxSpacer} />
               <div className={styles.flowBoxChain}>
-                <Image src={flow.logo} width={16} height={16} alt="logo" />
+                <img src={flow.logo} width={16} height={16} alt="logo" />
                 <p>{flow.name}</p>
               </div>
             </div>
@@ -52,7 +51,7 @@ const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
                 >
                   <a>
                     <div className={styles.flowBoxRowBridge}>
-                      <Image
+                      <img
                         src={bridge.logo}
                         width={24}
                         height={24}

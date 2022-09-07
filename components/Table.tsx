@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { ReactElement, ReactNode } from 'react';
 import styles from '../styles/Table.module.css';
@@ -61,7 +60,7 @@ const Table = ({
                           {addLeadingZero(index + 1)}
                         </span>
                         <span className={styles.vAlign}>
-                          <Image
+                          <img
                             src={content.logo}
                             width="20"
                             height="20"

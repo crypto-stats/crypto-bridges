@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { ReactElement } from 'react';
 import { IDummyData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
@@ -17,7 +16,7 @@ const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
       <div className={styles.nodeItem}>
         <h2>bridge</h2>
         <div className={styles.nodeInfo}>
-          <Image src={bridge.metadata.icon} width={30} height={30} alt="logo" />
+          <img src={bridge.metadata.icon} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{bridge.metadata.name}</p>
           <p className={styles.nodeCategory}>{bridge.metadata.category}</p>
         </div>
