@@ -1,95 +1,115 @@
 {
   "chains": [
     {
-      "name": "axelar",
-      "logo": "https://ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki"
+      "id": "axelar",
+      "logo": "https://ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki",
+      "description": "Axelar is a cross-chain bridge protocol, centered around it's own Cosmos SDK-based chain. In addition to producing blocks on the Axelar chain, validators must also monitor the state of external bridged blockchains and attest to the state of these chains using threshold signatures.",
+      "website": "https://axelar.network/",
+      "whitepaper": "https://axelar.network/axelar_whitepaper.pdf"
     },
     {
-      "name": "bitcoin",
-      "logo": "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023"
+      "id": "bitcoin",
+      "logo": "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023",
+      "description": "Bitcoin is a peer-to-peer payment network, and the original decentralized blockchain.",
+      "whitepaper": "https://bitcoin.org/bitcoin.pdf"
     },
     {
-      "name": "bsc",
-      "logo": "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=023"
+      "id": "bsc",
+      "name": "BNB Chain",
+      "logo": "https://cryptologos.cc/logos/bnb-bnb-logo.png?v=023",
+      "description": "BNB Chain (previously Binance Smart Chain) is a generalized blockchain for low-cost decentralized applications.",
+      "website": "https://bnbchain.org/"
     },
     {
-      "name": "ethereum",
-      "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"
+      "id": "ethereum",
+      "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023",
+      "description": "Ethereum is a generalized blockchain for the development of decentralized applications."
     },
     {
-      "name": "evmos",
-      "logo": "https://ipfs.io/ipfs/QmXhPaHEpLakqEvhY36bzt3ffi9HheF8haPNdbf8RKJbko"
+      "id": "evmos",
+      "logo": "https://ipfs.io/ipfs/QmXhPaHEpLakqEvhY36bzt3ffi9HheF8haPNdbf8RKJbko",
+      "description": "EVMOS is Cosmos-ecosystem blockchain that supports Ethereum-native applications and tools by fully implementing the Ethereum Virtual Machine (EVM)."
     },
     {
-      "name": "arbitrum",
-      "logo": "https://l2beat.com/icons/arbitrum.png"
+      "id": "arbitrum",
+      "logo": "https://l2beat.com/icons/arbitrum.png",
+      "description": "Arbitrum is a scaling solution running on the Ethereum blockchain. As an \"optimistic rollup\", the chain is secured by the economic incentives to post a fraud-proof to Ethereum in the case of an invalid block.",
+      "website": "https://arbitrum.io"
     },
     {
-      "name": "moonbeam",
-      "logo": "https://ipfs.io/ipfs/QmTHLLmM8QLAf9L3aNLMmzK8RQSjJTU3z7vVb6MrJtSccc"
+      "id": "moonbeam",
+      "logo": "https://ipfs.io/ipfs/QmTHLLmM8QLAf9L3aNLMmzK8RQSjJTU3z7vVb6MrJtSccc",
+      "description": ""
     },
     {
-      "name": "optimism",
-      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023"
+      "id": "optimism",
+      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023",
+      "description": "Optimism is a scaling solution running on the Ethereum blockchain. As an \"optimistic rollup\", the chain is secured by the economic incentives to post a fraud-proof to Ethereum in the case of an invalid block.",
+      "website": "https://www.optimism.io/"
     },
     {
-      "name": "polygon",
+      "id": "polygon",
       "logo": "https://cryptologos.cc/logos/polygon-matic-logo.png?v=023"
     },
     {
-      "name": "multichain",
+      "id": "multichain",
       "logo": "https://defillama.com/_next/image?url=https%3A%2F%2Ficons.llama.fi%2Fmultichain.jpg&w=32&q=75"
     },
     {
-      "name": "avalanche",
+      "id": "avalanche",
       "logo": "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=023"
     },
     {
-      "name": "fantom",
+      "id": "fantom",
       "logo": "https://cryptologos.cc/logos/fantom-ftm-logo.png?v=023"
     },
     {
-      "name": "ripple",
+      "id": "ripple",
       "logo": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=023"
     },
     {
-      "name": "cardano",
+      "id": "cardano",
       "logo": "https://cryptologos.cc/logos/cardano-ada-logo.png?v=023"
     },
     {
-      "name": "solana",
-      "logo": "https://cryptologos.cc/logos/solana-sol-logo.png?v=023"
+      "id": "solana",
+      "logo": "https://cryptologos.cc/logos/solana-sol-logo.png?v=023",
+      "description": "Solana is a high-throughput blockchain optimized for low-cost decentralized applications"
     },
     {
-      "name": "near",
+      "id": "near",
       "logo": "https://cryptologos.cc/logos/near-protocol-near-logo.png?v=023"
     },
     {
-      "name": "polkadot",
+      "id": "polkadot",
       "logo": "https://cryptologos.cc/logos/polkadot-new-dot-logo.png?v=023"
     },
     {
-      "name": "osmosis",
-      "logo": "https://ipfs.io/ipfs/QmaPe4CFwjoN3orMzYUhrXYfYdsbpJn497i2bHJJjzEgPL"
+      "id": "osmosis",
+      "logo": "https://ipfs.io/ipfs/QmaPe4CFwjoN3orMzYUhrXYfYdsbpJn497i2bHJJjzEgPL",
+      "description": "Osmosis is a cross-chain decentralized asset exchange, operating on it's own Cosmos SDK-chain. The exchange facilitates trading assets from within the Cosmos ecosystem, and beyond using various bridges."
     },
     {
-      "name": "cosmoshub",
-      "logo": "https://cryptologos.cc/logos/cosmos-atom-logo.png?v=023"
+      "id": "cosmoshub",
+      "logo": "https://cryptologos.cc/logos/cosmos-atom-logo.png?v=023",
+      "description": "The Cosmos Hub is the original blockchain in the Cosmos ecosystem. The chain is intended to act as a central hub by which other blockchains can connect, relay messages, and rent security needed to secure their chains."
     },
     {
-      "name": "gnosis-chain",
-      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4"
+      "id": "gnosis-chain",
+      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4",
+      "description": "Gnosis Chain is a fully Ethereum-compatible companion chain with low fees, and a native stablecoin as the base asset.",
+      "website": "https://www.gnosischain.com/"
     },
     {
-      "name": "gravitybridge",
+      "id": "gravitybridge",
       "logo": "https://ipfs.io/ipfs/QmezADpEoBvneUXB9iopsUC4i1JSgW7kuhVF5jDebCsHBw"
     },
     {
-      "name": "juno",
+      "id": "juno",
       "logo": "https://ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
     },
     {
-      "name": "secretnetwork",
+      "id": "secretnetwork",
       "logo": "https://ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St"
     }
   ]

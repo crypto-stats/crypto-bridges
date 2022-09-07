@@ -5,7 +5,8 @@ import styles from '../styles/Table.module.css';
 import { addLeadingZero, format } from '../utils';
 
 export interface ITableItem {
-  name: string;
+  id: string;
+  name?: string;
   logo: string;
   tvl: number;
   in: number;
@@ -39,19 +40,17 @@ const Table = ({
             <span className={styles.imageGap}></span>
             <span>name</span>
           </p>
-          <p>{valueIn ? 'value in' : 'value out'}</p>
-          <p>{valueIn ? 'value out' : 'value in'}</p>
+          <p>{valueIn ? 'value imported' : 'value exported'}</p>
+          <p>{valueIn ? 'value exported' : 'value imported'}</p>
         </div>
         <ol className={styles.list}>
           {tableContent
             .sort((a, b) => (valueIn ? b.in - a.in : b.tvl - a.tvl))
             .map((content, index) => {
               return (
-                <li key={index} className={styles.item}>
+                <li key={content.id} className={styles.item}>
                   <Link
-                    href={`/${listsChains ? 'chain' : 'bridges'}/${content.name
-                      .split(' ')
-                      .join('-')}`}
+                    href={`/${listsChains ? 'chain' : 'bridges'}/${content.id}`}
                     scroll={false}
                     passHref={true}
                   >
@@ -68,7 +67,7 @@ const Table = ({
                             alt=""
                           />
                         </span>
-                        <span className={styles.vAlign}>{content.name}</span>
+                        <span className={styles.vAlign}>{content.name || content.id.replaceAll('-', ' ')}</span>
                       </p>
                       <p>{`${format(valueIn ? content.in : content.tvl)}`}</p>
                       <p>{`${format(valueIn ? content.tvl : content.in)}`}</p>

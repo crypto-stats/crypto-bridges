@@ -218,7 +218,7 @@ export function drawGraph(
     .append('tspan')
     //.text((d) => d.chain.split(' ')[1] ?? '')
     .attr('dy', '20')
-    .attr('dx', (d: any) => -d.chain.split(' ')[1]?.length * 9 || '0');
+    .attr('dx', (d: any) => -d.name.split(' ')[1]?.length * 9 || '0');
 
   resize();
   updateSelected(window.location.pathname);
@@ -231,7 +231,7 @@ export function drawGraph(
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-selected', (d: any) => {
-        if (d.source.chain === node.chain || d.target.chain === node.chain) {
+        if (d.source.chain === node.id || d.target.chain === node.id) {
           connectedNodeNames.push(d.source.chain as string);
           connectedNodeNames.push(d.target.chain as string);
           return true;
@@ -239,7 +239,7 @@ export function drawGraph(
         return false;
       })
       .style('filter', (d: any) =>
-        d.source.chain === node.chain || d.target.chain === node.chain
+        d.source.chain === node.id || d.target.chain === node.id
           ? `url(#${GLOW_ID})`
           : 'none',
       );
@@ -372,7 +372,7 @@ export function drawGraph(
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-hovered', (d: any) => {
-        if (d.source.chain === node.chain || d.target.chain === node.chain) {
+        if (d.source.chain === node.id || d.target.chain === node.id) {
           connectedNodeNames.push(d.source.chain as string);
           connectedNodeNames.push(d.target.chain as string);
           return true;
@@ -380,8 +380,8 @@ export function drawGraph(
         return false;
       })
       .style('filter', function (d: any) {
-        return d.source.chain === node.chain ||
-          d.target.chain === node.chain ||
+        return d.source.chain === node.id ||
+          d.target.chain === node.id ||
           select(this).classed('path-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
@@ -484,7 +484,7 @@ export function drawGraph(
   }
 
   function getLinkFromNode(n: IFlowBridgesGraphNode): string {
-    return `/chain/${n.chain.split(' ').join('-')}`;
+    return `/chain/${n.id}`;
   }
 
   function getLinkFromBridgePath(p: IFlowBridgesGraphBridgeLink): string {
@@ -520,7 +520,7 @@ export function drawGraph(
       .force(
         'link',
         forceLink()
-          .id((d: any) => (d as IFlowBridgesGraphNode).chain)
+          .id((d: any) => (d as IFlowBridgesGraphNode).id)
           .links(data.links),
       )
       .force('center', forceCenter(width / 2, height / 2))
@@ -576,7 +576,7 @@ export function drawGraph(
         return coord;
       });
     text
-      .attr('dx', (d: any) => d.x - d.chain.split(' ')[0].length * 4.7)
+      .attr('dx', (d: any) => d.x - d.name.split(' ')[0].length * 4.7)
       .attr('dy', (d: any) => (d.y as number) + 5);
     images
       .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
@@ -639,7 +639,7 @@ export function drawGraph(
   }
 
   function findSelectedChain(path: string): IFlowBridgesGraphNode | undefined {
-    return data.nodes.find((node) => node.chain === path.split('/')[2]);
+    return data.nodes.find((node) => node.id === path.split('/')[2]);
   }
 
   function findSelectedBridge(
