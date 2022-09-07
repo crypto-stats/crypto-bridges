@@ -1,8 +1,12 @@
 {
   "chains": [
     {
+      "name": "acala",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmW4JDMcuP3kxNPYXgoPhAzREM48sCX2yutBPPBp72BbbU"
+    },
+    {
       "name": "axelar",
-      "logo": "https://ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki"
     },
     {
       "name": "bitcoin",
@@ -78,19 +82,19 @@
     },
     {
       "name": "gnosis-chain",
-      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4"
     },
     {
       "name": "gravitybridge",
-      "logo": "https://ipfs.io/ipfs/QmezADpEoBvneUXB9iopsUC4i1JSgW7kuhVF5jDebCsHBw"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmezADpEoBvneUXB9iopsUC4i1JSgW7kuhVF5jDebCsHBw"
     },
     {
       "name": "juno",
-      "logo": "https://ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
     },
     {
       "name": "secretnetwork",
-      "logo": "https://ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St"
     }
   ]
 }

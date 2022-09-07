@@ -15,6 +15,7 @@ const nextConfig = {
       'alphagrowth.io',
       'images.ctfassets.net',
       'kronosresearch.com',
+      'cryptostats.infura-ipfs.io',
     ],
   },
 };
