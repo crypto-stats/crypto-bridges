@@ -31,9 +31,7 @@ export async function getStaticPaths(): Promise<{
   paths: IChainPath[];
 }> {
   const data = await loadData();
-  const paths = data.chains.map(({ name }) => {
-    return { params: { chain: name.split(' ').join('-').toLowerCase() } };
-  });
+  const paths = data.chains.map(({ id }) => ({ params: { chain: id } }));
   return { paths, fallback: false };
 }
 

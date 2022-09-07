@@ -50,7 +50,8 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
                 }
               }
               return {
-                name: chain.name,
+                id: chain.id,
+                name: chain.name || chain.id.replaceAll('-', ' '),
                 logo: chain.logo,
                 in: flowIn,
                 tvl: flowOut,

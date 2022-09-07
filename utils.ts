@@ -41,7 +41,8 @@ export interface IFlowBridgesGraphFlowLink {
 }
 
 export interface IFlowBridgesGraphNode {
-  chain: string;
+  id: string;
+  name: string;
   logo: string;
   tvl: number;
   in: number;
@@ -87,11 +88,11 @@ export function convertDummyDataForGraph(
       flow.metadata.name = 'Undefined';
     }
     const chainAIndex = graphData.nodes.findIndex(
-      (node) => node.chain === flow.metadata.chainA,
+      (node) => node.id === flow.metadata.chainA,
     );
     if (chainAIndex === -1) {
       const chain = data.chains.find(
-        (chain) => chain.name === flow.metadata.chainA,
+        (chain) => chain.id === flow.metadata.chainA,
       );
       if (chain === undefined) {
         console.error(
@@ -100,7 +101,8 @@ export function convertDummyDataForGraph(
         return;
       }
       graphData.nodes.push({
-        chain: flow.metadata.chainA,
+        id: chain.id,
+        name: chain.name || chain.id.replaceAll('-', ' '),
         logo: chain.logo,
         tvl: flow.results.currentValueBridgedAToB || 0,
         in: flow.results.currentValueBridgedBToA || 0,
@@ -112,11 +114,11 @@ export function convertDummyDataForGraph(
         flow.results.currentValueBridgedBToA || 0;
     }
     const chainBIndex = graphData.nodes.findIndex(
-      (node) => node.chain === flow.metadata.chainB,
+      (node) => node.id === flow.metadata.chainB,
     );
     if (chainBIndex === -1) {
       const chain = data.chains.find(
-        (chain) => chain.name === flow.metadata.chainB,
+        (chain) => chain.id === flow.metadata.chainB,
       );
       if (chain === undefined) {
         console.error(
@@ -125,7 +127,8 @@ export function convertDummyDataForGraph(
         return;
       }
       graphData.nodes.push({
-        chain: flow.metadata.chainB,
+        id: chain.id,
+        name: chain.name || chain.id.replaceAll('-', ' '),
         logo: chain.logo,
         tvl: flow.results.currentValueBridgedBToA || 0,
         in: flow.results.currentValueBridgedAToB || 0,

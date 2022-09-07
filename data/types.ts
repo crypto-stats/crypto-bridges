@@ -36,8 +36,12 @@ export interface IDummyFlow {
 }
 
 export interface IDummyChain {
-  name: string;
+  id: string;
+  name?: string;
   logo: string;
+  description?: string;
+  website?: string;
+  whitepaper?: string;
 }
 
 export interface IDummyBridge {
