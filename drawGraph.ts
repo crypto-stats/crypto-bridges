@@ -207,19 +207,6 @@ export function drawGraph(
     .on('mouseout', onMouseOut)
     .on('click', onClick);
 
-  const text = circleGroups
-    .append('text')
-    .style('fill', '#ccc')
-    .style('cursor', 'pointer')
-    .attr('font-size', '1em');
-  text.append('tspan');
-  //.text((d) => d.chain.split(' ')[0]);
-  text
-    .append('tspan')
-    //.text((d) => d.chain.split(' ')[1] ?? '')
-    .attr('dy', '20')
-    .attr('dx', (d: any) => -d.chain.split(' ')[1]?.length * 9 || '0');
-
   resize();
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
@@ -231,25 +218,25 @@ export function drawGraph(
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-selected', (d: any) => {
-        if (d.source.chain === node.chain || d.target.chain === node.chain) {
-          connectedNodeNames.push(d.source.chain as string);
-          connectedNodeNames.push(d.target.chain as string);
+        if (d.source.id === node.id || d.target.id === node.id) {
+          connectedNodeNames.push(d.source.id as string);
+          connectedNodeNames.push(d.target.id as string);
           return true;
         }
         return false;
       })
       .style('filter', (d: any) =>
-        d.source.chain === node.chain || d.target.chain === node.chain
+        d.source.id === node.id || d.target.id === node.id
           ? `url(#${GLOW_ID})`
           : 'none',
       );
     tvlCircles.classed(
       'circle-selected',
-      (c: any) => connectedNodeNames.indexOf(c.chain as string) > -1,
+      (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
     );
     blurredImages.classed(
       'blurred-image-selected',
-      (c: any) => connectedNodeNames.indexOf(c.chain as string) > -1,
+      (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
     );
   }
 
@@ -275,14 +262,14 @@ export function drawGraph(
         (path) => (path as IFlowBridgesGraphBridgeLink).bridge === link.bridge,
       )
       .forEach((path) => {
-        const source = (path.source as any).chain as string;
+        const source = (path.source as any).name as string;
         chainsServed.includes(source) ? true : chainsServed.push(source);
-        const target = (path.target as any).chain as string;
+        const target = (path.target as any).name as string;
         chainsServed.includes(target) ? true : chainsServed.push(target);
       });
     circleGroups.classed(
       'transparent',
-      (d: any) => !chainsServed.includes(d.chain as string),
+      (d: any) => !chainsServed.includes(d.name as string),
     );
     blurredImages.classed('blurred-image-selected', false);
     clickablePaths.classed('path-hidden', (d: any) => d.bridge !== link.bridge);
@@ -321,16 +308,16 @@ export function drawGraph(
       .classed(
         'path-hovered',
         (d: any) =>
-          (d.source.chain === (path.source as any).chain &&
-            d.target.chain === (path.target as any).chain) ||
-          (d.target.chain === (path.source as any).chain &&
-            d.source.chain === (path.target as any).chain),
+          (d.source.id === (path.source as any).id &&
+            d.target.id === (path.target as any).id) ||
+          (d.target.id === (path.source as any).id &&
+            d.source.id === (path.target as any).id),
       )
       .style('filter', function (d: any) {
-        return (d.source.chain === (path.source as any).chain &&
-          d.target.chain === (path.target as any).chain) ||
-          (d.target.chain === (path.source as any).chain &&
-            d.source.chain === (path.target as any).chain) ||
+        return (d.source.id === (path.source as any).id &&
+          d.target.id === (path.target as any).id) ||
+          (d.target.id === (path.source as any).id &&
+            d.source.id === (path.target as any).id) ||
           select(this).classed('path-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
@@ -339,13 +326,12 @@ export function drawGraph(
     tvlCircles
       .classed('circle-hovered', function (c: any) {
         return (
-          (path.source as any).chain === c.chain ||
-          (path.target as any).chain === c.chain
+          (path.source as any).id === c.id || (path.target as any).id === c.id
         );
       })
       .style('filter', function (d: any) {
-        return (path.source as any).chain === d.chain ||
-          (path.target as any).chain === d.chain ||
+        return (path.source as any).id === d.id ||
+          (path.target as any).id === d.id ||
           select(this).classed('circle-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
@@ -353,8 +339,7 @@ export function drawGraph(
     blurredImages.classed(
       'blurred-image-hovered',
       (c: any) =>
-        (path.source as any).chain === c.chain ||
-        (path.target as any).chain === c.chain,
+        (path.source as any).id === c.id || (path.target as any).id === c.id,
     );
   }
 
@@ -372,16 +357,16 @@ export function drawGraph(
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-hovered', (d: any) => {
-        if (d.source.chain === node.chain || d.target.chain === node.chain) {
-          connectedNodeNames.push(d.source.chain as string);
-          connectedNodeNames.push(d.target.chain as string);
+        if (d.source.id === node.id || d.target.id === node.id) {
+          connectedNodeNames.push(d.source.id as string);
+          connectedNodeNames.push(d.target.id as string);
           return true;
         }
         return false;
       })
       .style('filter', function (d: any) {
-        return d.source.chain === node.chain ||
-          d.target.chain === node.chain ||
+        return d.source.id === node.id ||
+          d.target.id === node.id ||
           select(this).classed('path-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
@@ -389,16 +374,16 @@ export function drawGraph(
     tvlCircles
       .classed(
         'circle-hovered',
-        (c: any) => connectedNodeNames.indexOf(c.chain as string) > -1,
+        (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
       )
       .style('filter', function (d: any) {
-        return connectedNodeNames.indexOf(d.chain as string) > -1
+        return connectedNodeNames.indexOf(d.id as string) > -1
           ? `url(#${GLOW_ID})`
           : 'none';
       });
     blurredImages.classed(
       'blurred-image-hovered',
-      (c: any) => connectedNodeNames.indexOf(c.chain as string) > -1,
+      (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
     );
   }
 
@@ -484,7 +469,7 @@ export function drawGraph(
   }
 
   function getLinkFromNode(n: IFlowBridgesGraphNode): string {
-    return `/chain/${n.chain.split(' ').join('-')}`;
+    return `/chain/${n.id}`;
   }
 
   function getLinkFromBridgePath(p: IFlowBridgesGraphBridgeLink): string {
@@ -520,7 +505,7 @@ export function drawGraph(
       .force(
         'link',
         forceLink()
-          .id((d: any) => (d as IFlowBridgesGraphNode).chain)
+          .id((d: any) => (d as IFlowBridgesGraphNode).id)
           .links(data.links),
       )
       .force('center', forceCenter(width / 2, height / 2))
@@ -575,9 +560,6 @@ export function drawGraph(
         d.y = coord;
         return coord;
       });
-    text
-      .attr('dx', (d: any) => d.x - d.chain.split(' ')[0].length * 4.7)
-      .attr('dy', (d: any) => (d.y as number) + 5);
     images
       .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
       .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
@@ -639,7 +621,7 @@ export function drawGraph(
   }
 
   function findSelectedChain(path: string): IFlowBridgesGraphNode | undefined {
-    return data.nodes.find((node) => node.chain === path.split('/')[2]);
+    return data.nodes.find((node) => node.id === path.split('/')[2]);
   }
 
   function findSelectedBridge(

@@ -17,9 +17,10 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
       <menu className={styles.menu}>
         <Table
           listsChains={true}
-          title={'exporters'}
+          title="Top Exporters"
           tableContent={convertedData.nodes.map((node) => ({
-            name: node.chain,
+            id: node.id,
+            name: node.name,
             logo: node.logo,
             tvl: node.tvl,
             in: node.in,
@@ -29,10 +30,11 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
         />
         <Table
           listsChains={true}
-          title={'importers'}
+          title="Top Importers"
           valueIn
           tableContent={convertedData.nodes.map((node) => ({
-            name: node.chain,
+            id: node.id,
+            name: node.name,
             logo: node.logo,
             tvl: node.tvl,
             in: node.in,

@@ -11,9 +11,11 @@ interface IBridgeProps {
 }
 
 const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
-  const chainName = name.split('-').join(' ');
-  const chain = data.chains.find((chain) => chain.name === name);
+  const chain = data.chains.find((chain) => chain.id === name);
   if (chain === undefined) return <div>Empty!</div>;
+
+  const chainName = chain.name || chain.id.replaceAll('-', ' ');
+
   const computeTVLForChain = () => {
     let tvl = 0;
     data.flows.forEach((flow) => {
@@ -81,10 +83,8 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
           <img src={chain.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{chainName}</p>
         </div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+        {chain.description && <p>{chain.description}</p>}
+        {chain.website && <a href={chain.website}>Website</a>}
       </div>
       <div className={styles.nodeItem}>
         <DataBox caption="Total value bridged" value={computeTVLForChain()} />
