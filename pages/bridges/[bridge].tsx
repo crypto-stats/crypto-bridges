@@ -30,7 +30,8 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
               for (const flow of data.flows) {
                 if (
                   flow.bundle === bridge &&
-                  (flow.metadata.chainA === chain.name || flow.metadata.chainB === chain.name)
+                  (flow.metadata.chainA === chain.id ||
+                    flow.metadata.chainB === chain.id)
                 ) {
                   return true;
                 }
@@ -41,10 +42,10 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
               let flowIn = 0;
               let flowOut = 0;
               for (const flow of data.flows) {
-                if (flow.metadata.chainA === chain.name) {
+                if (flow.metadata.chainA === chain.id) {
                   flowIn += flow.results.currentValueBridgedBToA || 0;
                   flowOut += flow.results.currentValueBridgedAToB || 0;
-                } else if (flow.metadata.chainB === chain.name) {
+                } else if (flow.metadata.chainB === chain.id) {
                   flowIn += flow.results.currentValueBridgedAToB || 0;
                   flowOut += flow.results.currentValueBridgedBToA || 0;
                 }
