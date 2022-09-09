@@ -6,11 +6,53 @@ import { HEADER_HEIGHT, PANEL_WIDTH } from '../constants';
 import styles from '../styles/Header.module.css';
 import { needsLandscape } from '../utils';
 
+const FlowBridge = () => {
+  const router = useRouter();
+  const selectBridges = () => router.push('/bridges/');
+  const selectFlow = () => router.push('/');
+  return (
+    <>
+      <button
+        onClick={selectFlow}
+        className={router.pathname === '/' ? styles.selected : ''}
+      >
+        Flow view
+      </button>
+      <button
+        onClick={selectBridges}
+        className={router.pathname.includes('/bridges') ? styles.selected : ''}
+      >
+        Bridge view
+      </button>
+    </>
+  );
+};
+
+const ImportExport = () => {
+  const router = useRouter();
+  const selectImport = () => router.push(router.pathname + '/imports');
+  const selectExport = () => router.push(router.pathname + '/exports');
+  return (
+    <>
+      <button
+        onClick={selectImport}
+        className={router.pathname.includes('/imports') ? styles.selected : ''}
+      >
+        Imports
+      </button>
+      <button
+        onClick={selectExport}
+        className={router.pathname.includes('/exports') ? styles.selected : ''}
+      >
+        Exports
+      </button>
+    </>
+  );
+};
+
 export default function Header() {
   const router = useRouter();
   const [isHorizontal, setHorizontal] = useState(false);
-  const selectBridges = () => router.push('/bridges/');
-  const selectFlow = () => router.push('/');
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const updateToSidePanel = () => {
@@ -70,20 +112,8 @@ export default function Header() {
         </p>
       </div>
       <div className={isHorizontal ? styles.toggle : styles.toggleVertical}>
-        <button
-          onClick={selectFlow}
-          className={router.pathname === '/' ? styles.selected : ''}
-        >
-          Flow view
-        </button>
-        <button
-          onClick={selectBridges}
-          className={
-            router.pathname.includes('/bridges') ? styles.selected : ''
-          }
-        >
-          Bridge view
-        </button>
+        <FlowBridge />
+        {/* router.pathname.includes('chain') ? <ImportExport /> : <FlowBridge /> */}
       </div>
     </header>
   );

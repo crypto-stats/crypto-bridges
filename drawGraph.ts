@@ -6,6 +6,14 @@ import {
   select,
   SimulationNodeDatum,
 } from 'd3';
+import {
+  sankey,
+  SankeyExtraProperties,
+  SankeyGraph,
+  sankeyLinkHorizontal,
+  SankeyLinkMinimal,
+  SankeyNodeMinimal,
+} from 'd3-sankey';
 import type { RefObject } from 'react';
 import {
   GLOW_ID,
@@ -87,23 +95,20 @@ export function drawGraph(
 
   const svg = select(svgRef.current);
 
-  /* const sankeyLayout = sankey()
-    .nodeWidth(100)
-    .nodePadding(30)
-    .extent([
-      [1, 5],
-      [300, 200],
-    ]);
-  const { nodes, links } = sankeyLayout({
-    nodes: [{ name: 'eth' }, { name: 'btc' }, { name: 'avax' }],
+  let sankeyInput: SankeyGraph<SankeyExtraProperties, SankeyExtraProperties> = {
+    nodes: [{ name: 'btc' }, { name: 'eth' }, { name: 'avax' }],
     links: [
-      { source: 1, target: 0, value: 1 },
-      { source: 1, target: 2, value: 2 },
+      { source: 0, target: 1, value: 10 },
+      { source: 0, target: 2, value: 2 },
     ],
-  });
-  console.log(nodes); */
+  };
 
-  initGui();
+  const linksContainer = svg.append('g');
+  const nodesContainer = svg.append('g');
+  const computeSankeyLinkPath = sankeyLinkHorizontal();
+  let sankeyLayout = sankey();
+
+  // initGui();
 
   async function initGui() {
     if (guiCreated) {
@@ -215,21 +220,47 @@ export function drawGraph(
     if (node === undefined) {
       return unselectAll();
     }
-    const connectedNodeNames: string[] = [];
-    paths
-      .classed('path-selected', (d: any) => {
-        if (d.source.id === node.id || d.target.id === node.id) {
-          connectedNodeNames.push(d.source.id as string);
-          connectedNodeNames.push(d.target.id as string);
-          return true;
+    const connectedNodeNames = data.nodes
+      .filter((item) => {
+        for (const link of data.links) {
+          if (
+            link.flow !== undefined &&
+            [(link.source as any).id, (link.target as any).id].includes(
+              item.id,
+            ) &&
+            [(link.source as any).id, (link.target as any).id].includes(node.id)
+          ) {
+            return true;
+          }
         }
         return false;
       })
-      .style('filter', (d: any) =>
-        d.source.id === node.id || d.target.id === node.id
-          ? `url(#${GLOW_ID})`
-          : 'none',
-      );
+      .map((item) => item.id);
+    const nodesArray = data.nodes.filter((item) =>
+      connectedNodeNames.includes(item.id),
+    );
+    sankeyInput = {
+      nodes: nodesArray,
+      links: data.links
+        .filter(
+          (item) =>
+            item.flow !== undefined &&
+            connectedNodeNames.indexOf((item.source as any).id as string) >
+              -1 &&
+            connectedNodeNames.indexOf((item.target as any).id as string) > -1,
+        )
+        .map((flow: any) => ({
+          value: flow.flow,
+          source: nodesArray.findIndex((item) => item.id === flow.source.id),
+          target: nodesArray.findIndex((item) => item.id === flow.target.id),
+        })),
+    };
+    resetSankey(width, height);
+    paths.classed('transparent', true);
+    circleGroups.classed(
+      'transparent',
+      (c: any) => connectedNodeNames.indexOf(c.id as string) === -1,
+    );
     tvlCircles.classed(
       'circle-selected',
       (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
@@ -238,6 +269,7 @@ export function drawGraph(
       'blurred-image-selected',
       (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
     );
+    linksContainer.classed('transparent', false);
   }
 
   function highlightBridge(link?: IFlowBridgesGraphBridgeLink) {
@@ -273,6 +305,71 @@ export function drawGraph(
     );
     blurredImages.classed('blurred-image-selected', false);
     clickablePaths.classed('path-hidden', (d: any) => d.bridge !== link.bridge);
+  }
+
+  function resetSankey(width: number, height: number) {
+    sankeyLayout = sankey()
+      .nodePadding(40)
+      .nodeWidth(100)
+      .extent([
+        [PADDING, PADDING],
+        [width - PADDING, height - PADDING],
+      ]);
+    const { nodes, links } = sankeyLayout
+      .nodes(sankeyInput.nodes)
+      .links(sankeyInput.links)(sankeyInput);
+
+    updateSankeyLinks(links);
+    updateSankeyNodes(nodes);
+  }
+
+  function updateSankeyLinks(
+    data: SankeyLinkMinimal<SankeyExtraProperties, SankeyExtraProperties>[],
+  ) {
+    const links = linksContainer
+      .selectAll('.sankeyLink')
+      .data(data, (d: any) => `${d.source as number}${d.target as number}`);
+    links.exit().remove();
+    links.attr('d', computeSankeyLinkPath);
+    links
+      .enter()
+      .append('path')
+      .attr('class', 'sankeyLink')
+      .style('stroke-dasharray', MIN_PATH_WIDTH)
+      .classed('highlight', true)
+      .classed('dash', true)
+      .classed('path-selected', true)
+      .attr('d', computeSankeyLinkPath)
+      .style('stroke-width', getPathWidth)
+      .sort((a: any, b: any) => b.dy - a.dy);
+  }
+
+  function updateSankeyNodes(
+    data: SankeyNodeMinimal<SankeyExtraProperties, SankeyExtraProperties>[],
+  ) {
+    return false;
+    const nodes = nodesContainer
+      .selectAll('.sankeyNode')
+      .data(data, (d: any) => d.id as number);
+    nodes.exit().remove();
+    nodes
+      .attr(
+        'transform',
+        (d: any) => `translate(${d.x0 as number}, ${d.y0 as number})`,
+      )
+      .attr('height', (d: any) => (d.y1 - d.y0) as number);
+    nodes
+      .enter()
+      .append('rect')
+      .attr('class', 'sankeyNode')
+      .attr('height', (d: any) => (d.y1 - d.y0) as number)
+      .attr('width', sankeyLayout.nodeWidth())
+      .attr(
+        'transform',
+        (d: any) => `translate(${d.x0 as number}, ${d.y0 as number})`,
+      )
+      .style('fill', '#fff')
+      .style('stroke', '#fff');
   }
 
   function onMouseOut() {
@@ -533,6 +630,8 @@ export function drawGraph(
     clickablePaths.style('stroke-width', (d: any) =>
       d.flow === 0 ? 0 : Math.max(MIN_PATH_CLICK_WIDTH, getPathWidth(d)),
     );
+
+    resetSankey(width, height);
   }
 
   function ticked() {
@@ -650,6 +749,7 @@ export function drawGraph(
   }
 
   function unselectAll() {
+    linksContainer.classed('transparent', true);
     circleGroups.classed('transparent', false);
     tvlCircles
       .classed('circle-selected', false)
