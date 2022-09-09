@@ -49,6 +49,7 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
       setDisplayLimit(maxElements);
       return maxElements;
     };
+    findMaxElements();
     window.addEventListener('resize', findMaxElements);
     return () => window.removeEventListener('resize', findMaxElements);
   }, [setDisplayLimit]);
