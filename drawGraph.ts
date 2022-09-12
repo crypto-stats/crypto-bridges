@@ -220,15 +220,14 @@ export function drawGraph(
     if (node === undefined) {
       return unselectAll();
     }
-    const connectedNodeNames = data.nodes
+    const targetNodesArray = data.nodes
       .filter((item) => {
         for (const link of data.links) {
           if (
             link.flow !== undefined &&
-            [(link.source as any).id, (link.target as any).id].includes(
-              item.id,
-            ) &&
-            [(link.source as any).id, (link.target as any).id].includes(node.id)
+            link.flow > 0 &&
+            (link.source as any).id === node.id &&
+            (link.target as any).id === item.id
           ) {
             return true;
           }
@@ -236,9 +235,26 @@ export function drawGraph(
         return false;
       })
       .map((item) => item.id);
+    const sourceNodesArray = data.nodes
+      .filter((item) => {
+        for (const link of data.links) {
+          if (
+            link.flow !== undefined &&
+            link.flow > 0 &&
+            (link.source as any).id === item.id &&
+            (link.target as any).id === node.id
+          ) {
+            return true;
+          }
+        }
+        return false;
+      })
+      .map((item) => item.id);
+    const connectedNodeNames = [...sourceNodesArray, ...targetNodesArray];
     const nodesArray = data.nodes.filter((item) =>
-      connectedNodeNames.includes(item.id),
+      targetNodesArray.includes(item.id),
     );
+    nodesArray.push(node);
     const linksArray = data.links
       .filter(
         (item: any) =>
@@ -246,7 +262,7 @@ export function drawGraph(
           item.flow !== undefined &&
           item.flow > 0 &&
           item.source.id === node.id &&
-          connectedNodeNames.indexOf(item.target.id as string) > -1,
+          targetNodesArray.indexOf(item.target.id as string) > -1,
       )
       .map((flow: any) => ({
         value: flow.flow,
@@ -552,23 +568,27 @@ export function drawGraph(
   function getPathWidthParameters(): [number, number] {
     const maxNodeArea = NODE_AREAS_SHARE.MAX * availableArea;
     const maxNodeRadius = Math.sqrt(maxNodeArea / Math.PI);
+    const linksWithFlow = sortedLinks.filter(
+      (item) => item.flow !== undefined && item.flow > 0,
+    );
+    sortedNodes.sort((a, b) => a.tvl - b.tvl);
     const maxPathWidthNodeRadiusRatio =
-      sortedLinks[sortedLinks.length - 1].flow /
+      linksWithFlow[linksWithFlow.length - 1].flow /
       sortedNodes[sortedNodes.length - 1].tvl;
     const maxPathWidth = maxNodeRadius * maxPathWidthNodeRadiusRatio;
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
         return findLinearParameters(
-          sortedLinks[0].flow,
-          sortedLinks[sortedLinks.length - 1].flow,
+          linksWithFlow[0].flow,
+          linksWithFlow[linksWithFlow.length - 1].flow,
           MIN_PATH_WIDTH,
           maxPathWidth,
         );
       }
       case DISTRIBUTION.LOGARITHMIC: {
         return findLogParameters(
-          sortedLinks[0].flow,
-          sortedLinks[sortedLinks.length - 1].flow,
+          linksWithFlow[0].flow,
+          linksWithFlow[linksWithFlow.length - 1].flow,
           MIN_PATH_WIDTH,
           maxPathWidth,
         );
@@ -577,7 +597,10 @@ export function drawGraph(
   }
 
   function getPathWidth(d: any): number {
-    if (d.flow === 0) {
+    if (
+      (d.flow !== undefined && d.flow === 0) ||
+      (d.value !== undefined && d.value === 0)
+    ) {
       return 0;
     }
     switch (distribution) {
