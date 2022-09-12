@@ -832,11 +832,13 @@ export function drawGraph(
   function updateSelected(path: string) {
     if (path === '/') {
       isImportExport = false;
+      resize();
       ticked();
       unselectAll();
       setMode(GRAPH_MODES.FLOWS);
     } else if (path.includes('bridges')) {
       isImportExport = false;
+      resize();
       ticked();
       setMode(GRAPH_MODES.BRIDGES);
       highlightBridge(findSelectedBridge(path));
