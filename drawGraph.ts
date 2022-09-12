@@ -313,12 +313,14 @@ export function drawGraph(
   }
 
   function resetSankey(width: number, height: number) {
+    const biggestTvlNode = data.nodes.sort((a, b) => b.tvl - a.tvl)[0];
+    const SANKEY_PADDING = PADDING + getTvlRadius(biggestTvlNode);
     sankeyLayout = sankey()
       .nodePadding(100)
-      .nodeWidth(100)
+      .nodeWidth(5)
       .extent([
-        [PADDING, PADDING],
-        [width - PADDING, height - PADDING],
+        [SANKEY_PADDING, SANKEY_PADDING],
+        [width - SANKEY_PADDING, height - SANKEY_PADDING],
       ]);
     const { links, nodes } = sankeyLayout(sankeyInput);
     updateSankeyLinks(links);
