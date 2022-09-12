@@ -8,11 +8,15 @@ import {
 } from 'd3';
 import {
   sankey,
+  sankeyCenter,
   SankeyExtraProperties,
   SankeyGraph,
+  sankeyJustify,
+  sankeyLeft,
   sankeyLinkHorizontal,
   SankeyLinkMinimal,
   SankeyNodeMinimal,
+  sankeyRight,
 } from 'd3-sankey';
 import type { RefObject } from 'react';
 import {
@@ -336,7 +340,7 @@ export function drawGraph(
     const SANKEY_PADDING = PADDING + getTvlRadius(biggestTvlNode);
     sankeyLayout = sankey()
       .nodePadding(100)
-      .nodeWidth(5)
+      .nodeWidth(50)
       .extent([
         [SANKEY_PADDING, SANKEY_PADDING],
         [width - SANKEY_PADDING, height - SANKEY_PADDING],
@@ -368,6 +372,18 @@ export function drawGraph(
       });
   }
 
+  function computeCustomSankeyPath(d: any) {
+    'M87.41882961406988,282.43104777743287C480,282.43104777743287,480,82.43104777743318,872.5811703859301,82.43104777743318';
+    const defaultPath = computeSankeyLinkPath(d);
+    if (defaultPath === null) return '';
+    const bits = defaultPath.split(',');
+    const bit1 = bits[1].split('C');
+    bit1[0] = `${height / 2}`;
+    bits[1] = bit1.join('C');
+    bits[2] = `${height / 2}`;
+    return bits.join(',');
+  }
+
   function updateSankeyLinks(
     data: SankeyLinkMinimal<SankeyExtraProperties, SankeyExtraProperties>[],
   ) {
@@ -375,7 +391,7 @@ export function drawGraph(
       .selectAll('.sankeyLink')
       .data(data, (d: any) => `${d.source as number}${d.target as number}`);
     links.exit().remove();
-    links.attr('d', computeSankeyLinkPath);
+    links.attr('d', computeCustomSankeyPath);
     links
       .enter()
       .append('path')
@@ -385,7 +401,7 @@ export function drawGraph(
       .classed('dash', true)
       .style('fill', 'none')
       .classed('path-selected', true)
-      .attr('d', computeSankeyLinkPath)
+      .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getPathWidth)
       .sort((a: any, b: any) => b.dy - a.dy);
   }
@@ -414,8 +430,7 @@ export function drawGraph(
         (d: any) => `translate(${d.x0 as number}, ${d.y0 as number})`,
       )
       .style('fill', '#fff')
-      .style('fill-opacity', '0.1')
-      .style('stroke', '#fff');
+      .style('fill-opacity', '0.05');
   }
 
   function moveCircleToSankeyNodeX(d: any) {
@@ -429,8 +444,9 @@ export function drawGraph(
   function moveCircleToSankeyNodeY(d: any) {
     const node = sankeyInput.nodes.find((node) => node.id === d.id);
     if (node === undefined) return 0;
+    const isStartNode = (sankeyInput.links[0]?.source as any)?.id === node.id;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return (node.y1! - node.y0!) / 2 + node.y0!;
+    return isStartNode ? height / 2 : (node.y1! - node.y0!) / 2 + node.y0!;
   }
 
   function onMouseOut() {
