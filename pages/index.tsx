@@ -20,24 +20,28 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
   const [showAllImports, setShowAllImports] = useState(false);
   const showExports = () => setShowAllExports(true);
   const showImports = () => setShowAllImports(true);
-  const exports = convertedData.nodes.map((node) => ({
-    id: node.id,
-    name: node.name,
-    logo: node.logo,
-    tvl: node.tvl,
-    in: node.in,
-    bridgedIn: 0,
-    bridgedOut: 0,
-  }));
-  const imports = convertedData.nodes.map((node) => ({
-    id: node.id,
-    name: node.name,
-    logo: node.logo,
-    tvl: node.tvl,
-    in: node.in,
-    bridgedIn: 0,
-    bridgedOut: 0,
-  }));
+  const exports = convertedData.nodes
+    .map((node) => ({
+      id: node.id,
+      name: node.name,
+      logo: node.logo,
+      tvl: node.tvl,
+      in: node.in,
+      bridgedIn: 0,
+      bridgedOut: 0,
+    }))
+    .sort((a, b) => b.tvl - a.tvl);
+  const imports = convertedData.nodes
+    .map((node) => ({
+      id: node.id,
+      name: node.name,
+      logo: node.logo,
+      tvl: node.tvl,
+      in: node.in,
+      bridgedIn: 0,
+      bridgedOut: 0,
+    }))
+    .sort((a, b) => b.in - a.in);
   useEffect(() => {
     const findMaxElements = () => {
       const isLandscape = needsLandscape();
