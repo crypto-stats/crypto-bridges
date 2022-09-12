@@ -91,6 +91,7 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       </div>
       <div className={styles.nodeItem}>
         <FlowBox
+          data={data}
           logo={chain.logo}
           name={chainName}
           flows={computeChainFlows()}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { IDummyData } from '../data/types';
 import styles from '../styles/FlowBox.module.css';
 import { format } from '../utils';
 
@@ -19,10 +20,11 @@ export interface IChainFlow {
 export interface IFlowBoxProps {
   name: string;
   logo: string;
+  data: IDummyData;
   flows: IChainFlow[];
 }
 
-const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
+const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
   return (
     <div className={styles.flowsContainer}>
       {flows.map((flow, index) => (
@@ -35,7 +37,12 @@ const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
               </div>
               <div className={styles.flowBoxSpacer} />
               <div className={styles.flowBoxChain}>
-                <img src={flow.logo} width={16} height={16} alt="logo" />
+                <img
+                  src={data.chains.find((chain) => chain.id === flow.name).logo}
+                  width={16}
+                  height={16}
+                  alt="logo"
+                />
                 <p>{flow.name}</p>
               </div>
             </div>
