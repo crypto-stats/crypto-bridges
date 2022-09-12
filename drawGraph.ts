@@ -277,15 +277,18 @@ export function drawGraph(
     paths.classed('transparent', true);
     circleGroups.classed(
       'transparent',
-      (c: any) => connectedNodeNames.indexOf(c.id as string) === -1,
+      (c: any) =>
+        targetNodesArray.indexOf(c.id as string) === -1 && node.id !== c.id,
     );
     tvlCircles.classed(
       'circle-selected',
-      (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
+      (c: any) =>
+        targetNodesArray.indexOf(c.id as string) > -1 || node.id === c.id,
     );
     blurredImages.classed(
       'blurred-image-selected',
-      (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
+      (c: any) =>
+        targetNodesArray.indexOf(c.id as string) > -1 || node.id === c.id,
     );
     linksContainer.classed('transparent', false).classed('path-hidden', false);
     nodesContainer.classed('transparent', false).classed('path-hidden', false);
