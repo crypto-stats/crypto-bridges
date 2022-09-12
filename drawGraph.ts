@@ -102,11 +102,11 @@ export function drawGraph(
       { source: 0, target: 2, value: 2 },
     ],
   };
-
+  let sankeyLayout = sankey();
   const linksContainer = svg.append('g');
   const nodesContainer = svg.append('g');
   const computeSankeyLinkPath = sankeyLinkHorizontal();
-  let sankeyLayout = sankey();
+  let isImportExport = false;
 
   // initGui();
 
@@ -239,21 +239,23 @@ export function drawGraph(
     const nodesArray = data.nodes.filter((item) =>
       connectedNodeNames.includes(item.id),
     );
+    const linksArray = data.links
+      .filter(
+        (item: any) =>
+          item.bridge === undefined &&
+          item.flow !== undefined &&
+          item.flow > 0 &&
+          item.source.id === node.id &&
+          connectedNodeNames.indexOf(item.target.id as string) > -1,
+      )
+      .map((flow: any) => ({
+        value: flow.flow,
+        source: nodesArray.findIndex((item) => item.id === flow.source.id),
+        target: nodesArray.findIndex((item) => item.id === flow.target.id),
+      }));
     sankeyInput = {
       nodes: nodesArray,
-      links: data.links
-        .filter(
-          (item) =>
-            item.flow !== undefined &&
-            connectedNodeNames.indexOf((item.source as any).id as string) >
-              -1 &&
-            connectedNodeNames.indexOf((item.target as any).id as string) > -1,
-        )
-        .map((flow: any) => ({
-          value: flow.flow,
-          source: nodesArray.findIndex((item) => item.id === flow.source.id),
-          target: nodesArray.findIndex((item) => item.id === flow.target.id),
-        })),
+      links: linksArray,
     };
     resetSankey(width, height);
     paths.classed('transparent', true);
@@ -269,7 +271,8 @@ export function drawGraph(
       'blurred-image-selected',
       (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
     );
-    linksContainer.classed('transparent', false);
+    linksContainer.classed('transparent', false).classed('path-hidden', false);
+    nodesContainer.classed('transparent', false).classed('path-hidden', false);
   }
 
   function highlightBridge(link?: IFlowBridgesGraphBridgeLink) {
@@ -305,22 +308,43 @@ export function drawGraph(
     );
     blurredImages.classed('blurred-image-selected', false);
     clickablePaths.classed('path-hidden', (d: any) => d.bridge !== link.bridge);
+    linksContainer.classed('transparent', true).classed('path-hidden', true);
+    nodesContainer.classed('transparent', true).classed('path-hidden', true);
   }
 
   function resetSankey(width: number, height: number) {
     sankeyLayout = sankey()
-      .nodePadding(40)
+      .nodePadding(100)
       .nodeWidth(100)
       .extent([
         [PADDING, PADDING],
         [width - PADDING, height - PADDING],
       ]);
-    const { nodes, links } = sankeyLayout
-      .nodes(sankeyInput.nodes)
-      .links(sankeyInput.links)(sankeyInput);
-
+    const { links, nodes } = sankeyLayout(sankeyInput);
     updateSankeyLinks(links);
     updateSankeyNodes(nodes);
+    const LOGO_SIZE =
+      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
+      2 *
+      Math.cos(Math.PI / 4) *
+      0.8;
+    tvlCircles
+      .attr('cx', moveCircleToSankeyNodeX)
+      .attr('cy', moveCircleToSankeyNodeY);
+    images
+      .attr('x', (d: any) => {
+        return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+      })
+      .attr('y', (d: any) => {
+        return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
+      });
+    blurredImages
+      .attr('x', (d: any) => {
+        return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+      })
+      .attr('y', (d: any) => {
+        return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
+      });
   }
 
   function updateSankeyLinks(
@@ -338,6 +362,7 @@ export function drawGraph(
       .style('stroke-dasharray', MIN_PATH_WIDTH)
       .classed('highlight', true)
       .classed('dash', true)
+      .style('fill', 'none')
       .classed('path-selected', true)
       .attr('d', computeSankeyLinkPath)
       .style('stroke-width', getPathWidth)
@@ -347,7 +372,6 @@ export function drawGraph(
   function updateSankeyNodes(
     data: SankeyNodeMinimal<SankeyExtraProperties, SankeyExtraProperties>[],
   ) {
-    return false;
     const nodes = nodesContainer
       .selectAll('.sankeyNode')
       .data(data, (d: any) => d.id as number);
@@ -369,7 +393,23 @@ export function drawGraph(
         (d: any) => `translate(${d.x0 as number}, ${d.y0 as number})`,
       )
       .style('fill', '#fff')
+      .style('fill-opacity', '0.1')
       .style('stroke', '#fff');
+  }
+
+  function moveCircleToSankeyNodeX(d: any) {
+    const node = sankeyInput.nodes.find((node) => node.id === d.id);
+    if (node === undefined) return 0;
+    const isStartNode = (sankeyInput.links[0]?.source as any)?.id === node.id;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return isStartNode ? node.x1! : node.x0!;
+  }
+
+  function moveCircleToSankeyNodeY(d: any) {
+    const node = sankeyInput.nodes.find((node) => node.id === d.id);
+    if (node === undefined) return 0;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return (node.y1! - node.y0!) / 2 + node.y0!;
   }
 
   function onMouseOut() {
@@ -540,11 +580,11 @@ export function drawGraph(
     }
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const width = kAP * d.flow + kBP;
+        const width = kAP * (d.flow ?? d.value) + kBP;
         return width;
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const width = kAP * Math.log(kBP * d.flow);
+        const width = kAP * Math.log(kBP * (d.flow ?? d.value));
         return width;
       }
     }
@@ -642,6 +682,9 @@ export function drawGraph(
       0.8;
     tvlCircles
       .attr('cx', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeX(d);
+        }
         const radius = getTvlRadius(d);
         const coord = Math.max(
           PADDING + radius,
@@ -651,6 +694,9 @@ export function drawGraph(
         return coord;
       })
       .attr('cy', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeY(d);
+        }
         const radius = getTvlRadius(d);
         const coord = Math.max(
           PADDING + radius,
@@ -660,11 +706,31 @@ export function drawGraph(
         return coord;
       });
     images
-      .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
-      .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
+      .attr('x', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+        }
+        return d.x - LOGO_SIZE / 2;
+      })
+      .attr('y', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
+        }
+        return d.y - LOGO_SIZE / 2;
+      });
     blurredImages
-      .attr('x', (d: any) => d.x - LOGO_SIZE / 2)
-      .attr('y', (d: any) => d.y - LOGO_SIZE / 2);
+      .attr('x', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+        }
+        return d.x - LOGO_SIZE / 2;
+      })
+      .attr('y', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
+        }
+        return d.y - LOGO_SIZE / 2;
+      });
     paths
       .attr('d', (d: any) =>
         d.type === undefined ? getFlowPath(d) : getBridgePath(d),
@@ -737,19 +803,25 @@ export function drawGraph(
 
   function updateSelected(path: string) {
     if (path === '/') {
+      isImportExport = false;
+      ticked();
       unselectAll();
       setMode(GRAPH_MODES.FLOWS);
     } else if (path.includes('bridges')) {
+      isImportExport = false;
+      ticked();
       setMode(GRAPH_MODES.BRIDGES);
       highlightBridge(findSelectedBridge(path));
     } else if (path.includes('chain')) {
+      isImportExport = true;
       setMode(GRAPH_MODES.FLOWS);
       highlightChain(findSelectedChain(path));
     }
   }
 
   function unselectAll() {
-    linksContainer.classed('transparent', true);
+    linksContainer.classed('transparent', true).classed('path-hidden', true);
+    nodesContainer.classed('transparent', true).classed('path-hidden', true);
     circleGroups.classed('transparent', false);
     tvlCircles
       .classed('circle-selected', false)
