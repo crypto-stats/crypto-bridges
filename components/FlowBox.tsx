@@ -38,7 +38,9 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
               <div className={styles.flowBoxSpacer} />
               <div className={styles.flowBoxChain}>
                 <img
-                  src={data.chains.find((chain) => chain.id === flow.name).logo}
+                  src={
+                    data.chains.find((chain) => chain.id === flow.name)?.logo
+                  }
                   width={16}
                   height={16}
                   alt="logo"
