@@ -92,6 +92,7 @@ export function drawGraph(
   );
   const sortedLinks = data.links.sort((a, b) => a.flow - b.flow);
   let [kAP, kBP] = getPathWidthParameters();
+  let [kAPS, kBPS] = getSankeyPathWidthParameters(1, 100);
 
   const svg = select(svgRef.current);
 
@@ -250,7 +251,6 @@ export function drawGraph(
         return false;
       })
       .map((item) => item.id);
-    const connectedNodeNames = [...sourceNodesArray, ...targetNodesArray];
     const nodesArray = data.nodes.filter((item) =>
       targetNodesArray.includes(item.id),
     );
@@ -265,10 +265,17 @@ export function drawGraph(
           targetNodesArray.indexOf(item.target.id as string) > -1,
       )
       .map((flow: any) => ({
-        value: flow.flow,
+        value: flow.flow as number,
         source: nodesArray.findIndex((item) => item.id === flow.source.id),
         target: nodesArray.findIndex((item) => item.id === flow.target.id),
-      }));
+      }))
+      .sort((a, b) => a.value - b.value);
+    if (linksArray.length > 0) {
+      [kAPS, kBPS] = getSankeyPathWidthParameters(
+        linksArray[0].value,
+        linksArray[linksArray.length - 1].value,
+      );
+    }
     sankeyInput = {
       nodes: nodesArray,
       links: linksArray,
@@ -369,7 +376,6 @@ export function drawGraph(
   }
 
   function computeCustomSankeyPath(d: any) {
-    'M87.41882961406988,282.43104777743287C480,282.43104777743287,480,82.43104777743318,872.5811703859301,82.43104777743318';
     const defaultPath = computeSankeyLinkPath(d);
     if (defaultPath === null) return '';
     const bits = defaultPath.split(',');
@@ -387,7 +393,9 @@ export function drawGraph(
       .selectAll('.sankeyLink')
       .data(data, (d: any) => `${d.source as number}${d.target as number}`);
     links.exit().remove();
-    links.attr('d', computeCustomSankeyPath);
+    links
+      .attr('d', computeCustomSankeyPath)
+      .style('stroke-width', getSankeyPathWidth);
     links
       .enter()
       .append('path')
@@ -398,7 +406,7 @@ export function drawGraph(
       .style('fill', 'none')
       .classed('path-selected', true)
       .attr('d', computeCustomSankeyPath)
-      .style('stroke-width', getPathWidth)
+      .style('stroke-width', getSankeyPathWidth)
       .sort((a: any, b: any) => b.dy - a.dy);
   }
 
@@ -611,6 +619,32 @@ export function drawGraph(
     }
   }
 
+  function getSankeyPathWidthParameters(
+    minFlow: number,
+    maxFlow: number,
+  ): [number, number] {
+    const minNodeArea = NODE_AREAS_SHARE.MIN * availableArea;
+    const minNodeRadius = Math.sqrt(minNodeArea / Math.PI);
+    switch (distribution) {
+      case DISTRIBUTION.LINEAR: {
+        return findLinearParameters(
+          minFlow,
+          maxFlow,
+          MIN_PATH_WIDTH,
+          minNodeRadius,
+        );
+      }
+      case DISTRIBUTION.LOGARITHMIC: {
+        return findLogParameters(
+          minFlow,
+          maxFlow,
+          MIN_PATH_WIDTH,
+          minNodeRadius,
+        );
+      }
+    }
+  }
+
   function getPathWidth(d: any): number {
     if (
       (d.flow !== undefined && d.flow === 0) ||
@@ -625,6 +659,22 @@ export function drawGraph(
       }
       case DISTRIBUTION.LOGARITHMIC: {
         const width = kAP * Math.log(kBP * (d.flow ?? d.value));
+        return width;
+      }
+    }
+  }
+
+  function getSankeyPathWidth(d: any): number {
+    if (d.value !== undefined && d.value === 0) {
+      return 0;
+    }
+    switch (distribution) {
+      case DISTRIBUTION.LINEAR: {
+        const width = kAPS * d.value + kBPS;
+        return width;
+      }
+      case DISTRIBUTION.LOGARITHMIC: {
+        const width = kAPS * Math.log(kBPS * d.value);
         return width;
       }
     }
