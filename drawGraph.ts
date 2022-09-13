@@ -8,15 +8,11 @@ import {
 } from 'd3';
 import {
   sankey,
-  sankeyCenter,
   SankeyExtraProperties,
   SankeyGraph,
-  sankeyJustify,
-  sankeyLeft,
   sankeyLinkHorizontal,
   SankeyLinkMinimal,
   SankeyNodeMinimal,
-  sankeyRight,
 } from 'd3-sankey';
 import type { RefObject } from 'react';
 import {
@@ -320,14 +316,14 @@ export function drawGraph(
         (path) => (path as IFlowBridgesGraphBridgeLink).bridge === link.bridge,
       )
       .forEach((path) => {
-        const source = (path.source as any).name as string;
+        const source = (path.source as any).id as string;
         chainsServed.includes(source) ? true : chainsServed.push(source);
-        const target = (path.target as any).name as string;
+        const target = (path.target as any).id as string;
         chainsServed.includes(target) ? true : chainsServed.push(target);
       });
     circleGroups.classed(
       'transparent',
-      (d: any) => !chainsServed.includes(d.name as string),
+      (d: any) => !chainsServed.includes(d.id as string),
     );
     blurredImages.classed('blurred-image-selected', false);
     clickablePaths.classed('path-hidden', (d: any) => d.bridge !== link.bridge);
@@ -838,8 +834,7 @@ export function drawGraph(
   ): IFlowBridgesGraphBridgeLink | undefined {
     const result = data.links.find(
       (link) =>
-        (link as IFlowBridgesGraphBridgeLink).bridge ===
-          path.split('/')[2]?.split('-').join(' ') &&
+        (link as IFlowBridgesGraphBridgeLink).bridge === path.split('/')[2] &&
         (link as IFlowBridgesGraphBridgeLink).type !== undefined,
     ) as IFlowBridgesGraphBridgeLink | undefined;
     return result;

@@ -29,8 +29,8 @@ svg text {
   stroke: #334272;
 }
 .circle-hovered {
-  fill: #712ebb;
-  stroke: #732ebb;
+  fill: #d750c8;
+  stroke: #d750c8;
 }
 .circle-selected {
   fill: #d750c8;
@@ -49,7 +49,7 @@ svg text {
   stroke: #304273;
 }
 .path-hovered {
-  stroke: #501b8a;
+  stroke: #d750c8;
 }
 .path-selected {
   stroke: #d750c8;
