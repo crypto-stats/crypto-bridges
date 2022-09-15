@@ -32,19 +32,19 @@
 }
 .flowBoxSpacer {
   width: 32px;
-  height: 3px;
+  height: 2px;
   background-color: #ddd;
   position: relative;
 }
 .flowBoxSpacerArrow {
-  border: solid 8px rgba(0, 0, 0, 0);
-  border-left: solid 10px #fff;
+  border: solid 5px rgba(0, 0, 0, 0);
+  border-left: solid 8px #fff;
   height: 0;
   width: 0;
   position: absolute;
   right: 0;
-  margin-top: -6px;
-  margin-right: -11px;
+  margin-top: -4px;
+  margin-right: -6px;
 }
 .flowBoxContent {
   display: flex;

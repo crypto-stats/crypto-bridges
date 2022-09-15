@@ -13,7 +13,30 @@
   height: 35px;
   background: rgba(69, 100, 178, 0.5);
   transition: background 300ms ease;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
 .backButton:hover {
   background: rgba(69, 100, 178, 0.7);
+}
+.backButton p {
+  margin: 0;
+}
+.backArrowTip {
+  border: solid 5px rgba(0, 0, 0, 0);
+  border-right: solid 7px #fff;
+  height: 0;
+  width: 0;
+  position: absolute;
+  left: 0;
+  margin-top: -4px;
+  margin-left: -8px;
+}
+.backArrow {
+  width: 15px;
+  height: 2px;
+  background-color: #ddd;
+  position: relative;
 }

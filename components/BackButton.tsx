@@ -11,7 +11,10 @@ export default function BackButton() {
     );
   return (
     <button onClick={onClick} className={styles.backButton}>
-      &#129044; Back
+      <div className={styles.backArrow}>
+        <span className={styles.backArrowTip}></span>
+      </div>
+      <p>Back</p>
     </button>
   );
 }
