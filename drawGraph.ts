@@ -162,7 +162,10 @@ export function drawGraph(
     .data(data.links)
     .enter()
     .append('path')
-    .style('stroke-dasharray', MIN_PATH_WIDTH)
+    .style(
+      'stroke-dasharray',
+      mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
+    )
     .style('fill', 'none')
     .style('fill-opacity', 0)
     .style('stroke-width', getPathWidth)
@@ -393,12 +396,19 @@ export function drawGraph(
     links.exit().remove();
     links
       .attr('d', computeCustomSankeyPath)
-      .style('stroke-width', getSankeyPathWidth);
+      .style('stroke-width', getSankeyPathWidth)
+      .style(
+        'stroke-dasharray',
+        mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
+      );
     links
       .enter()
       .append('path')
       .attr('class', 'sankeyLink')
-      .style('stroke-dasharray', MIN_PATH_WIDTH)
+      .style(
+        'stroke-dasharray',
+        mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
+      )
       .classed('highlight', true)
       .classed('dash', true)
       .style('fill', 'none')
@@ -570,6 +580,10 @@ export function drawGraph(
 
   function setMode(newMode: GRAPH_MODES) {
     mode = newMode;
+    paths.style(
+      'stroke-dasharray',
+      mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
+    );
     paths.classed(
       'transparent',
       (d: any) =>
@@ -832,6 +846,10 @@ export function drawGraph(
         'dash',
         (d: any) => d.target.x - d.source.x > 0 || d.type !== undefined,
       )
+      .style(
+        'stroke-dasharray',
+        mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
+      )
       .classed(
         'dash-reverse',
         (d: any) => d.target.x - d.source.x <= 0 && d.type === undefined,
@@ -865,6 +883,9 @@ export function drawGraph(
     const y1 = d.source.y as number;
     const x2 = d.target.x as number;
     const y2 = d.target.y as number;
+    if (d.bridgeIndex === 0) {
+      return `M${x1} ${y1} ${x2} ${y2}`;
+    }
     const vector = [x2 - x1, y2 - y1];
     const vectorLength = Math.sqrt(
       vector[0] * vector[0] + vector[1] * vector[1],
@@ -906,7 +927,7 @@ export function drawGraph(
       highlightBridge(findSelectedBridge(path));
     } else if (path.includes('chain')) {
       isImportExport = true;
-      setMode(GRAPH_MODES.FLOWS);
+      setMode(GRAPH_MODES.SANKEY);
       highlightChain(findSelectedChain(path));
     }
   }

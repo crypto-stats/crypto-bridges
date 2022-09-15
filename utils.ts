@@ -115,7 +115,9 @@ export function convertDataForGraph(data: IData): IGraphData {
       website: bridge.metadata.website,
       audits: bridge.metadata.audits ?? null,
       type: bridge.metadata.category,
-      flow: flow.results.currentValueBridgedAToB || 0,
+      flow:
+        (flow.results.currentValueBridgedAToB || 0) +
+        (flow.results.currentValueBridgedBToA || 0),
       bridge: flow.bundle,
       logo: bridge.metadata.icon,
       bridgeIndex: graphData.links.filter(
@@ -124,23 +126,6 @@ export function convertDataForGraph(data: IData): IGraphData {
             link.target === flow.metadata.chainB.toLowerCase()) ||
           (link.target === flow.metadata.chainA.toLowerCase() &&
             link.source === flow.metadata.chainB.toLowerCase()),
-      ).length,
-    });
-    graphData.links.push({
-      source: flow.metadata.chainB,
-      target: flow.metadata.chainA,
-      website: bridge.metadata.website,
-      audits: bridge.metadata.audits ?? null,
-      type: bridge.metadata.category,
-      flow: flow.results.currentValueBridgedBToA || 0,
-      bridge: flow.bundle,
-      logo: bridge.metadata.icon,
-      bridgeIndex: graphData.links.filter(
-        (link) =>
-          (link.source === flow.metadata.chainB.toLowerCase() &&
-            link.target === flow.metadata.chainA.toLowerCase()) ||
-          (link.target === flow.metadata.chainB.toLowerCase() &&
-            link.source === flow.metadata.chainA.toLowerCase()),
       ).length,
     });
 
