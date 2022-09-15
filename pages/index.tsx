@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 import Motion from '../components/Motion';
 import Table from '../components/Table';
 import { loadData } from '../data/load-data';
-import { GetStaticBridgeProps, IDummyData } from '../data/types';
+import { GetStaticBridgeProps, IData } from '../data/types';
 import styles from '../styles/index.module.css';
-import { convertDummyDataForGraph, needsLandscape } from '../utils';
+import { convertDataForGraph, needsLandscape } from '../utils';
 
 const DEFAULT_MAX_ELEMENTS = 4;
 
 interface HomePageProps {
-  data: IDummyData;
+  data: IData;
 }
 
 const Home: NextPage<HomePageProps> = ({ data }) => {
-  const convertedData = convertDummyDataForGraph(data);
+  const convertedData = convertDataForGraph(data);
   const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
   const [showAllExports, setShowAllExports] = useState(false);
   const [showAllImports, setShowAllImports] = useState(false);

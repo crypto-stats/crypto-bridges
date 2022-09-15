@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetStaticProps } from 'next';
 
 export interface IAudit {
   name: string;
@@ -14,28 +14,28 @@ export type BridgeCategory =
   | 'native'
   | 'unknown';
 
-export interface IDummyData {
-  flows: IDummyFlow[];
-  chains: IDummyChain[];
-  bridges: IDummyBridge[];
+export interface IData {
+  flows: IFlow[];
+  chains: IChain[];
+  bridges: IBridge[];
 }
 
-export interface IDummyFlow {
-  id: string
+export interface IFlow {
+  id: string;
   results: {
     currentValueBridgedAToB: number | null;
     currentValueBridgedBToA: number | null;
-  },
-  bundle: string/*  | null */;
+  };
+  bundle: string /*  | null */;
   metadata: {
     name: string;
     subtitle?: string;
     chainA: string;
     chainB: string;
-  },
+  };
 }
 
-export interface IDummyChain {
+export interface IChain {
   id: string;
   name?: string;
   logo: string;
@@ -44,15 +44,15 @@ export interface IDummyChain {
   whitepaper?: string;
 }
 
-export interface IDummyBridge {
-  id: string
+export interface IBridge {
+  id: string;
   metadata: {
-    name: string
-    category: BridgeCategory
-    icon: string
-    website?: string
+    name: string;
+    category: BridgeCategory;
+    icon: string;
+    website?: string;
     audits?: IAudit[];
-  }
+  };
 }
 
-export type GetStaticBridgeProps<T = any> = GetStaticProps<T & { data: IDummyData }>
+export type GetStaticBridgeProps<T = any> = GetStaticProps<T & { data: IData }>;

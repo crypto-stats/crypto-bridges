@@ -3,12 +3,12 @@ import BackButton from '../../components/BackButton';
 import ChainSpecifics from '../../components/Chain';
 import Motion from '../../components/Motion';
 import { loadData } from '../../data/load-data';
-import { GetStaticBridgeProps, IDummyData } from '../../data/types';
+import { GetStaticBridgeProps, IData } from '../../data/types';
 import styles from '../../styles/page.module.css';
 
 interface IChainProps {
   chain: string;
-  data: IDummyData;
+  data: IData;
 }
 
 interface IChainPath {

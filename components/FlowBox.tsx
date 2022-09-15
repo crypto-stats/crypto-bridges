@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { IDummyData } from '../data/types';
+import { IData } from '../data/types';
 import styles from '../styles/FlowBox.module.css';
 import { format } from '../utils';
 
@@ -20,7 +20,7 @@ export interface IChainFlow {
 export interface IFlowBoxProps {
   name: string;
   logo: string;
-  data: IDummyData;
+  data: IData;
   flows: IChainFlow[];
 }
 

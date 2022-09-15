@@ -25,10 +25,10 @@ import {
   findLinearParameters,
   findLogParameters,
   getDiagramDimensions,
-  IFlowBridgesGraphBridgeLink,
-  IFlowBridgesGraphData,
-  IFlowBridgesGraphFlowLink,
-  IFlowBridgesGraphNode,
+  IBridgeLink,
+  IChainNode,
+  IFlowLink,
+  IGraphData,
 } from './utils';
 
 let guiCreated = false;
@@ -62,7 +62,7 @@ enum DISTRIBUTION {
 // surface, so that the proportions are consistent on all possible resize,s.
 export function drawGraph(
   svgRef: RefObject<SVGSVGElement>,
-  data: IFlowBridgesGraphData,
+  data: IGraphData,
   navigateTo: (path: string) => void,
 ): INetworkGraph {
   let mode = GRAPH_MODES.FLOWS;
@@ -139,35 +139,23 @@ export function drawGraph(
     .append('path')
     .style('fill', 'none')
     .style('fill-opacity', 0)
-    .style(
-      'cursor',
-      (path: IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink) =>
-        (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink)
-          .type !== undefined
-          ? 'pointer'
-          : 'normal',
+    .style('cursor', (path: IBridgeLink | IFlowLink) =>
+      (path as IBridgeLink & IFlowLink).type !== undefined
+        ? 'pointer'
+        : 'normal',
     )
     .style('stroke', 'rgba(255,255,255,0)')
     .style('stroke-opacity', 0)
     .on('mouseover', onMouseOverPath)
     .on('mouseout', onMouseOut)
-    .on(
-      'click',
-      function (
-        e: MouseEvent,
-        path: IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink,
-      ) {
-        e.preventDefault();
-        let link;
-        if (
-          (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink)
-            .type !== undefined
-        ) {
-          link = getLinkFromBridgePath(path as IFlowBridgesGraphBridgeLink);
-          navigateTo(link);
-        }
-      },
-    );
+    .on('click', function (e: MouseEvent, path: IBridgeLink | IFlowLink) {
+      e.preventDefault();
+      let link;
+      if ((path as IBridgeLink & IFlowLink).type !== undefined) {
+        link = getLinkFromBridgePath(path as IBridgeLink);
+        navigateTo(link);
+      }
+    });
 
   const paths = svg
     .selectAll('line')
@@ -220,7 +208,7 @@ export function drawGraph(
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
 
-  function highlightChain(node?: IFlowBridgesGraphNode) {
+  function highlightChain(node?: IChainNode) {
     if (node === undefined) {
       return unselectAll();
     }
@@ -307,7 +295,7 @@ export function drawGraph(
     nodesContainer.classed('transparent', false).classed('path-hidden', false);
   }
 
-  function highlightBridge(link?: IFlowBridgesGraphBridgeLink) {
+  function highlightBridge(link?: IBridgeLink) {
     if (link === undefined) {
       return unselectAll();
     }
@@ -325,9 +313,7 @@ export function drawGraph(
     tvlCircles.classed('circle-selected', false);
     const chainsServed: string[] = [];
     data.links
-      .filter(
-        (path) => (path as IFlowBridgesGraphBridgeLink).bridge === link.bridge,
-      )
+      .filter((path) => (path as IBridgeLink).bridge === link.bridge)
       .forEach((path) => {
         const source = (path.source as any).id as string;
         chainsServed.includes(source) ? true : chainsServed.push(source);
@@ -490,21 +476,15 @@ export function drawGraph(
     blurredImages.classed('blurred-image-hovered', false);
   }
 
-  function onMouseOverPath(
-    e: MouseEvent,
-    path: IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink,
-  ) {
-    if (
-      (path as IFlowBridgesGraphBridgeLink & IFlowBridgesGraphFlowLink).type !==
-      undefined
-    ) {
-      onMouseOverBridge((path as IFlowBridgesGraphBridgeLink).bridge);
+  function onMouseOverPath(e: MouseEvent, path: IBridgeLink | IFlowLink) {
+    if ((path as IBridgeLink & IFlowLink).type !== undefined) {
+      onMouseOverBridge((path as IBridgeLink).bridge);
     } else {
-      onMouseOverFlow(path as IFlowBridgesGraphFlowLink);
+      onMouseOverFlow(path as IFlowLink);
     }
   }
 
-  function onMouseOverFlow(path: IFlowBridgesGraphFlowLink) {
+  function onMouseOverFlow(path: IFlowLink) {
     paths
       .classed(
         'path-hovered',
@@ -554,7 +534,7 @@ export function drawGraph(
       });
   }
 
-  function onMouseOverNode(e: MouseEvent, node: IFlowBridgesGraphNode) {
+  function onMouseOverNode(e: MouseEvent, node: IChainNode) {
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-hovered', (d: any) => {
@@ -605,7 +585,7 @@ export function drawGraph(
     circleGroups.classed('transparent', false);
   }
 
-  function onClick(e: MouseEvent, node: IFlowBridgesGraphNode) {
+  function onClick(e: MouseEvent, node: IChainNode) {
     e.preventDefault();
     highlightChain(node);
     navigateTo(getLinkFromNode(node));
@@ -718,11 +698,11 @@ export function drawGraph(
     }
   }
 
-  function getLinkFromNode(n: IFlowBridgesGraphNode): string {
+  function getLinkFromNode(n: IChainNode): string {
     return `/chain/${n.id}`;
   }
 
-  function getLinkFromBridgePath(p: IFlowBridgesGraphBridgeLink): string {
+  function getLinkFromBridgePath(p: IBridgeLink): string {
     const link = `/bridges/${p.bridge.split(' ').join('-')}`;
     return link;
   }
@@ -755,7 +735,7 @@ export function drawGraph(
       .force(
         'link',
         forceLink()
-          .id((d: any) => (d as IFlowBridgesGraphNode).id)
+          .id((d: any) => (d as IChainNode).id)
           .links(data.links),
       )
       .force('center', forceCenter(width / 2, height / 2))
@@ -898,18 +878,16 @@ export function drawGraph(
     return `M${x1} ${y1} C${x3} ${y3}, ${x4} ${y4} ${x2} ${y2}`;
   }
 
-  function findSelectedChain(path: string): IFlowBridgesGraphNode | undefined {
+  function findSelectedChain(path: string): IChainNode | undefined {
     return data.nodes.find((node) => node.id === path.split('/')[2]);
   }
 
-  function findSelectedBridge(
-    path: string,
-  ): IFlowBridgesGraphBridgeLink | undefined {
+  function findSelectedBridge(path: string): IBridgeLink | undefined {
     const result = data.links.find(
       (link) =>
-        (link as IFlowBridgesGraphBridgeLink).bridge === path.split('/')[2] &&
-        (link as IFlowBridgesGraphBridgeLink).type !== undefined,
-    ) as IFlowBridgesGraphBridgeLink | undefined;
+        (link as IBridgeLink).bridge === path.split('/')[2] &&
+        (link as IBridgeLink).type !== undefined,
+    ) as IBridgeLink | undefined;
     return result;
   }
 

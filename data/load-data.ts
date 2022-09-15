@@ -1,7 +1,7 @@
 import chainData from './chains.json';
 import dummyData from './dummy.json';
 import { getSDK } from './sdk';
-import { IDummyData } from './types';
+import { IData } from './types';
 
 const useDummy = process.env.NODE_ENV !== 'production';
 
@@ -15,7 +15,7 @@ function removeIcons(data: any[]) {
 
 removeIcons(dummyData.flows);
 
-export async function loadData(): Promise<IDummyData> {
+export async function loadData(): Promise<IData> {
   if (useDummy) {
     return { ...dummyData, ...chainData } as any;
   }

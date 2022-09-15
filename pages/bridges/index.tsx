@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import Motion from '../../components/Motion';
 import { loadData } from '../../data/load-data';
-import { IDummyData } from '../../data/types';
+import { IData } from '../../data/types';
 import styles from '../../styles/page.module.css';
 
 interface IBridgeProps {
-  data: IDummyData;
+  data: IData;
 }
 
 const Bridges: NextPage<IBridgeProps> = ({ data }) => {

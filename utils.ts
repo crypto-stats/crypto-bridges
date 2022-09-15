@@ -1,27 +1,7 @@
 import { FOOTER_HEIGHT, HEADER_HEIGHT, PANEL_WIDTH } from './constants';
-import { BridgeCategory, IAudit, IDummyData } from './data/types';
+import { BridgeCategory, IAudit, IData } from './data/types';
 
-export interface IGraphNode {
-  name: string;
-  value: number;
-  imageSrc: string;
-  type: 'blockchain' | 'bridge';
-  audits: IAudit[] | null;
-  category: BridgeCategory | null;
-}
-
-export interface IGraphLink {
-  source: string;
-  target: string;
-  tvl: number;
-}
-
-export interface IGraphData {
-  nodes: IGraphNode[];
-  links: IGraphLink[];
-}
-
-export interface IFlowBridgesGraphBridgeLink {
+export interface IBridgeLink {
   source: string;
   target: string;
   bridge: string;
@@ -33,14 +13,14 @@ export interface IFlowBridgesGraphBridgeLink {
   bridgeIndex: number;
 }
 
-export interface IFlowBridgesGraphFlowLink {
+export interface IFlowLink {
   source: string;
   target: string;
   flow: number;
   reverse: boolean;
 }
 
-export interface IFlowBridgesGraphNode {
+export interface IChainNode {
   id: string;
   name: string;
   logo: string;
@@ -48,38 +28,14 @@ export interface IFlowBridgesGraphNode {
   in: number;
 }
 
-export interface IFlowBridgesGraphData {
-  nodes: IFlowBridgesGraphNode[];
-  links: (IFlowBridgesGraphBridgeLink | IFlowBridgesGraphFlowLink)[];
+export interface IGraphData {
+  nodes: IChainNode[];
+  links: (IBridgeLink | IFlowLink)[];
 }
 
-interface INode {
-  id: string;
-  bundle: null;
-  results: { currentValueLocked: number };
-  metadata: {
-    name: string;
-    toChain?: string;
-    website?: string;
-    category: BridgeCategory;
-    subtitle: string;
-    icon: string | 0;
-    fromChain: string;
-    audits?: IAudit[];
-  };
-  errors: { [key: string]: string };
-}
-
-export interface ICsApiData {
-  success: boolean;
-  data: INode[];
-}
-
-export function convertDummyDataForGraph(
-  data: IDummyData,
-): IFlowBridgesGraphData {
-  const graphData: IFlowBridgesGraphData = { nodes: [], links: [] };
-  const aggregatedFlows: IFlowBridgesGraphFlowLink[] = [];
+export function convertDataForGraph(data: IData): IGraphData {
+  const graphData: IGraphData = { nodes: [], links: [] };
+  const aggregatedFlows: IFlowLink[] = [];
   data.flows.forEach((flow) => {
     if (flow.metadata.name === undefined) {
       console.error(
@@ -221,52 +177,6 @@ export function convertDummyDataForGraph(
     }
   });
   graphData.links.push(...aggregatedFlows);
-  return graphData;
-}
-
-export function convertDataForGraph(data: ICsApiData): IGraphData {
-  const graphData: IGraphData = { nodes: [], links: [] };
-  data.data.forEach((apiNode: INode) => {
-    const isBridge = apiNode.metadata.toChain === undefined;
-
-    const nodeName = apiNode.metadata.name.toLowerCase();
-    let nodeIndex = graphData.nodes.findIndex((node) => node.name === nodeName);
-    if (nodeIndex === -1) {
-      nodeIndex = graphData.nodes.push({
-        name: nodeName,
-        type: isBridge ? 'bridge' : 'blockchain',
-        value: apiNode.results.currentValueLocked,
-        imageSrc:
-          apiNode.metadata.icon === 0 ? '/logo.png' : apiNode.metadata.icon,
-        audits: apiNode.metadata.audits ?? null,
-        category: isBridge ? apiNode.metadata.category : null,
-      });
-    } else {
-      graphData.nodes[nodeIndex].value += apiNode.results.currentValueLocked;
-    }
-
-    const fromName = apiNode.metadata.fromChain;
-    let fromIndex = graphData.nodes.findIndex((node) => node.name === fromName);
-    if (fromIndex === -1) {
-      fromIndex = graphData.nodes.push({
-        name: fromName,
-        type: 'blockchain',
-        value: apiNode.results.currentValueLocked,
-        imageSrc:
-          apiNode.metadata.icon === 0 ? '/logo.png' : apiNode.metadata.icon,
-        audits: null,
-        category: null,
-      });
-    } else {
-      graphData.nodes[fromIndex].value += apiNode.results.currentValueLocked;
-    }
-
-    graphData.links.push({
-      source: fromName,
-      target: nodeName,
-      tvl: apiNode.results.currentValueLocked,
-    });
-  });
   return graphData;
 }
 

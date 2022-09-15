@@ -1,12 +1,12 @@
 import { ReactElement, useMemo } from 'react';
-import { IDummyData } from '../data/types';
+import { IData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
 import { format } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
 import DataBox from './DataBox';
 
 interface IBridgeProps {
-  data: IDummyData;
+  data: IData;
   id: string;
 }
 

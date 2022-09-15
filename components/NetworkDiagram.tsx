@@ -5,7 +5,7 @@ import { useData } from '../data/data-context';
 import { drawGraph, INetworkGraph } from '../drawGraph';
 import { useStore } from '../store';
 import style from '../styles/NetworkDiagram.module.css';
-import { convertDummyDataForGraph } from '../utils';
+import { convertDataForGraph } from '../utils';
 
 export default function NetworkDiagram() {
   const router = useRouter();
@@ -48,7 +48,7 @@ export default function NetworkDiagram() {
       </filter>
       </defs>`;
     }
-    const convertedData = convertDummyDataForGraph(data);
+    const convertedData = convertDataForGraph(data);
     const navigateTo = (path: string) =>
       router.push(path, undefined, { scroll: false });
     const viz = drawGraph(svg, convertedData, navigateTo);

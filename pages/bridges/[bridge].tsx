@@ -4,12 +4,12 @@ import BridgeSpecifics from '../../components/Bridge';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
 import { loadData } from '../../data/load-data';
-import { GetStaticBridgeProps, IDummyData } from '../../data/types';
+import { GetStaticBridgeProps, IData } from '../../data/types';
 import styles from '../../styles/page.module.css';
 
 interface IBridgeProps {
   bridge: string;
-  data: IDummyData;
+  data: IData;
 }
 
 interface IBridgePath {

@@ -1,12 +1,12 @@
 import type { ReactElement } from 'react';
-import { IDummyData } from '../data/types';
+import { IData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
 import { format } from '../utils';
 import DataBox from './DataBox';
 import FlowBox, { IChainFlow } from './FlowBox';
 
 interface IBridgeProps {
-  data: IDummyData;
+  data: IData;
   name: string;
 }
 
