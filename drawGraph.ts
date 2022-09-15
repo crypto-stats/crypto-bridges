@@ -596,6 +596,7 @@ export function drawGraph(
         (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
         (mode === GRAPH_MODES.FLOWS && d.type !== undefined),
     );
+    tvlCircles.attr('r', getTvlRadius);
     circleGroups.classed('transparent', false);
   }
 
@@ -698,6 +699,9 @@ export function drawGraph(
   }
 
   function getTvlRadius(d: any): number {
+    if (mode === GRAPH_MODES.SANKEY) {
+      return Math.sqrt((NODE_AREAS_SHARE.SANKEY * availableArea) / Math.PI);
+    }
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
         const areaShare = kLinAN * d.tvl + kLinBN;
