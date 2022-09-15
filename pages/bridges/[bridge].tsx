@@ -42,6 +42,9 @@ const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
               let flowIn = 0;
               let flowOut = 0;
               for (const flow of data.flows) {
+                if (flow.bundle !== bridge) {
+                  continue;
+                }
                 if (flow.metadata.chainA === chain.id) {
                   flowIn += flow.results.currentValueBridgedBToA || 0;
                   flowOut += flow.results.currentValueBridgedAToB || 0;

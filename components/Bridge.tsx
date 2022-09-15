@@ -1,7 +1,9 @@
-import type { ReactElement } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { IDummyData } from '../data/types';
 import styles from '../styles/NodeSpecifics.module.css';
+import { format } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
+import DataBox from './DataBox';
 
 interface IBridgeProps {
   data: IDummyData;
@@ -10,6 +12,16 @@ interface IBridgeProps {
 
 const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
   const bridge = data.bridges.find((bridge) => bridge.id === id);
+  const tvl = useMemo(() => {
+    let result = 0;
+    data.flows.forEach((flow) => {
+      if (flow.bundle === id) {
+        result += flow.results.currentValueBridgedAToB ?? 0;
+        result += flow.results.currentValueBridgedBToA ?? 0;
+      }
+    });
+    return result;
+  }, [data, id]);
   if (bridge === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
@@ -24,13 +36,7 @@ const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
-        <BoxRow
-          data={[
-            { caption: 'Bridge TVL', value: '$ 500mln' },
-            { caption: 'Bridge TVL', value: '$ 500mln' },
-          ]}
-          align={BoxAlign.Left}
-        />
+        <DataBox caption="bridge TVL" value={format(tvl)} />
       </div>
       <div className={styles.nodeItemGap8}>
         <h2>Trustiness</h2>
