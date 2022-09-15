@@ -110,7 +110,7 @@ export function drawGraph(
   const nodesContainer = svg.append('g');
   const computeSankeyLinkPath = sankeyLinkHorizontal();
   let isImportExport = false;
-  let isImport = false;
+  let isImport = true;
 
   // initGui();
 

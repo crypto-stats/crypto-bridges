@@ -7,7 +7,7 @@ interface IState {
 }
 
 export const useStore = create<IState>((set) => ({
-  flowsShowImport: false,
+  flowsShowImport: true,
   showImportFlows: () => set({ flowsShowImport: true }),
   showExportFlows: () => set({ flowsShowImport: false }),
 }));
