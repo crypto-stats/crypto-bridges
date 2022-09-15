@@ -30,6 +30,12 @@
   align-items: center;
   gap: 15px;
 }
+.flowBoxChainsReverse {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-direction: row-reverse;
+}
 .flowBoxSpacer {
   width: 32px;
   height: 2px;

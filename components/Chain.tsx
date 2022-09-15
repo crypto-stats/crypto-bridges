@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { IData } from '../data/types';
+import { useStore } from '../store';
 import styles from '../styles/NodeSpecifics.module.css';
 import { format } from '../utils';
 import DataBox from './DataBox';
@@ -11,11 +12,10 @@ interface IBridgeProps {
 }
 
 const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
+  const isImport = useStore((state) => state.flowsShowImport);
   const chain = data.chains.find((chain) => chain.id === name);
   if (chain === undefined) return <div>Empty!</div>;
-
   const chainName = chain.name || chain.id.replaceAll('-', ' ');
-
   const computeTVLForChain = () => {
     let tvl = 0;
     data.flows.forEach((flow) => {
@@ -42,9 +42,13 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
             .icon ?? '',
         value:
           (isA
-            ? flow.results.currentValueBridgedAToB
+            ? isImport
+              ? flow.results.currentValueBridgedBToA
+              : flow.results.currentValueBridgedAToB
             : isB
-            ? flow.results.currentValueBridgedBToA
+            ? isImport
+              ? flow.results.currentValueBridgedAToB
+              : flow.results.currentValueBridgedBToA
             : 0) ?? 0,
       };
       if (bridge.value === 0) {
