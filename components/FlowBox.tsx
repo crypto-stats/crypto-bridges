@@ -35,7 +35,9 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
                 <img src={logo} width={16} height={16} alt="logo" />
                 <p>{name}</p>
               </div>
-              <div className={styles.flowBoxSpacer} />
+              <div className={styles.flowBoxSpacer}>
+                <span className={styles.flowBoxSpacerArrow}></span>
+              </div>
               <div className={styles.flowBoxChain}>
                 <img
                   src={
