@@ -45,6 +45,8 @@ export enum GRAPH_MODES {
 
 export interface INetworkGraph {
   updateSelected: (path: string) => void;
+  showImports: (imports: boolean) => void;
+  showsImports: () => boolean;
 }
 
 enum DISTRIBUTION {
@@ -108,6 +110,7 @@ export function drawGraph(
   const nodesContainer = svg.append('g');
   const computeSankeyLinkPath = sankeyLinkHorizontal();
   let isImportExport = false;
+  let isImport = false;
 
   // initGui();
 
@@ -251,8 +254,9 @@ export function drawGraph(
         return false;
       })
       .map((item) => item.id);
+    const sourceOrTarget = isImport ? sourceNodesArray : targetNodesArray;
     const nodesArray = data.nodes.filter((item) =>
-      targetNodesArray.includes(item.id),
+      sourceOrTarget.includes(item.id),
     );
     nodesArray.push(node);
     const linksArray = data.links
@@ -261,8 +265,10 @@ export function drawGraph(
           item.bridge === undefined &&
           item.flow !== undefined &&
           item.flow > 0 &&
-          item.source.id === node.id &&
-          targetNodesArray.indexOf(item.target.id as string) > -1,
+          (isImport ? item.target.id : item.source.id) === node.id &&
+          sourceOrTarget.indexOf(
+            (isImport ? item.source.id : item.target.id) as string,
+          ) > -1,
       )
       .map((flow: any) => ({
         value: flow.flow as number,
@@ -285,17 +291,17 @@ export function drawGraph(
     circleGroups.classed(
       'transparent',
       (c: any) =>
-        targetNodesArray.indexOf(c.id as string) === -1 && node.id !== c.id,
+        sourceOrTarget.indexOf(c.id as string) === -1 && node.id !== c.id,
     );
     tvlCircles.classed(
       'circle-selected',
       (c: any) =>
-        targetNodesArray.indexOf(c.id as string) > -1 || node.id === c.id,
+        sourceOrTarget.indexOf(c.id as string) > -1 || node.id === c.id,
     );
     blurredImages.classed(
       'blurred-image-selected',
       (c: any) =>
-        targetNodesArray.indexOf(c.id as string) > -1 || node.id === c.id,
+        sourceOrTarget.indexOf(c.id as string) > -1 || node.id === c.id,
     );
     linksContainer.classed('transparent', false).classed('path-hidden', false);
     nodesContainer.classed('transparent', false).classed('path-hidden', false);
@@ -378,11 +384,17 @@ export function drawGraph(
   function computeCustomSankeyPath(d: any) {
     const defaultPath = computeSankeyLinkPath(d);
     if (defaultPath === null) return '';
+    const targetHeight = `${height / 2}`;
     const bits = defaultPath.split(',');
-    const bit1 = bits[1].split('C');
-    bit1[0] = `${height / 2}`;
-    bits[1] = bit1.join('C');
-    bits[2] = `${height / 2}`;
+    if (isImport) {
+      bits[4] = targetHeight;
+      bits[6] = targetHeight;
+    } else {
+      const bit1 = bits[1].split('C');
+      bit1[0] = targetHeight;
+      bits[1] = bit1.join('C');
+      bits[2] = targetHeight;
+    }
     return bits.join(',');
   }
 
@@ -440,7 +452,10 @@ export function drawGraph(
   function moveCircleToSankeyNodeX(d: any) {
     const node = sankeyInput.nodes.find((node) => node.id === d.id);
     if (node === undefined) return 0;
-    const isStartNode = (sankeyInput.links[0]?.source as any)?.id === node.id;
+    const arrayCheck = isImport
+      ? sankeyInput.links.map((link) => (link.source as any).id as string)
+      : [(sankeyInput.links[0]?.source as any)?.id as string];
+    const isStartNode = arrayCheck.includes(node.id as string);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return isStartNode ? node.x1! : node.x0!;
   }
@@ -448,9 +463,17 @@ export function drawGraph(
   function moveCircleToSankeyNodeY(d: any) {
     const node = sankeyInput.nodes.find((node) => node.id === d.id);
     if (node === undefined) return 0;
-    const isStartNode = (sankeyInput.links[0]?.source as any)?.id === node.id;
+    const arrayCheck = isImport
+      ? sankeyInput.links.map((link) => (link.source as any).id as string)
+      : [(sankeyInput.links[0]?.source as any)?.id as string];
+    const isStartNode = arrayCheck.includes(node.id as string);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return isStartNode ? height / 2 : (node.y1! - node.y0!) / 2 + node.y0!;
+    const defaultHeight = (node.y1! - node.y0!) / 2 + node.y0!;
+    if (isImport) {
+      return isStartNode ? defaultHeight : height / 2;
+    } else {
+      return isStartNode ? height / 2 : defaultHeight;
+    }
   }
 
   function onMouseOut() {
@@ -927,5 +950,17 @@ export function drawGraph(
       .classed('blurred-image-hovered', false);
   }
 
-  return { updateSelected };
+  function showImports(imports: boolean) {
+    isImport = imports;
+  }
+
+  function showsImports() {
+    return isImport;
+  }
+
+  return {
+    updateSelected,
+    showImports,
+    showsImports,
+  };
 }

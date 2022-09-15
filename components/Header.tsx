@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { HEADER_HEIGHT, PANEL_WIDTH } from '../constants';
+import { useStore } from '../store';
 import styles from '../styles/Header.module.css';
 import { needsLandscape } from '../utils';
 
@@ -29,20 +30,22 @@ const FlowBridge = () => {
 };
 
 const ImportExport = () => {
-  const router = useRouter();
-  const selectImport = () => router.push(router.pathname + '/imports');
-  const selectExport = () => router.push(router.pathname + '/exports');
+  const { isImport, selectImport, selectExport } = useStore((state) => ({
+    isImport: state.flowsShowImport,
+    selectImport: state.showImportFlows,
+    selectExport: state.showExportFlows,
+  }));
   return (
     <>
       <button
         onClick={selectImport}
-        className={router.pathname.includes('/imports') ? styles.selected : ''}
+        className={isImport ? styles.selected : ''}
       >
         Imports
       </button>
       <button
         onClick={selectExport}
-        className={router.pathname.includes('/exports') ? styles.selected : ''}
+        className={!isImport ? styles.selected : ''}
       >
         Exports
       </button>
@@ -112,8 +115,7 @@ export default function Header() {
         </p>
       </div>
       <div className={isHorizontal ? styles.toggle : styles.toggleVertical}>
-        <FlowBridge />
-        {/* router.pathname.includes('chain') ? <ImportExport /> : <FlowBridge /> */}
+        {router.pathname.includes('chain') ? <ImportExport /> : <FlowBridge />}
       </div>
     </header>
   );
