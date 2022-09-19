@@ -2,7 +2,8 @@
   "chains": [
     {
       "id": "axelar",
-      "logo": "https://ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki",
+      "name": "Axelar Chain",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki",
       "description": "Axelar is a cross-chain bridge protocol, centered around it's own Cosmos SDK-based chain. In addition to producing blocks on the Axelar chain, validators must also monitor the state of external bridged blockchains and attest to the state of these chains using threshold signatures.",
       "website": "https://axelar.network/",
       "whitepaper": "https://axelar.network/axelar_whitepaper.pdf"
@@ -23,33 +24,38 @@
     {
       "id": "ethereum",
       "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023",
-      "description": "Ethereum is a generalized blockchain for the development of decentralized applications."
+      "description": "Ethereum is a generalized blockchain for the development of decentralized applications.",
+      "website": "https://ethereum.org/"
     },
     {
       "id": "evmos",
-      "logo": "https://ipfs.io/ipfs/QmXhPaHEpLakqEvhY36bzt3ffi9HheF8haPNdbf8RKJbko",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmXhPaHEpLakqEvhY36bzt3ffi9HheF8haPNdbf8RKJbko",
       "description": "EVMOS is Cosmos-ecosystem blockchain that supports Ethereum-native applications and tools by fully implementing the Ethereum Virtual Machine (EVM)."
     },
     {
       "id": "arbitrum",
-      "logo": "https://l2beat.com/icons/arbitrum.png",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmeRunQGxv3haLoMfgwD2VjKwScf7gDQiA1DCYd1HNBCG6",
       "description": "Arbitrum is a scaling solution running on the Ethereum blockchain. As an \"optimistic rollup\", the chain is secured by the economic incentives to post a fraud-proof to Ethereum in the case of an invalid block.",
       "website": "https://arbitrum.io"
     },
     {
       "id": "moonbeam",
-      "logo": "https://ipfs.io/ipfs/QmTHLLmM8QLAf9L3aNLMmzK8RQSjJTU3z7vVb6MrJtSccc",
-      "description": ""
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmTHLLmM8QLAf9L3aNLMmzK8RQSjJTU3z7vVb6MrJtSccc",
+      "description": "Moonbeam is an EVM-compatable Parachain running in the Polkadot network",
+      "website": "https://moonbeam.network"
     },
     {
       "id": "optimism",
-      "logo": "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=023",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmegSBGwcyoYU9yrgGS2U13DAexE9VYdetTn9rqa88yjZK",
       "description": "Optimism is a scaling solution running on the Ethereum blockchain. As an \"optimistic rollup\", the chain is secured by the economic incentives to post a fraud-proof to Ethereum in the case of an invalid block.",
       "website": "https://www.optimism.io/"
     },
     {
       "id": "polygon",
-      "logo": "https://cryptologos.cc/logos/polygon-matic-logo.png?v=023"
+      "name": "Polygon PoS",
+      "description": "Polygon PoS is an Ethereum side-chain that provides high throughput and low transaction fees.",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmcakfgwRpoXotCQdBc8fos31X4p9ujvJBuigSh9C59cKS",
+      "website": "https://polygon.technology/solutions/polygon-pos/"
     },
     {
       "id": "multichain",
@@ -57,11 +63,11 @@
     },
     {
       "id": "avalanche",
-      "logo": "https://cryptologos.cc/logos/avalanche-avax-logo.png?v=023"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmcWreeBT5HuurXsc5LbdDphmXUY3T4YrfnXvqt6y2no68"
     },
     {
       "id": "fantom",
-      "logo": "https://cryptologos.cc/logos/fantom-ftm-logo.png?v=023"
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/Qmej3LprBGEi5ZXaFknt3CZd2krM9MvY5HzeEEqRuGC5K7"
     },
     {
       "id": "ripple",
@@ -74,43 +80,56 @@
     {
       "id": "solana",
       "logo": "https://cryptologos.cc/logos/solana-sol-logo.png?v=023",
-      "description": "Solana is a high-throughput blockchain optimized for low-cost decentralized applications"
+      "description": "Solana is a high-throughput blockchain optimized for low-cost decentralized applications",
+      "website": "https://solana.com"
     },
     {
       "id": "near",
-      "logo": "https://cryptologos.cc/logos/near-protocol-near-logo.png?v=023"
+      "name": "NEAR Protocol",
+      "description": "NEAR is a sharded, general-purpose blockchain.",
+      "logo": "https://cryptologos.cc/logos/near-protocol-near-logo.png?v=023",
+      "website": "https://near.org"
     },
     {
       "id": "polkadot",
+      "name": "Polkadot Relay Chain",
+      "description": "Polkadot's 'Relay Chain' is the core of the Polkadot network, providing security and connectivity to the Parachains in the network.",
       "logo": "https://cryptologos.cc/logos/polkadot-new-dot-logo.png?v=023"
     },
     {
       "id": "osmosis",
-      "logo": "https://ipfs.io/ipfs/QmaPe4CFwjoN3orMzYUhrXYfYdsbpJn497i2bHJJjzEgPL",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmaPe4CFwjoN3orMzYUhrXYfYdsbpJn497i2bHJJjzEgPL",
       "description": "Osmosis is a cross-chain decentralized asset exchange, operating on it's own Cosmos SDK-chain. The exchange facilitates trading assets from within the Cosmos ecosystem, and beyond using various bridges."
     },
     {
       "id": "cosmoshub",
+      "name": "Cosmos Hub",
       "logo": "https://cryptologos.cc/logos/cosmos-atom-logo.png?v=023",
       "description": "The Cosmos Hub is the original blockchain in the Cosmos ecosystem. The chain is intended to act as a central hub by which other blockchains can connect, relay messages, and rent security needed to secure their chains."
     },
     {
       "id": "gnosis-chain",
-      "logo": "https://ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmPFzLaw3G3SDvsHoebWGn52H1n8dpfEmmvSznkKDkPuC4",
       "description": "Gnosis Chain is a fully Ethereum-compatible companion chain with low fees, and a native stablecoin as the base asset.",
       "website": "https://www.gnosischain.com/"
     },
     {
       "id": "gravitybridge",
-      "logo": "https://ipfs.io/ipfs/QmezADpEoBvneUXB9iopsUC4i1JSgW7kuhVF5jDebCsHBw"
+      "name": "Gravity Bridge Chain",
+      "description": "Gravity Bridge is a cross-chain bridge protocol, centered around it's own Cosmos SDK-based chain.",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmezADpEoBvneUXB9iopsUC4i1JSgW7kuhVF5jDebCsHBw"
     },
     {
       "id": "juno",
-      "logo": "https://ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
+      "description": "Juno is a generalized smart-contract chain built with the Cosmos SDK.",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmTLH1Z7eB3SGEWgLad6wk6wsfS2BDpnFoPpXLL3F6wS8R"
     },
     {
       "id": "secretnetwork",
-      "logo": "https://ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St"
+      "name": "Secret Network",
+      "description": "Secret Network is a privacy-centric blockchain built on the Cosmos SDK",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/Qmdpq313DRDLn1mnaEDS3FuZCTNZp1QEmdqNnZpVQ2i1St",
+      "website": "https://scrt.network/"
     }
   ]
 }
