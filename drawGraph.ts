@@ -345,7 +345,7 @@ export function drawGraph(
       ]);
     const { links, nodes } = sankeyLayout(sankeyInput);
     updateSankeyLinks(links);
-    updateSankeyNodes(nodes);
+    //updateSankeyNodes(nodes);
     const LOGO_SIZE =
       Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
       2 *
