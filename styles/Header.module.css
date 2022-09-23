@@ -22,6 +22,9 @@
   vertical-align: middle;
   font-size: 24px;
 }
+.header h1 {
+  margin: 0;
+}
 .verticalAlign {
   vertical-align: middle;
 }
@@ -45,19 +48,20 @@
 .onelineVertical {
   justify-content: center;
   align-items: center;
+  flex-direction: column-reverse;
 }
 .onelineVertical .poweredBy {
-  display: block;
+  /* display: block; */
 }
 .question,
 .questionVertical {
   color: #90a0ce;
-  margin: 0;
+  margin: 10px 0 0 0;
   text-align: left;
 }
 .questionVertical {
   text-align: center;
-  margin: 10px 0 12px;
+  margin: 10px 0 12px 0;
 }
 .toggle,
 .toggleVertical {

@@ -15,6 +15,11 @@
   text-transform: uppercase;
 }
 
+.table:first-of-type h2 {
+  line-height: normal;
+  padding-bottom: 10px;
+}
+
 .titleBox {
   display: flex;
   flex-direction: column;
@@ -110,4 +115,10 @@
 }
 .item p {
   margin: 0;
+}
+
+@media (max-width: 600px) {
+  .item a {
+    font-size: 12px;
+  }
 }
