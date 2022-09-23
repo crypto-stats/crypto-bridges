@@ -8,6 +8,7 @@ import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/Header.module.css';
 import { needsLandscape } from '../utils';
+import { Filters } from './Filters';
 
 const FlowBridge = () => {
   const router = useRouter();
@@ -103,6 +104,14 @@ const ImportExport = () => {
 export default function Header() {
   const router = useRouter();
   const [isHorizontal, setHorizontal] = useState(false);
+  const [modalIsOpen, setModalOpen] = useState(false);
+  const [filterCount, setFilterCount] = useState(2);
+  const openFilters = () => setModalOpen(true);
+  const closeFilters = () => setModalOpen(false);
+  const resetFilters = (e) => {
+    e.stopPropagation();
+    setFilterCount(0);
+  };
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const updateToSidePanel = () => {
@@ -161,9 +170,34 @@ export default function Header() {
           Where does value flow in crypto?
         </p>
       </div>
-      <div className={isHorizontal ? styles.toggle : styles.toggleVertical}>
-        {router.pathname.includes('chain') ? <ImportExport /> : <FlowBridge />}
+      <div className={styles.buttons}>
+        <div className={isHorizontal ? styles.toggle : styles.toggleVertical}>
+          {router.pathname.includes('chain') ? (
+            <ImportExport />
+          ) : (
+            <FlowBridge />
+          )}
+        </div>
+        <div
+          className={styles.filterBox}
+          onClick={() => setModalOpen(!modalIsOpen)}
+        >
+          <div className={styles.filterBoxContent}>
+            <img src="/filter.svg" alt="filter" height="15" />
+            <p>Filters {filterCount > 0 ? <b>({filterCount})</b> : null}</p>
+          </div>
+          {filterCount > 0 && (
+            <button className={styles.removeFilters} onClick={resetFilters}>
+              ×
+            </button>
+          )}
+        </div>
       </div>
+      <Filters
+        isHorizontal={isHorizontal}
+        show={modalIsOpen}
+        closeFilters={closeFilters}
+      />
     </header>
   );
 }

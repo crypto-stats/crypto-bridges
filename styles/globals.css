@@ -135,3 +135,6 @@ svg text::selection {
 .simplebar-horizontal {
   display: none;
 }
+.MuiSlider-valueLabelOpen.MuiSlider-valueLabel.css-nnid7-MuiSlider-valueLabel {
+  background: none;
+}
