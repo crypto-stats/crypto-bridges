@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { HEADER_HEIGHT, PANEL_WIDTH } from '../constants';
+import { useData } from '../data/data-context';
+import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/Header.module.css';
 import { needsLandscape } from '../utils';
@@ -29,26 +31,71 @@ const FlowBridge = () => {
   );
 };
 
+const checkImportExport = (
+  path: string,
+  data: IData,
+): { hasImport: boolean; hasExport: boolean } => {
+  const chain = path.split('/')[2];
+  let hasImport = false;
+  let hasExport = false;
+  for (const flow of data.flows) {
+    if (
+      (flow.metadata.chainA === chain &&
+        (flow.results.currentValueBridgedBToA || 0) > 0) ||
+      (flow.metadata.chainB === chain &&
+        (flow.results.currentValueBridgedAToB || 0) > 0)
+    ) {
+      hasImport = true;
+    }
+    if (
+      (flow.metadata.chainA === chain &&
+        (flow.results.currentValueBridgedAToB || 0) > 0) ||
+      (flow.metadata.chainB === chain &&
+        (flow.results.currentValueBridgedBToA || 0) > 0)
+    ) {
+      hasExport = true;
+    }
+  }
+  return { hasImport, hasExport };
+};
+
 const ImportExport = () => {
   const { isImport, selectImport, selectExport } = useStore((state) => ({
     isImport: state.flowsShowImport,
     selectImport: state.showImportFlows,
     selectExport: state.showExportFlows,
   }));
+  const { asPath } = useRouter();
+  const data = useData();
+  const { hasImport, hasExport } = useMemo(() => {
+    return checkImportExport(asPath, data);
+  }, [asPath, data]);
+  useEffect(() => {
+    if (isImport && !hasImport) {
+      selectExport();
+    }
+    if (!isImport && !hasExport) {
+      selectImport();
+    }
+  }, [hasImport, hasExport, isImport, selectExport, selectImport]);
   return (
     <>
-      <button
-        onClick={selectImport}
-        className={isImport ? styles.selected : ''}
-      >
-        Imports
-      </button>
-      <button
-        onClick={selectExport}
-        className={!isImport ? styles.selected : ''}
-      >
-        Exports
-      </button>
+      {hasImport && (
+        <button
+          onClick={selectImport}
+          className={isImport ? styles.selected : ''}
+        >
+          Imports
+        </button>
+      )}
+      {hasExport && (
+        <button
+          onClick={selectExport}
+          className={!isImport ? styles.selected : ''}
+        >
+          Exports
+        </button>
+      )}
     </>
   );
 };
