@@ -229,3 +229,27 @@ export function format(x: number): string {
     maximumFractionDigits: 0,
   });
 }
+
+export function formatShort(x: number, precision = 3): string {
+  const formatted = format(x);
+  const shortened = formatted.split(',');
+  const unit = (length: number): string => {
+    switch (length) {
+      case 2:
+        return 'K';
+      case 3:
+        return 'M';
+      case 4:
+        return 'B';
+      default:
+        return '';
+    }
+  };
+  return (
+    shortened[0] +
+    (shortened[1] !== undefined
+      ? '.' + shortened[1].slice(0, Math.min(3, precision))
+      : '') +
+    unit(shortened.length)
+  );
+}

@@ -16,6 +16,11 @@ import {
 } from 'd3-sankey';
 import type { RefObject } from 'react';
 import {
+  TooltipBridgeArg,
+  TooltipChainArg,
+  TooltipFlowArg,
+} from './components/NetworkDiagram';
+import {
   GLOW_ID,
   IMAGE_GLOW_ID,
   MIN_PATH_WIDTH,
@@ -36,6 +41,8 @@ let guiCreated = false;
 const PADDING = 30;
 
 const MIN_PATH_CLICK_WIDTH = 40;
+
+const PATHS_GLOW = true;
 
 export enum GRAPH_MODES {
   FLOWS,
@@ -64,6 +71,9 @@ export function drawGraph(
   svgRef: RefObject<SVGSVGElement>,
   data: IGraphData,
   navigateTo: (path: string) => void,
+  showChainTooltip: (coords: TooltipChainArg) => void,
+  showFlowTooltip: (coords: TooltipFlowArg) => void,
+  showBridgeTooltip: (coords: TooltipBridgeArg) => void,
 ): INetworkGraph {
   let mode = GRAPH_MODES.FLOWS;
   let width = 0,
@@ -111,6 +121,7 @@ export function drawGraph(
   const computeSankeyLinkPath = sankeyLinkHorizontal();
   let isImportExport = false;
   let isImport = true;
+  let LOGO_SIZE = 5;
 
   // initGui();
 
@@ -183,7 +194,6 @@ export function drawGraph(
     .append('circle')
     .attr('r', getTvlRadius)
     .style('fill', '#311c42')
-    .style('stroke-width', '4')
     .style('cursor', 'pointer')
     .on('click', onClick)
     .on('mouseover', onMouseOverNode)
@@ -309,7 +319,7 @@ export function drawGraph(
       )
       .classed('transparent', (d: any) => d.bridge !== link.bridge)
       .style('filter', (d: any) =>
-        d.bridge === link.bridge && d.bridge !== undefined
+        PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
           ? `url(#${GLOW_ID})`
           : 'none',
       );
@@ -400,7 +410,12 @@ export function drawGraph(
       .style(
         'stroke-dasharray',
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
-      );
+      )
+      .on('mouseover', onMouseOverSankeyFlow)
+      .on('mouseout', onMouseOut)
+      .style('filter', function (d: any) {
+        return PATHS_GLOW ? `url(#${GLOW_ID})` : 'none';
+      });
     links
       .enter()
       .append('path')
@@ -411,11 +426,16 @@ export function drawGraph(
       )
       .classed('highlight', true)
       .classed('dash', true)
+      .on('mouseover', onMouseOverSankeyFlow)
+      .on('mouseout', onMouseOut)
       .style('fill', 'none')
       .classed('path-selected', true)
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
-      .sort((a: any, b: any) => b.dy - a.dy);
+      .sort((a: any, b: any) => b.dy - a.dy)
+      .style('filter', function (d: any) {
+        return PATHS_GLOW ? `url(#${GLOW_ID})` : 'none';
+      });
   }
 
   function updateSankeyNodes(
@@ -453,7 +473,8 @@ export function drawGraph(
       : [(sankeyInput.links[0]?.source as any)?.id as string];
     const isStartNode = arrayCheck.includes(node.id as string);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return isStartNode ? node.x1! : node.x0!;
+    const value = isStartNode ? node.x1! : node.x0!;
+    return isNaN(value) ? 0 : value;
   }
 
   function moveCircleToSankeyNodeY(d: any) {
@@ -479,72 +500,130 @@ export function drawGraph(
         : 'none';
     });
     paths.classed('path-hovered', false).style('filter', function () {
-      return select(this).classed('path-selected')
+      return PATHS_GLOW && select(this).classed('path-selected')
         ? `url(#${GLOW_ID})`
         : 'none';
     });
     blurredImages.classed('blurred-image-hovered', false);
+    showBridgeTooltip(false);
+    showChainTooltip(false);
+    showFlowTooltip(false);
   }
 
   function onMouseOverPath(e: MouseEvent, path: IBridgeLink | IFlowLink) {
     if ((path as IBridgeLink & IFlowLink).type !== undefined) {
-      onMouseOverBridge((path as IBridgeLink).bridge);
+      onMouseOverBridge(path as IBridgeLink);
     } else {
       onMouseOverFlow(path as IFlowLink);
     }
   }
+  function onMouseOverSankeyFlow(path: any) {}
 
   function onMouseOverFlow(path: IFlowLink) {
+    const source = path.source as any as {
+      id: string;
+      x: number;
+      y: number;
+      logo: string;
+    };
+    const target = path.target as any as {
+      id: string;
+      x: number;
+      y: number;
+      logo: string;
+    };
+    if (mode === GRAPH_MODES.FLOWS) {
+      showFlowTooltip({
+        x: (target.x - source.x) / 2 + source.x,
+        y: (target.y - source.y) / 2 + source.y,
+        value: path.flow,
+        chain1: source.id,
+        chain2: target.id,
+        logo1: source.logo,
+        logo2: target.logo,
+      });
+    } else if (mode === GRAPH_MODES.SANKEY) {
+      /* console.log('hover', path);
+      const targetX = computeCircleX(target);
+      const sourceX = computeCircleX(source);
+      const targetY = computeCircleY(target);
+      const sourceY = computeCircleY(source);
+      showFlowTooltip({
+        x: (targetX - sourceX) / 2 + sourceX,
+        y: (targetY - sourceY) / 2 + sourceY,
+      }); */
+    }
     paths
       .classed(
         'path-hovered',
         (d: any) =>
-          (d.source.id === (path.source as any).id &&
-            d.target.id === (path.target as any).id) ||
-          (d.target.id === (path.source as any).id &&
-            d.source.id === (path.target as any).id),
+          (d.source.id === source.id && d.target.id === target.id) ||
+          (d.target.id === source.id && d.source.id === target.id),
       )
       .style('filter', function (d: any) {
-        return (d.source.id === (path.source as any).id &&
-          d.target.id === (path.target as any).id) ||
-          (d.target.id === (path.source as any).id &&
-            d.source.id === (path.target as any).id) ||
-          select(this).classed('path-selected')
+        return PATHS_GLOW &&
+          ((d.source.id === source.id && d.target.id === target.id) ||
+            (d.target.id === source.id && d.source.id === target.id) ||
+            select(this).classed('path-selected'))
           ? `url(#${GLOW_ID})`
           : 'none';
       });
 
     tvlCircles
       .classed('circle-hovered', function (c: any) {
-        return (
-          (path.source as any).id === c.id || (path.target as any).id === c.id
-        );
+        return source.id === c.id || target.id === c.id;
       })
       .style('filter', function (d: any) {
-        return (path.source as any).id === d.id ||
-          (path.target as any).id === d.id ||
+        return source.id === d.id ||
+          target.id === d.id ||
           select(this).classed('circle-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
       });
     blurredImages.classed(
       'blurred-image-hovered',
-      (c: any) =>
-        (path.source as any).id === c.id || (path.target as any).id === c.id,
+      (c: any) => source.id === c.id || target.id === c.id,
     );
   }
 
-  function onMouseOverBridge(bridge: string) {
+  function onMouseOverBridge(bridge: IBridgeLink) {
+    const name = bridge.bridge;
+    const source = bridge.source as any as { id: string; x: number; y: number };
+    const target = bridge.target as any as { id: string; x: number; y: number };
+    mode === GRAPH_MODES.BRIDGES &&
+      showBridgeTooltip({
+        x: (target.x - source.x) / 2 + source.x,
+        y: (target.y - source.y) / 2 + source.y,
+        type: bridge.type,
+        logo: bridge.logo,
+        value: bridge.flow,
+        name: bridge.bridge,
+      });
     paths
-      .classed('path-hovered', (d: any) => d.bridge === bridge)
+      .classed('path-hovered', (d: any) => d.bridge === name)
       .style('filter', function (d: any) {
-        return d.bridge === bridge || select(this).classed('path-selected')
+        return PATHS_GLOW &&
+          (d.bridge === name || select(this).classed('path-selected'))
           ? `url(#${GLOW_ID})`
           : 'none';
       });
   }
 
   function onMouseOverNode(e: MouseEvent, node: IChainNode) {
+    showChainTooltip({
+      x:
+        mode === GRAPH_MODES.SANKEY
+          ? moveCircleToSankeyNodeX(node)
+          : (node as any).x,
+      y:
+        mode === GRAPH_MODES.SANKEY
+          ? moveCircleToSankeyNodeY(node)
+          : (node as any).y,
+      chain: node.name,
+      logo: node.logo,
+      exports: node.tvl,
+      imports: node.in,
+    });
     const connectedNodeNames: string[] = [];
     paths
       .classed('path-hovered', (d: any) => {
@@ -556,9 +635,10 @@ export function drawGraph(
         return false;
       })
       .style('filter', function (d: any) {
-        return d.source.id === node.id ||
-          d.target.id === node.id ||
-          select(this).classed('path-selected')
+        return PATHS_GLOW &&
+          (d.source.id === node.id ||
+            d.target.id === node.id ||
+            select(this).classed('path-selected'))
           ? `url(#${GLOW_ID})`
           : 'none';
       });
@@ -672,12 +752,12 @@ export function drawGraph(
     }
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const width = kAP * (d.flow ?? d.value) + kBP;
-        return width;
+        const w = kAP * (d.flow ?? d.value) + kBP;
+        return w / (width < 500 ? 2 : 1);
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const width = kAP * Math.log(kBP * (d.flow ?? d.value));
-        return width;
+        const w = kAP * Math.log(kBP * (d.flow ?? d.value));
+        return w / (width < 500 ? 2 : 1);
       }
     }
   }
@@ -688,12 +768,12 @@ export function drawGraph(
     }
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const width = kAPS * d.value + kBPS;
-        return width;
+        const w = kAPS * d.value + kBPS;
+        return w;
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const width = kAPS * Math.log(kBPS * d.value);
-        return width;
+        const w = kAPS * Math.log(kBPS * d.value);
+        return w;
       }
     }
   }
@@ -738,6 +818,11 @@ export function drawGraph(
     width = dimensions.width;
     height = dimensions.height;
     availableArea = (width - PADDING) * (height - PADDING);
+    LOGO_SIZE =
+      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
+      2 *
+      Math.cos(Math.PI / 4) *
+      0.8;
     [kAP, kBP] = getPathWidthParameters();
 
     svg.attr('width', width).attr('height', height);
@@ -760,12 +845,6 @@ export function drawGraph(
       .on('tick', ticked)
       .on('end', ticked);
 
-    const LOGO_SIZE =
-      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
-      2 *
-      Math.cos(Math.PI / 4) *
-      0.8;
-
     tvlCircles.attr('r', getTvlRadius);
     images
       .attr('width', LOGO_SIZE)
@@ -785,63 +864,50 @@ export function drawGraph(
     resetSankey(width, height);
   }
 
+  function computeCircleX(d: any) {
+    if (isImportExport) {
+      return moveCircleToSankeyNodeX(d);
+    }
+    const radius = getTvlRadius(d);
+    const coord = Math.max(
+      PADDING + radius,
+      Math.min(d.x as number, width - PADDING - radius),
+    );
+    d.x = coord;
+    return coord;
+  }
+
+  function computeCircleY(d: any) {
+    if (isImportExport) {
+      return moveCircleToSankeyNodeY(d);
+    }
+    const radius = getTvlRadius(d);
+    const coord = Math.max(
+      PADDING + radius,
+      Math.min(d.y as number, height - PADDING - radius),
+    );
+    d.y = coord;
+    return coord;
+  }
+
+  function computeImageX(d: any) {
+    if (isImportExport) {
+      return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+    }
+    return d.x - LOGO_SIZE / 2;
+  }
+
+  function computeImageY(d: any) {
+    if (isImportExport) {
+      return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
+    }
+    return d.y - LOGO_SIZE / 2;
+  }
+
   function ticked() {
-    const LOGO_SIZE =
-      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
-      2 *
-      Math.cos(Math.PI / 4) *
-      0.8;
-    tvlCircles
-      .attr('cx', (d: any) => {
-        if (isImportExport) {
-          return moveCircleToSankeyNodeX(d);
-        }
-        const radius = getTvlRadius(d);
-        const coord = Math.max(
-          PADDING + radius,
-          Math.min(d.x as number, width - PADDING - radius),
-        );
-        d.x = coord;
-        return coord;
-      })
-      .attr('cy', (d: any) => {
-        if (isImportExport) {
-          return moveCircleToSankeyNodeY(d);
-        }
-        const radius = getTvlRadius(d);
-        const coord = Math.max(
-          PADDING + radius,
-          Math.min(d.y as number, height - PADDING - radius),
-        );
-        d.y = coord;
-        return coord;
-      });
-    images
-      .attr('x', (d: any) => {
-        if (isImportExport) {
-          return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
-        }
-        return d.x - LOGO_SIZE / 2;
-      })
-      .attr('y', (d: any) => {
-        if (isImportExport) {
-          return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
-        }
-        return d.y - LOGO_SIZE / 2;
-      });
-    blurredImages
-      .attr('x', (d: any) => {
-        if (isImportExport) {
-          return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
-        }
-        return d.x - LOGO_SIZE / 2;
-      })
-      .attr('y', (d: any) => {
-        if (isImportExport) {
-          return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
-        }
-        return d.y - LOGO_SIZE / 2;
-      });
+    tvlCircles.attr('cx', computeCircleX).attr('cy', computeCircleY);
+    images.attr('x', computeImageX).attr('y', computeImageY);
+    blurredImages.attr('x', computeImageX).attr('y', computeImageY);
     paths
       .attr('d', (d: any) =>
         d.type === undefined ? getFlowPath(d) : getBridgePath(d),

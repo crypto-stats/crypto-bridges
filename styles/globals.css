@@ -27,6 +27,7 @@ svg text {
 .circle-default {
   fill: #304273;
   stroke: #334272;
+  stroke-width: 2;
 }
 .circle-hovered {
   fill: #d750c8;
