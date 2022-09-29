@@ -181,7 +181,39 @@ export function drawGraph(
     .style('fill-opacity', 0)
     .style('stroke-width', getPathWidth)
     .classed('highlight', true)
-    .classed('path-default', true);
+    .each(function (d: any) {
+      const flowArray = data.links
+        .map((link) => link.flow)
+        .filter((v) => v > 0);
+      const minFlow = Math.min.apply(null, flowArray);
+      const maxFlow = Math.max.apply(null, flowArray);
+      const decile = (maxFlow - minFlow) / 10;
+      let className = 'path-default';
+      if (d.flow === maxFlow) {
+        className = 'path-default-100';
+      } else if (d.flow > minFlow + 9 * decile) {
+        className = 'path-default-90';
+      } else if (d.flow > minFlow + 8 * decile) {
+        className = 'path-default-80';
+      } else if (d.flow > minFlow + 7 * decile) {
+        className = 'path-default-70';
+      } else if (d.flow > minFlow + 6 * decile) {
+        className = 'path-default-60';
+      } else if (d.flow > minFlow + 5 * decile) {
+        className = 'path-default-50';
+      } else if (d.flow > minFlow + 4 * decile) {
+        className = 'path-default-40';
+      } else if (d.flow > minFlow + 3 * decile) {
+        className = 'path-default-30';
+      } else if (d.flow > minFlow + 2 * decile) {
+        className = 'path-default-20';
+      } else if (d.flow > minFlow + 1 * decile) {
+        className = 'path-default-10';
+      } else if (d.flow === minFlow) {
+        className = 'path-default-0';
+      }
+      select(this).classed(className, true);
+    });
 
   const circleGroups = svg
     .selectAll('circle')

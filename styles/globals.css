@@ -47,7 +47,40 @@ svg text {
   opacity: 1;
 }
 .path-default {
-  stroke: #304273;
+  stroke: hsl(224, 41%, 32%);
+}
+.path-default-0 {
+  stroke: hsl(224, 41%, 32%);
+}
+.path-default-10 {
+  stroke: hsl(232, 43%, 34%);
+}
+.path-default-20 {
+  stroke: hsl(240, 45%, 36%);
+}
+.path-default-30 {
+  stroke: hsl(248, 47%, 39%);
+}
+.path-default-40 {
+  stroke: hsl(256, 50%, 41%);
+}
+.path-default-50 {
+  stroke: hsl(265, 52%, 45%);
+}
+.path-default-60 {
+  stroke: hsl(273, 54%, 48%);
+}
+.path-default-70 {
+  stroke: hsl(281, 56%, 51%);
+}
+.path-default-80 {
+  stroke: hsl(289, 58%, 54%);
+}
+.path-default-90 {
+  stroke: hsl(298, 60%, 56%);
+}
+.path-default-100 {
+  stroke: hsl(307, 63%, 58%);
 }
 .path-hovered {
   stroke: #d750c8;
