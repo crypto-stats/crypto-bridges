@@ -294,16 +294,6 @@ export function drawGraph(
       (c: any) =>
         sourceOrTarget.indexOf(c.id as string) === -1 && node.id !== c.id,
     );
-    tvlCircles.classed(
-      'circle-selected',
-      (c: any) =>
-        sourceOrTarget.indexOf(c.id as string) > -1 || node.id === c.id,
-    );
-    blurredImages.classed(
-      'blurred-image-selected',
-      (c: any) =>
-        sourceOrTarget.indexOf(c.id as string) > -1 || node.id === c.id,
-    );
     linksContainer.classed('transparent', false).classed('path-hidden', false);
     nodesContainer.classed('transparent', false).classed('path-hidden', false);
   }
@@ -493,6 +483,7 @@ export function drawGraph(
   }
 
   function onMouseOut() {
+    linksContainer.selectAll('.sankeyLink').classed('path-hovered', false);
     tvlCircles.classed('circle-hovered', false).style('filter', function () {
       return select(this).classed('circle-selected')
         ? `url(#${GLOW_ID})`
@@ -516,14 +507,15 @@ export function drawGraph(
       onMouseOverFlow(path as IFlowLink);
     }
   }
-  function onMouseOverSankeyFlow(e: MouseEvent, path: IFlowLink) {
-    const source = path.source as any as {
+
+  function onMouseOverSankeyFlow(e: MouseEvent, path: any) {
+    const source = path.source as {
       id: string;
       x: number;
       y: number;
       logo: string;
     };
-    const target = path.target as any as {
+    const target = path.target as {
       id: string;
       x: number;
       y: number;
@@ -558,6 +550,18 @@ export function drawGraph(
       logo1: source.logo,
       logo2: target.logo,
     });
+    tvlCircles
+      .classed('circle-hovered', (c: any) =>
+        [source.id, target.id].includes(c.id as string),
+      )
+      .style('filter', (c: any) =>
+        [source.id, target.id].includes(c.id as string)
+          ? `url(#${GLOW_ID})`
+          : 'none',
+      );
+    blurredImages.classed('blurred-image-hovered', (c: any) =>
+      [source.id, target.id].includes(c.id as string),
+    );
   }
 
   function onMouseOverFlow(path: IFlowLink) {
@@ -599,7 +603,6 @@ export function drawGraph(
           ? `url(#${GLOW_ID})`
           : 'none';
       });
-
     tvlCircles
       .classed('circle-hovered', function (c: any) {
         return source.id === c.id || target.id === c.id;
@@ -656,37 +659,72 @@ export function drawGraph(
       imports: node.in,
     });
     const connectedNodeNames: string[] = [];
-    paths
-      .classed('path-hovered', (d: any) => {
-        if (d.source.id === node.id || d.target.id === node.id) {
-          connectedNodeNames.push(d.source.id as string);
-          connectedNodeNames.push(d.target.id as string);
-          return true;
-        }
-        return false;
-      })
-      .style('filter', function (d: any) {
-        return PATHS_GLOW &&
-          (d.source.id === node.id ||
-            d.target.id === node.id ||
-            select(this).classed('path-selected'))
-          ? `url(#${GLOW_ID})`
-          : 'none';
-      });
-    tvlCircles
-      .classed(
-        'circle-hovered',
+    if (mode !== GRAPH_MODES.SANKEY) {
+      paths
+        .classed('path-hovered', (d: any) => {
+          if (d.source.id === node.id || d.target.id === node.id) {
+            connectedNodeNames.push(d.source.id as string);
+            connectedNodeNames.push(d.target.id as string);
+            return true;
+          }
+          return false;
+        })
+        .style('filter', function (d: any) {
+          return PATHS_GLOW &&
+            (d.source.id === node.id ||
+              d.target.id === node.id ||
+              select(this).classed('path-selected'))
+            ? `url(#${GLOW_ID})`
+            : 'none';
+        });
+      tvlCircles
+        .classed(
+          'circle-hovered',
+          (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
+        )
+        .style('filter', function (d: any) {
+          return connectedNodeNames.indexOf(d.id as string) > -1
+            ? `url(#${GLOW_ID})`
+            : 'none';
+        });
+      blurredImages.classed(
+        'blurred-image-hovered',
         (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
-      )
-      .style('filter', function (d: any) {
-        return connectedNodeNames.indexOf(d.id as string) > -1
-          ? `url(#${GLOW_ID})`
-          : 'none';
-      });
-    blurredImages.classed(
-      'blurred-image-hovered',
-      (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
-    );
+      );
+    } else {
+      linksContainer
+        .selectAll('.sankeyLink')
+        .classed('path-hovered', (d: any) => {
+          if (d.source.id === node.id || d.target.id === node.id) {
+            connectedNodeNames.push(
+              d.source.id as string,
+              d.target.id as string,
+            );
+            return true;
+          }
+          return false;
+        })
+        .style('filter', function (d: any) {
+          return PATHS_GLOW &&
+            (d.source.id === node.id || d.target.id === node.id)
+            ? `url(#${GLOW_ID})`
+            : 'none';
+        });
+      tvlCircles
+        .classed(
+          'circle-hovered',
+          (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
+        )
+        .style('filter', function (d: any) {
+          return connectedNodeNames.indexOf(d.id as string) > -1
+            ? `url(#${GLOW_ID})`
+            : 'none';
+        });
+      blurredImages.classed(
+        'blurred-image-hovered',
+        (c: any) => connectedNodeNames.indexOf(c.id as string) > -1,
+      );
+    }
   }
 
   function setMode(newMode: GRAPH_MODES) {
