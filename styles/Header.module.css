@@ -73,7 +73,6 @@
   box-sizing: border-box;
 }
 .toggleVertical {
-  padding: 3px;
   height: auto;
 }
 .toggle button.selected,
@@ -93,8 +92,7 @@
   border-radius: 30px;
 }
 .toggleVertical button {
-  height: 25px;
-  padding: 0 10px;
+  height: 30px;
 }
 .vertical {
   width: 100%;
