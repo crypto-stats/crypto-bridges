@@ -407,6 +407,8 @@ export function drawGraph(
     links
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
+      .on('mouseover', onMouseOverSankeyFlow)
+      .on('mouseout', onMouseOut)
       .style(
         'stroke-dasharray',
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
@@ -423,9 +425,10 @@ export function drawGraph(
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
       )
       .classed('highlight', true)
-      .classed('dash', true)
       .style('fill', 'none')
       .classed('path-default', true)
+      .on('mouseover', onMouseOverSankeyFlow)
+      .on('mouseout', onMouseOut)
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
       .sort((a: any, b: any) => b.dy - a.dy)
@@ -513,21 +516,20 @@ export function drawGraph(
       onMouseOverFlow(path as IFlowLink);
     }
   }
-  function onMouseOverSankeyFlow(path: any) {
-    const source = path.source as {
+  function onMouseOverSankeyFlow(e: MouseEvent, path: IFlowLink) {
+    const source = path.source as any as {
       id: string;
       x: number;
       y: number;
       logo: string;
     };
-    const target = path.target as {
+    const target = path.target as any as {
       id: string;
       x: number;
       y: number;
       logo: string;
     };
     const links = linksContainer.selectAll('.sankeyLink');
-    console.log(links);
     links
       .classed(
         'path-hovered',
@@ -543,6 +545,19 @@ export function drawGraph(
           ? `url(#${GLOW_ID})`
           : 'none';
       });
+    const targetX = computeCircleX(target);
+    const sourceX = computeCircleX(source);
+    const targetY = computeCircleY(target);
+    const sourceY = computeCircleY(source);
+    showFlowTooltip({
+      x: (targetX - sourceX) / 2 + sourceX,
+      y: (targetY - sourceY) / 2 + sourceY,
+      value: path.value,
+      chain1: source.id,
+      chain2: target.id,
+      logo1: source.logo,
+      logo2: target.logo,
+    });
   }
 
   function onMouseOverFlow(path: IFlowLink) {
@@ -568,16 +583,6 @@ export function drawGraph(
         logo1: source.logo,
         logo2: target.logo,
       });
-    } else if (mode === GRAPH_MODES.SANKEY) {
-      /* console.log('hover', path);
-      const targetX = computeCircleX(target);
-      const sourceX = computeCircleX(source);
-      const targetY = computeCircleY(target);
-      const sourceY = computeCircleY(source);
-      showFlowTooltip({
-        x: (targetX - sourceX) / 2 + sourceX,
-        y: (targetY - sourceY) / 2 + sourceY,
-      }); */
     }
     paths
       .classed(
