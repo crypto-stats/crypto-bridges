@@ -411,8 +411,6 @@ export function drawGraph(
         'stroke-dasharray',
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
       )
-      .on('mouseover', onMouseOverSankeyFlow)
-      .on('mouseout', onMouseOut)
       .style('filter', function (d: any) {
         return PATHS_GLOW ? `url(#${GLOW_ID})` : 'none';
       });
@@ -426,10 +424,8 @@ export function drawGraph(
       )
       .classed('highlight', true)
       .classed('dash', true)
-      .on('mouseover', onMouseOverSankeyFlow)
-      .on('mouseout', onMouseOut)
       .style('fill', 'none')
-      .classed('path-selected', true)
+      .classed('path-default', true)
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
       .sort((a: any, b: any) => b.dy - a.dy)
@@ -517,7 +513,37 @@ export function drawGraph(
       onMouseOverFlow(path as IFlowLink);
     }
   }
-  function onMouseOverSankeyFlow(path: any) {}
+  function onMouseOverSankeyFlow(path: any) {
+    const source = path.source as {
+      id: string;
+      x: number;
+      y: number;
+      logo: string;
+    };
+    const target = path.target as {
+      id: string;
+      x: number;
+      y: number;
+      logo: string;
+    };
+    const links = linksContainer.selectAll('.sankeyLink');
+    console.log(links);
+    links
+      .classed(
+        'path-hovered',
+        (d: any) =>
+          (d.source.id === source.id && d.target.id === target.id) ||
+          (d.target.id === source.id && d.source.id === target.id),
+      )
+      .style('filter', function (d: any) {
+        return PATHS_GLOW &&
+          ((d.source.id === source.id && d.target.id === target.id) ||
+            (d.target.id === source.id && d.source.id === target.id) ||
+            select(this).classed('path-selected'))
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
+  }
 
   function onMouseOverFlow(path: IFlowLink) {
     const source = path.source as any as {
@@ -674,7 +700,8 @@ export function drawGraph(
       'path-hidden',
       (d: any) =>
         (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
-        (mode === GRAPH_MODES.FLOWS && d.type !== undefined),
+        (mode === GRAPH_MODES.FLOWS && d.type !== undefined) ||
+        mode === GRAPH_MODES.SANKEY,
     );
     tvlCircles.attr('r', getTvlRadius);
     circleGroups.classed('transparent', false);
