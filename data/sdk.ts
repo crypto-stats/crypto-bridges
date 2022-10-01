@@ -4,6 +4,7 @@ export function getSDK() {
   const sdk = new CryptoStatsSDK({
     mongoConnectionString: process.env.MONGO_CONNECTION_STRING,
     redisConnectionString: process.env.REDIS_URL,
+    executionTimeout: process.env.ADAPTER_EXECUTION_TIMEOUT ? parseInt(process.env.ADAPTER_EXECUTION_TIMEOUT) : 60,
   });
 
   sdk
