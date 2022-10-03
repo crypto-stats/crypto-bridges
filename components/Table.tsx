@@ -55,10 +55,8 @@ const Table = ({
                   >
                     <a>
                       <p className={styles.nameBox}>
-                        <span className={styles.vAlign}>
-                          {addLeadingZero(index + 1)}
-                        </span>
-                        <span className={styles.vAlign}>
+                        <span>{addLeadingZero(index + 1)}</span>
+                        <span>
                           <img
                             src={content.logo}
                             width="20"
@@ -66,7 +64,9 @@ const Table = ({
                             alt=""
                           />
                         </span>
-                        <span className={styles.vAlign}>{content.name || content.id.replaceAll('-', ' ')}</span>
+                        <span className={styles.name}>
+                          {content.name || content.id.replaceAll('-', ' ')}
+                        </span>
                       </p>
                       <p>{`${format(valueIn ? content.in : content.tvl)}`}</p>
                       <p>{`${format(valueIn ? content.tvl : content.in)}`}</p>

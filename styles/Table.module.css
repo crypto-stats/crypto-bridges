@@ -104,6 +104,10 @@
   );
 }
 
+.nameBox .name {
+  text-align: left;
+}
+
 .item a:hover {
   background: rgba(215, 80, 200, 0.5);
   scale: 1.006;
