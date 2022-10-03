@@ -435,8 +435,6 @@ export function drawGraph(
     links
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
-      .on('mouseover', onMouseOverSankeyFlow)
-      .on('mouseout', onMouseOut)
       .style(
         'stroke-dasharray',
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
@@ -453,16 +451,39 @@ export function drawGraph(
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
       )
       .classed('highlight', true)
+      .classed('dash', true)
       .style('fill', 'none')
       .classed('path-default', true)
-      .on('mouseover', onMouseOverSankeyFlow)
-      .on('mouseout', onMouseOut)
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
-      .sort((a: any, b: any) => b.dy - a.dy)
       .style('filter', function (d: any) {
         return PATHS_GLOW ? `url(#${GLOW_ID})` : 'none';
       });
+    const clickableLinks = linksContainer
+      .selectAll('.sankeyLinkClickable')
+      .data(data, (d: any) => `${d.source as number}${d.target as number}`);
+    clickableLinks.exit().remove();
+    clickableLinks
+      .attr('d', computeCustomSankeyPath)
+      .style('stroke-width', (d: any) =>
+        Math.max(MIN_PATH_CLICK_WIDTH, getPathWidth(d)),
+      )
+      .style('stroke', 'rgba(255,255,255,0)')
+      .on('mouseover', onMouseOverSankeyFlow)
+      .on('mouseout', onMouseOut);
+    clickableLinks
+      .enter()
+      .append('path')
+      .attr('class', 'sankeyLinkClickable')
+      .style('fill', 'none')
+      .style('stroke', 'rgba(255,255,255,0)')
+      .classed('transparent', true)
+      .on('mouseover', onMouseOverSankeyFlow)
+      .on('mouseout', onMouseOut)
+      .attr('d', computeCustomSankeyPath)
+      .style('stroke-width', (d: any) =>
+        Math.max(MIN_PATH_CLICK_WIDTH, getPathWidth(d)),
+      );
   }
 
   function updateSankeyNodes(
