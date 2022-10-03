@@ -29,6 +29,7 @@ export function getSDK() {
 
   sdk.cosmos.addChain('cosmoshub', 'https://cosmos-mainnet-rpc.allthatnode.com:26657/');
   sdk.cosmos.addChain('osmosis', 'https://osmosis-mainnet-rpc.allthatnode.com:26657');
+  sdk.ethers.addProvider('bsc', 'https://bscrpc.com');
 
   return sdk;
 } 
