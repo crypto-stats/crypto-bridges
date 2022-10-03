@@ -1084,11 +1084,14 @@ export function drawGraph(
   }
 
   function hideNodeIfWithinBoundaries(d: any) {
-    return !(
-      d.in >= chainImportBoundaries[0] &&
-      d.in <= chainImportBoundaries[1] &&
-      d.tvl >= chainExportBoundaries[0] &&
-      d.tvl <= chainExportBoundaries[1]
+    return (
+      mode !== GRAPH_MODES.SANKEY &&
+      !(
+        d.in >= chainImportBoundaries[0] &&
+        d.in <= chainImportBoundaries[1] &&
+        d.tvl >= chainExportBoundaries[0] &&
+        d.tvl <= chainExportBoundaries[1]
+      )
     );
   }
 
