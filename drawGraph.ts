@@ -792,21 +792,12 @@ export function drawGraph(
       'stroke-dasharray',
       mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
     );
-    paths.classed(
-      'transparent',
-      (d: any) =>
-        (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
-        (mode === GRAPH_MODES.FLOWS && d.type !== undefined),
-    );
-    clickablePaths.classed(
-      'path-hidden',
-      (d: any) =>
-        (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
-        (mode === GRAPH_MODES.FLOWS && d.type !== undefined) ||
-        mode === GRAPH_MODES.SANKEY,
-    );
+    paths.classed('transparent', hidePathIfChainsWithinBoundaries);
+    clickablePaths.classed('path-hidden', hidePathIfChainsWithinBoundaries);
+    circleGroups
+      .classed('transparent', false)
+      .classed('path-hidden', hideNodeIfWithinBoundaries);
     tvlCircles.attr('r', getTvlRadius);
-    circleGroups.classed('transparent', false);
   }
 
   function onClick(e: MouseEvent, node: IChainNode) {
@@ -1034,18 +1025,10 @@ export function drawGraph(
   }
 
   function ticked() {
-    tvlCircles
-      .attr('cx', computeCircleX)
-      .attr('cy', computeCircleY)
-      .classed('path-hidden', hideNodeIfWithinBoundaries);
-    images
-      .attr('x', computeImageX)
-      .attr('y', computeImageY)
-      .classed('path-hidden', hideNodeIfWithinBoundaries);
-    blurredImages
-      .attr('x', computeImageX)
-      .attr('y', computeImageY)
-      .classed('path-hidden', hideNodeIfWithinBoundaries);
+    tvlCircles.attr('cx', computeCircleX).attr('cy', computeCircleY);
+    images.attr('x', computeImageX).attr('y', computeImageY);
+    blurredImages.attr('x', computeImageX).attr('y', computeImageY);
+    circleGroups.classed('path-hidden', hideNodeIfWithinBoundaries);
     paths
       .attr('d', (d: any) =>
         d.type === undefined ? getFlowPath(d) : getBridgePath(d),
@@ -1062,7 +1045,8 @@ export function drawGraph(
         'dash-reverse',
         (d: any) => d.target.x - d.source.x <= 0 && d.type === undefined,
       )
-      .classed('path-hidden', hidePathIfChainsWithinBoundaries);
+      .classed('path-hidden', hidePathIfChainsWithinBoundaries)
+      .classed('transparent', hidePathIfChainsWithinBoundaries);
     clickablePaths
       .attr('d', (d: any) =>
         d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
@@ -1072,19 +1056,23 @@ export function drawGraph(
 
   function hidePathIfChainsWithinBoundaries(d: any) {
     return (
-      (mode === GRAPH_MODES.SANKEY &&
-        !(
-          d.target.in >= chainImportBoundaries[0] &&
-          d.target.in <= chainImportBoundaries[1] &&
-          d.target.tvl >= chainExportBoundaries[0] &&
-          d.target.tvl <= chainExportBoundaries[1] &&
-          d.source.in >= chainImportBoundaries[0] &&
-          d.source.in <= chainImportBoundaries[1] &&
-          d.source.tvl >= chainExportBoundaries[0] &&
-          d.source.tvl <= chainExportBoundaries[1]
-        )) ||
+      mode === GRAPH_MODES.SANKEY ||
+      (mode === GRAPH_MODES.FLOWS && d.type !== undefined) ||
       (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
-      (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
+      !pathNodesAreWithinBoundaries(d)
+    );
+  }
+
+  function pathNodesAreWithinBoundaries(d: any) {
+    return (
+      d.target.in >= chainImportBoundaries[0] &&
+      d.target.in <= chainImportBoundaries[1] &&
+      d.target.tvl >= chainExportBoundaries[0] &&
+      d.target.tvl <= chainExportBoundaries[1] &&
+      d.source.in >= chainImportBoundaries[0] &&
+      d.source.in <= chainImportBoundaries[1] &&
+      d.source.tvl >= chainExportBoundaries[0] &&
+      d.source.tvl <= chainExportBoundaries[1]
     );
   }
 
