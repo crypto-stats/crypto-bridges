@@ -50,6 +50,7 @@
     "rules": {
       "no-console": 1,
       "prettier/prettier": 0,
+      "@next/next/no-img-element": 0,
       "@typescript-eslint/no-floating-promises": 0,
       "@typescript-eslint/no-misused-promises": 0,
       "@typescript-eslint/no-unsafe-assignment": 0,

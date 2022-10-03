@@ -30,9 +30,19 @@ const routeChange = () => {
 Router.events.on('routeChangeComplete', routeChange);
 Router.events.on('routeChangeStart', routeChange);
 
+const simplePages = ['/404', '/_error'];
+
 function MyApp({ Component, pageProps, router }: AppProps) {
+  if (simplePages.includes(router.pathname)) {
+    return (
+      <>
+        <Component {...pageProps} />
+      </>
+    );
+  }
+
   if (!pageProps.data) {
-    throw new Error(`No data available on ${router.pathname}`)
+    throw new Error(`No data available on ${router.pathname}`);
   }
 
   return (
