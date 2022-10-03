@@ -1071,15 +1071,20 @@ export function drawGraph(
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
-    return !(
-      d.target.in >= chainImportBoundaries[0] &&
-      d.target.in <= chainImportBoundaries[1] &&
-      d.target.tvl >= chainExportBoundaries[0] &&
-      d.target.tvl <= chainExportBoundaries[1] &&
-      d.source.in >= chainImportBoundaries[0] &&
-      d.source.in <= chainImportBoundaries[1] &&
-      d.source.tvl >= chainExportBoundaries[0] &&
-      d.source.tvl <= chainExportBoundaries[1]
+    return (
+      (mode === GRAPH_MODES.SANKEY &&
+        !(
+          d.target.in >= chainImportBoundaries[0] &&
+          d.target.in <= chainImportBoundaries[1] &&
+          d.target.tvl >= chainExportBoundaries[0] &&
+          d.target.tvl <= chainExportBoundaries[1] &&
+          d.source.in >= chainImportBoundaries[0] &&
+          d.source.in <= chainImportBoundaries[1] &&
+          d.source.tvl >= chainExportBoundaries[0] &&
+          d.source.tvl <= chainExportBoundaries[1]
+        )) ||
+      (mode === GRAPH_MODES.BRIDGES && d.type === undefined) ||
+      (mode === GRAPH_MODES.FLOWS && d.type !== undefined)
     );
   }
 
