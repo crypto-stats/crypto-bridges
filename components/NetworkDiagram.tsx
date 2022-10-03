@@ -41,7 +41,13 @@ export type TooltipBridgeArg = IBridgeInput | false;
 
 export default function NetworkDiagram() {
   const router = useRouter();
-  const isImport = useStore((state) => state.flowsShowImport);
+  const { isImport, chainImportBoundaries, chainExportBoundaries } = useStore(
+    (state) => ({
+      isImport: state.flowsShowImport,
+      chainImportBoundaries: state.chainImportBoundaries,
+      chainExportBoundaries: state.chainExportBoundaries,
+    }),
+  );
   const [graph, setGraph] = useState<INetworkGraph>();
   const [showChainTooltip, setShowChainTooltip] =
     useState<TooltipChainArg>(false);
@@ -56,6 +62,18 @@ export default function NetworkDiagram() {
       if (graph.showsImports() !== isImport) {
         graph.showImports(isImport);
         graph.updateSelected(router.asPath);
+      }
+      if (
+        graph.importBoundaries()[0] !== chainImportBoundaries[0] ||
+        graph.importBoundaries()[1] !== chainImportBoundaries[1]
+      ) {
+        graph.updateImportBoundaries(chainImportBoundaries);
+      }
+      if (
+        graph.exportBoundaries()[0] !== chainExportBoundaries[0] ||
+        graph.exportBoundaries()[1] !== chainExportBoundaries[1]
+      ) {
+        graph.updateExportBoundaries(chainExportBoundaries);
       }
       return;
     }
@@ -110,6 +128,8 @@ export default function NetworkDiagram() {
     setShowBridgeTooltip,
     setShowChainTooltip,
     setShowFlowTooltip,
+    chainImportBoundaries,
+    chainExportBoundaries,
   ]);
 
   return (

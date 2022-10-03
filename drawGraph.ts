@@ -54,6 +54,10 @@ export interface INetworkGraph {
   updateSelected: (path: string) => void;
   showImports: (imports: boolean) => void;
   showsImports: () => boolean;
+  importBoundaries: () => [number, number];
+  updateImportBoundaries: (boundaries: [number, number]) => void;
+  exportBoundaries: () => [number, number];
+  updateExportBoundaries: (boundaries: [number, number]) => void;
 }
 
 enum DISTRIBUTION {
@@ -121,6 +125,8 @@ export function drawGraph(
   const computeSankeyLinkPath = sankeyLinkHorizontal();
   let isImportExport = false;
   let isImport = true;
+  const chainImportBoundaries: [number, number] = [0, 0];
+  const chainExportBoundaries: [number, number] = [0, 0];
   let LOGO_SIZE = 5;
 
   // initGui();
@@ -1007,9 +1013,18 @@ export function drawGraph(
   }
 
   function ticked() {
-    tvlCircles.attr('cx', computeCircleX).attr('cy', computeCircleY);
-    images.attr('x', computeImageX).attr('y', computeImageY);
-    blurredImages.attr('x', computeImageX).attr('y', computeImageY);
+    tvlCircles
+      .attr('cx', computeCircleX)
+      .attr('cy', computeCircleY)
+      .classed('path-hidden', hideNodeIfWithinBoundaries);
+    images
+      .attr('x', computeImageX)
+      .attr('y', computeImageY)
+      .classed('path-hidden', hideNodeIfWithinBoundaries);
+    blurredImages
+      .attr('x', computeImageX)
+      .attr('y', computeImageY)
+      .classed('path-hidden', hideNodeIfWithinBoundaries);
     paths
       .attr('d', (d: any) =>
         d.type === undefined ? getFlowPath(d) : getBridgePath(d),
@@ -1025,9 +1040,34 @@ export function drawGraph(
       .classed(
         'dash-reverse',
         (d: any) => d.target.x - d.source.x <= 0 && d.type === undefined,
-      );
-    clickablePaths.attr('d', (d: any) =>
-      d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
+      )
+      .classed('path-hidden', hidePathIfChainsWithinBoundaries);
+    clickablePaths
+      .attr('d', (d: any) =>
+        d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
+      )
+      .classed('path-hidden', hidePathIfChainsWithinBoundaries);
+  }
+
+  function hidePathIfChainsWithinBoundaries(d: any) {
+    return !(
+      d.target.in >= chainImportBoundaries[0] &&
+      d.target.in <= chainImportBoundaries[1] &&
+      d.target.tvl >= chainExportBoundaries[0] &&
+      d.target.tvl <= chainExportBoundaries[1] &&
+      d.source.in >= chainImportBoundaries[0] &&
+      d.source.in <= chainImportBoundaries[1] &&
+      d.source.tvl >= chainExportBoundaries[0] &&
+      d.source.tvl <= chainExportBoundaries[1]
+    );
+  }
+
+  function hideNodeIfWithinBoundaries(d: any) {
+    return !(
+      d.in >= chainImportBoundaries[0] &&
+      d.in <= chainImportBoundaries[1] &&
+      d.tvl >= chainExportBoundaries[0] &&
+      d.tvl <= chainExportBoundaries[1]
     );
   }
 
@@ -1129,9 +1169,33 @@ export function drawGraph(
     return isImport;
   }
 
+  function importBoundaries() {
+    return chainImportBoundaries;
+  }
+
+  function updateImportBoundaries(boundaries: [number, number]) {
+    chainImportBoundaries[0] = boundaries[0];
+    chainImportBoundaries[1] = boundaries[1];
+    ticked();
+  }
+
+  function exportBoundaries() {
+    return chainExportBoundaries;
+  }
+
+  function updateExportBoundaries(boundaries: [number, number]) {
+    chainExportBoundaries[0] = boundaries[0];
+    chainExportBoundaries[1] = boundaries[1];
+    ticked();
+  }
+
   return {
     updateSelected,
     showImports,
     showsImports,
+    importBoundaries,
+    updateImportBoundaries,
+    exportBoundaries,
+    updateExportBoundaries,
   };
 }

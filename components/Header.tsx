@@ -106,9 +106,8 @@ export default function Header() {
   const [isHorizontal, setHorizontal] = useState(false);
   const [modalIsOpen, setModalOpen] = useState(false);
   const [filters, setFilters] = useState<string[]>([]);
-  const openFilters = () => setModalOpen(true);
   const closeFilters = () => setModalOpen(false);
-  const resetFilters = (e) => {
+  const resetFilters = (e: any) => {
     e.stopPropagation();
     setFilters([]);
   };

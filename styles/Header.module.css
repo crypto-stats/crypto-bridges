@@ -81,6 +81,7 @@
   font-weight: 400;
   font-size: 12px;
   margin: 0;
+  letter-spacing: 0.16em;
 }
 .filter .inputRange {
   padding: 0 10px;
@@ -92,7 +93,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 32px 24px;
+  padding: 30px 40px;
   gap: 32px;
   background: #283b6d;
   box-sizing: border-box;
@@ -124,6 +125,10 @@
   cursor: pointer;
   gap: 5px;
   width: 125px;
+  transition: all 200ms ease;
+}
+.filterBox:hover {
+  background: #344a80;
 }
 .filterBoxContent {
   display: flex;
@@ -146,10 +151,16 @@
   width: 60px;
   height: 60px;
   margin: 0 0 0 calc(50% - 30px);
-  border: solid 3px #283b6d;
+  border: none;
   color: #283b6d;
   background: #344d8b;
   cursor: pointer;
+  transition: all 150ms ease;
+  box-shadow: 0 0 10px rgba(69, 94, 160, 0);
+}
+.closeFiltersButton:hover {
+  background: #455ea0;
+  box-shadow: 0 0 10px rgba(69, 94, 160, 1);
 }
 .removeFilters {
   padding: 0;
