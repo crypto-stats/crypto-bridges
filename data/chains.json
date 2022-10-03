@@ -1,6 +1,13 @@
 {
   "chains": [
     {
+      "id": "acala",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmW4JDMcuP3kxNPYXgoPhAzREM48sCX2yutBPPBp72BbbU",
+      "description": "Acala is a DeFi-focused blockchain in the Polkadot ecosystem, featuring an extended version of the EVM and a native stablecoin, aUSD.",
+      "website": "https://acala.network/",
+      "whitepaper": "https://github.com/AcalaNetwork/Acala-white-paper/blob/master/Acala_Whitepaper.pdf"
+    },
+    {
       "id": "axelar",
       "name": "Axelar Chain",
       "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki",
