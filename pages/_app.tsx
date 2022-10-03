@@ -31,6 +31,10 @@ Router.events.on('routeChangeComplete', routeChange);
 Router.events.on('routeChangeStart', routeChange);
 
 function MyApp({ Component, pageProps, router }: AppProps) {
+  if (!pageProps.data) {
+    throw new Error(`No data available on ${router.pathname}`)
+  }
+
   return (
     <>
       <HtmlHead />
