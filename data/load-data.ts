@@ -27,6 +27,11 @@ export async function loadData(): Promise<IData> {
     'currentValueBridgedAToB',
     'currentValueBridgedBToA',
   ]);
+  for (const flow of flows) {
+    for (let errorQuery in flow.errors) {
+      console.warn(flow.errors[errorQuery]);
+    }
+  }
   removeIcons(flows);
 
   const bridges: any = await collection.getBundles();

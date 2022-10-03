@@ -1,5 +1,11 @@
 import { CryptoStatsSDK } from "@cryptostats/sdk";
 
+const CACHED_QUERIES = [
+  'currentValueBridged',
+  'currentValueBridgedAToB',
+  'currentValueBridgedBToA',
+];
+
 export function getSDK() {
   const sdk = new CryptoStatsSDK({
     mongoConnectionString: process.env.MONGO_CONNECTION_STRING,
@@ -7,10 +13,11 @@ export function getSDK() {
     executionTimeout: process.env.ADAPTER_EXECUTION_TIMEOUT ? parseInt(process.env.ADAPTER_EXECUTION_TIMEOUT) : 60,
   });
 
+  // Hourly caches
   sdk
     .getCollection('bridged-value')
     .setCacheKeyResolver((_id: string, query: string, params: string[]) =>
-      query.indexOf('currentValueBridged') === 0 ? Math.floor(Date.now() / 1000 / 60 / 60).toString() : null
+      CACHED_QUERIES.includes(query) ? Math.floor(Date.now() / 1000 / 60 / 60).toString() : null
     );
 
     if (process.env.ALCHEMY_ETH_KEY) {
@@ -19,6 +26,9 @@ export function getSDK() {
   } else {
     console.error('Alchemy key not set');
   }
+
+  sdk.cosmos.addChain('cosmoshub', 'https://cosmos-mainnet-rpc.allthatnode.com:26657/');
+  sdk.cosmos.addChain('osmosis', 'https://osmosis-mainnet-rpc.allthatnode.com:26657');
 
   return sdk;
 } 
