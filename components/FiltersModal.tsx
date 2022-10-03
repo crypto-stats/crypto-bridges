@@ -52,22 +52,34 @@ export const FiltersModal = ({
     chainExportBoundaries: state.chainExportBoundaries,
     setChainExports: state.setChainExports,
   }));
-  const convertedData = convertDataForGraph(data);
-  const bridgesFlow = convertedData.links
-    .filter((link) => (link as any).bridge !== undefined)
-    .map((link) => link.flow);
-  const chainsTvl = convertedData.nodes.map((node) => node.tvl);
-  const boundaries = useMemo(
-    () => ({
-      minChainImport: 0,
-      maxChainImport: Math.max(...chainsTvl),
-      minChainExport: 0,
-      maxChainExport: Math.max(...chainsTvl),
-      minBridgeFlow: Math.min(...bridgesFlow),
-      maxBridgeFlow: Math.max(...bridgesFlow),
-    }),
-    [bridgesFlow, chainsTvl],
-  );
+  const { boundaries, importMarks, exportMarks } = useMemo(() => {
+    const convertedData = convertDataForGraph(data);
+    const bridgesFlow = convertedData.links
+      .filter((link) => (link as any).bridge !== undefined)
+      .map((link) => link.flow);
+    const chainsTvl = convertedData.nodes.map((node) => node.tvl);
+    return {
+      importMarks: convertedData.nodes.map((node) => ({
+        label: node.name,
+        // The material UI slider internally assigns `key={value}` to the dots,
+        // hence add randomness to be sure they're never the same.
+        value: node.in + Math.random() / 1000,
+      })),
+      exportMarks: convertedData.nodes.map((node) => ({
+        label: node.name,
+        // See above
+        value: node.tvl + Math.random() / 1000,
+      })),
+      boundaries: {
+        minChainImport: 0,
+        maxChainImport: Math.max(...chainsTvl),
+        minChainExport: 0,
+        maxChainExport: Math.max(...chainsTvl),
+        minBridgeFlow: Math.min(...bridgesFlow),
+        maxBridgeFlow: Math.max(...bridgesFlow),
+      },
+    };
+  }, [data]);
   const updateChainImport = (e: any, values: [number, number]) => {
     if (
       values[0] === boundaries.minChainImport &&
@@ -134,6 +146,7 @@ export const FiltersModal = ({
               formatShort(value, 1)
             }
             scale={(x) => x}
+            marks={importMarks}
             min={boundaries.minChainImport}
             max={boundaries.maxChainImport}
           />
@@ -150,6 +163,7 @@ export const FiltersModal = ({
               formatShort(value, 1)
             }
             scale={(x) => x}
+            marks={exportMarks}
             min={boundaries.minChainExport}
             max={boundaries.maxChainExport}
           />
