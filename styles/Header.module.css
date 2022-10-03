@@ -96,6 +96,7 @@
   gap: 32px;
   background: #283b6d;
   box-sizing: border-box;
+  z-index: 1;
 }
 .filtersModalHorizontal {
   position: absolute;
@@ -111,7 +112,6 @@
   bottom: 0;
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -5px 15px #000;
-  z-index: 1;
 }
 .filterBox {
   background: #283b6d;
@@ -119,9 +119,11 @@
   padding: 4px 16px 4px 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   cursor: pointer;
   gap: 5px;
+  width: 125px;
 }
 .filterBoxContent {
   display: flex;

@@ -8,7 +8,7 @@ import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/Header.module.css';
 import { needsLandscape } from '../utils';
-import { Filters } from './Filters';
+import { FiltersModal } from './FiltersModal';
 
 const FlowBridge = () => {
   const router = useRouter();
@@ -105,12 +105,12 @@ export default function Header() {
   const router = useRouter();
   const [isHorizontal, setHorizontal] = useState(false);
   const [modalIsOpen, setModalOpen] = useState(false);
-  const [filterCount, setFilterCount] = useState(2);
+  const [filters, setFilters] = useState<string[]>([]);
   const openFilters = () => setModalOpen(true);
   const closeFilters = () => setModalOpen(false);
   const resetFilters = (e) => {
     e.stopPropagation();
-    setFilterCount(0);
+    setFilters([]);
   };
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -128,6 +128,7 @@ export default function Header() {
     window.addEventListener('resize', updateToSidePanel);
     return () => window.removeEventListener('resize', updateToSidePanel);
   }, [setHorizontal]);
+  const showFilters = !router.pathname.includes('chain');
   return (
     <header
       className={isHorizontal ? styles.headerHorizontal : styles.header}
@@ -178,26 +179,34 @@ export default function Header() {
             <FlowBridge />
           )}
         </div>
-        <div
-          className={styles.filterBox}
-          onClick={() => setModalOpen(!modalIsOpen)}
-        >
-          <div className={styles.filterBoxContent}>
-            <img src="/filter.svg" alt="filter" height="15" />
-            <p>Filters {filterCount > 0 ? <b>({filterCount})</b> : null}</p>
+        {showFilters && (
+          <div
+            className={styles.filterBox}
+            onClick={() => setModalOpen(!modalIsOpen)}
+          >
+            <div className={styles.filterBoxContent}>
+              <img src="/filter.svg" alt="filter" height="15" />
+              <p>
+                Filters {filters.length > 0 ? <b>({filters.length})</b> : null}
+              </p>
+            </div>
+            {filters.length > 0 && (
+              <button className={styles.removeFilters} onClick={resetFilters}>
+                ×
+              </button>
+            )}
           </div>
-          {filterCount > 0 && (
-            <button className={styles.removeFilters} onClick={resetFilters}>
-              ×
-            </button>
-          )}
-        </div>
+        )}
       </div>
-      <Filters
-        isHorizontal={isHorizontal}
-        show={modalIsOpen}
-        closeFilters={closeFilters}
-      />
+      {showFilters && (
+        <FiltersModal
+          isHorizontal={isHorizontal}
+          show={modalIsOpen}
+          closeFilters={closeFilters}
+          setFilters={setFilters}
+          filters={filters}
+        />
+      )}
     </header>
   );
 }

@@ -1,17 +1,21 @@
 import Slider from '@mui/material/Slider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useData } from '../data/data-context';
 import styles from '../styles/Header.module.css';
 import { convertDataForGraph, formatShort } from '../utils';
 
-export const Filters = ({
+export const FiltersModal = ({
   isHorizontal,
   show,
   closeFilters,
+  setFilters,
+  filters,
 }: {
   isHorizontal: boolean;
   show: boolean;
   closeFilters: () => void;
+  setFilters: (filters: string[]) => void;
+  filters: string[];
 }) => {
   const data = useData();
   const convertedData = convertDataForGraph(data);
@@ -31,8 +35,29 @@ export const Filters = ({
     boundaries.minChainImport,
     boundaries.maxChainImport,
   ]);
-  const updateChainImport = (e: any, values: number[]) =>
+  const updateChainImport = (e: any, values: number[]) => {
+    if (
+      values[0] === boundaries.minChainImport &&
+      values[1] === boundaries.maxChainImport
+    ) {
+      setFilters(filters.filter((name) => name !== 'chainImport'));
+    } else if (!filters.includes('chainImport')) {
+      setFilters([...filters, 'chainImport']);
+    }
     setImportBoundaries(values);
+  };
+  useEffect(() => {
+    if (
+      (importBoundaries[0] !== boundaries.minChainImport ||
+        importBoundaries[1] !== boundaries.maxChainImport) &&
+      !filters.includes('chainImport')
+    ) {
+      setImportBoundaries([
+        boundaries.minChainImport,
+        boundaries.maxChainImport,
+      ]);
+    }
+  }, [filters]);
   return show ? (
     <div
       className={
