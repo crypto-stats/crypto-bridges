@@ -6,7 +6,8 @@ import { BridgeCategory } from '../data/types';
 import { drawGraph, INetworkGraph } from '../drawGraph';
 import { useStore } from '../store';
 import style from '../styles/NetworkDiagram.module.css';
-import { convertDataForGraph, formatShort } from '../utils';
+import { convertDataForGraph } from '../utils';
+import { Tooltip } from './Tooltip';
 
 interface IChainInput {
   x: number;
@@ -135,99 +136,11 @@ export default function NetworkDiagram() {
   return (
     <div className={style.networkDiagram}>
       <svg ref={svg}></svg>
-      {showChainTooltip !== false && (
-        <div
-          className={style.chainTooltip}
-          style={{
-            position: 'absolute',
-            top: `${showChainTooltip.y}px`,
-            left: `${showChainTooltip.x}px`,
-          }}
-        >
-          <div className={style.chainTooltipTitle}>
-            <img
-              src={showChainTooltip.logo}
-              alt={`${showChainTooltip.chain} logo`}
-              width={20}
-              height={20}
-            />
-            <p>{showChainTooltip.chain}</p>
-          </div>
-          <div className={style.chainData}>
-            <div className={style.chainDataInput}>
-              <p>Exported</p>
-              <p className={style.value}>
-                {formatShort(showChainTooltip.exports)}
-              </p>
-            </div>
-            <div className={style.chainDataInput}>
-              <p>Imported</p>
-              <p className={style.value}>
-                {formatShort(showChainTooltip.imports)}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-      {showFlowTooltip !== false && (
-        <div
-          className={style.flowTooltip}
-          style={{
-            position: 'absolute',
-            top: `${showFlowTooltip.y}px`,
-            left: `${showFlowTooltip.x}px`,
-          }}
-        >
-          <div className={style.flowTooltipTitle}>
-            <img
-              src={showFlowTooltip.logo1}
-              alt={`${showFlowTooltip.chain1} logo`}
-              width={20}
-              height={20}
-            />
-            <div className={style.flowArrow}>
-              <span className={style.flowArrowTip}></span>
-            </div>
-            <img
-              src={showFlowTooltip.logo2}
-              alt={`${showFlowTooltip.chain2} logo`}
-              width={20}
-              height={20}
-            />
-          </div>
-          <div className={style.flowData}>
-            <p>Value Bridged</p>
-            <p className={style.value}>{formatShort(showFlowTooltip.value)}</p>
-          </div>
-        </div>
-      )}
-      {showBridgeTooltip !== false && (
-        <div
-          className={style.bridgeTooltip}
-          style={{
-            position: 'absolute',
-            top: `${showBridgeTooltip.y}px`,
-            left: `${showBridgeTooltip.x}px`,
-          }}
-        >
-          <div className={style.flowTooltipTitle}>
-            <img
-              src={showBridgeTooltip.logo}
-              alt={`${showBridgeTooltip.name} logo`}
-              width={20}
-              height={20}
-            />
-            <p>{showBridgeTooltip.name}</p>
-            <p className={style.bridgeType}>{showBridgeTooltip.type}</p>
-          </div>
-          <div className={style.flowData}>
-            <p>Value Bridged</p>
-            <p className={style.value}>
-              {formatShort(showBridgeTooltip.value)}
-            </p>
-          </div>
-        </div>
-      )}
+      <Tooltip
+        showChainTooltip={showChainTooltip}
+        showFlowTooltip={showFlowTooltip}
+        showBridgeTooltip={showBridgeTooltip}
+      />
     </div>
   );
 }
