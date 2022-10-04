@@ -8,20 +8,32 @@ import FlowBox, { IChainFlow } from './FlowBox';
 
 interface IBridgeProps {
   data: IData;
-  name: string;
+  chainId: string;
 }
 
-const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
+const ChainSpecifics = ({ data, chainId }: IBridgeProps): ReactElement => {
   const isImport = useStore((state) => state.flowsShowImport);
-  const chain = data.chains.find((chain) => chain.id === name);
+
+  const findChain = (id: string) => data.chains.find(chain => chain.id === id);
+  const getChainName = (id: string) => {
+    const chain = findChain(id);
+    if (!chain) {
+      return null;
+    }
+    return chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1);
+  }
+
+  const chain = findChain(chainId);
   if (chain === undefined) return <div>Empty!</div>;
-  const chainName = chain.name || chain.id.replaceAll('-', ' ');
+
+  const chainName = getChainName(chainId);
+
   const computeTVLForChain = () => {
     let tvl = 0;
     data.flows.forEach((flow) => {
-      if (flow.metadata.chainA === name)
+      if (flow.metadata.chainA === chainId)
         tvl += flow.results.currentValueBridgedAToB ?? 0;
-      if (flow.metadata.chainB === name)
+      if (flow.metadata.chainB === chainId)
         tvl += flow.results.currentValueBridgedBToA ?? 0;
     });
     return format(tvl);
@@ -29,13 +41,13 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
   const computeChainFlows = () => {
     const flows: IChainFlow[] = [];
     data.flows.forEach((flow) => {
-      const isA = flow.metadata.chainA === name;
-      const isB = flow.metadata.chainB === name;
+      const isA = flow.metadata.chainA === chainId;
+      const isB = flow.metadata.chainB === chainId;
       if (!(isA || isB)) {
         return;
       }
       const bridge = {
-        name: flow.metadata.name?.toLowerCase(),
+        name: flow.metadata.name,
         bundle: flow.bundle,
         logo:
           data.bridges.find((bridge) => bridge.id === flow.bundle)?.metadata
@@ -60,13 +72,8 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
       );
       if (otherChainIndex === -1) {
         flows.push({
-          name: isA ? flow.metadata.chainB : flow.metadata.chainA,
-          logo:
-            data.chains.find(
-              (item) =>
-                item.name ===
-                (isA ? flow.metadata.chainB : flow.metadata.chainA),
-            )?.logo ?? '',
+          name: getChainName(isA ? flow.metadata.chainB : flow.metadata.chainA) || 'Unknown',
+          logo: findChain(isA ? flow.metadata.chainB : flow.metadata.chainA)?.logo ?? '',
           total: bridge.value,
           bridges: [bridge],
         });
@@ -97,7 +104,7 @@ const ChainSpecifics = ({ data, name }: IBridgeProps): ReactElement => {
         <FlowBox
           data={data}
           logo={chain.logo}
-          name={chainName}
+          name={chainName || 'Unknown'}
           flows={computeChainFlows()}
         />
       </div>

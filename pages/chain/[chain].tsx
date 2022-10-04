@@ -20,7 +20,7 @@ const Chain: NextPage<IChainProps> = ({ data, chain }: IChainProps) => {
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <ChainSpecifics data={data} name={chain} />
+        <ChainSpecifics data={data} chainId={chain} />
       </section>
     </Motion>
   );

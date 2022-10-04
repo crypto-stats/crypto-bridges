@@ -22,7 +22,6 @@
 .flowBoxChain {
   display: flex;
   gap: 8px;
-  text-transform: capitalize;
   align-items: center;
 }
 .flowBoxChains {
@@ -77,7 +76,6 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
-  text-transform: capitalize;
   width: 100%;
 }
 .flowBoxRow a:hover {

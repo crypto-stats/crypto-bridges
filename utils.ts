@@ -58,7 +58,7 @@ export function convertDataForGraph(data: IData): IGraphData {
       }
       graphData.nodes.push({
         id: chain.id,
-        name: chain.name || chain.id.replaceAll('-', ' '),
+        name: chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1),
         logo: chain.logo,
         tvl: flow.results.currentValueBridgedAToB || 0,
         in: flow.results.currentValueBridgedBToA || 0,
@@ -84,7 +84,7 @@ export function convertDataForGraph(data: IData): IGraphData {
       }
       graphData.nodes.push({
         id: chain.id,
-        name: chain.name || chain.id.replaceAll('-', ' '),
+        name: chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1),
         logo: chain.logo,
         tvl: flow.results.currentValueBridgedBToA || 0,
         in: flow.results.currentValueBridgedAToB || 0,
