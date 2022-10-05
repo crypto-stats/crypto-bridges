@@ -103,7 +103,9 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
           <p className={styles.nodeName}>{chainName}</p>
           {chain.website && (
             <Link passHref href={chain.website}>
-              <img src="/website.svg" alt="Website" width={24} height={24} />
+              <a className={styles.link}>
+                <img src="/website.svg" alt="Website" width={24} height={24} />
+              </a>
             </Link>
           )}
         </div>

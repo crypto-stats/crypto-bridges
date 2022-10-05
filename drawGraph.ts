@@ -65,12 +65,6 @@ enum DISTRIBUTION {
   LINEAR,
 }
 
-// This d3 network graph implements dynamic node sizes:
-// we want to apply min and max node surfaces to control the graph's clarity
-// and the node repulsion force in the d3 simulation force.
-// Here we find the areas distribution curve parameters given min/max
-// input values and arbitrary min/max node areas as a share of the available
-// surface, so that the proportions are consistent on all possible resize,s.
 export function drawGraph(
   svgRef: RefObject<SVGSVGElement>,
   data: IGraphData,
@@ -232,7 +226,7 @@ export function drawGraph(
   const tvlCircles = circleGroups
     .append('circle')
     .attr('r', getTvlRadius)
-    .style('fill', '#311c42')
+    .style('fill', '#412957')
     .style('cursor', 'pointer')
     .on('click', onClick)
     .on('mouseover', onMouseOverNode)
@@ -453,7 +447,7 @@ export function drawGraph(
         mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
       )
       .style('filter', function (d: any) {
-        return PATHS_GLOW ? `url(#${GLOW_ID})` : 'none';
+        return PATHS_GLOW && d.y0 !== d.y1 ? `url(#${GLOW_ID})` : 'none';
       });
     links
       .enter()
@@ -470,7 +464,7 @@ export function drawGraph(
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
       .style('filter', function (d: any) {
-        return PATHS_GLOW ? `url(#${GLOW_ID})` : 'none';
+        return PATHS_GLOW && d.y0 !== d.y1 ? `url(#${GLOW_ID})` : 'none';
       });
     const clickableLinks = linksContainer
       .selectAll('.sankeyLinkClickable')
@@ -603,6 +597,7 @@ export function drawGraph(
       )
       .style('filter', function (d: any) {
         return PATHS_GLOW &&
+          d.y0 !== d.y1 &&
           ((d.source.id === source.id && d.target.id === target.id) ||
             (d.target.id === source.id && d.source.id === target.id) ||
             select(this).classed('path-selected'))
@@ -790,6 +785,7 @@ export function drawGraph(
         })
         .style('filter', function (d: any) {
           return PATHS_GLOW &&
+            d.y0 !== d.y1 &&
             (d.source.id === node.id || d.target.id === node.id)
             ? `url(#${GLOW_ID})`
             : 'none';

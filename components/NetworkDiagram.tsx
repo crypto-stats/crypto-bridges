@@ -84,27 +84,27 @@ export default function NetworkDiagram() {
       // components and their typings.
       svg.current.innerHTML = `
       <defs>
-      <filter id="${GLOW_ID}" width="300%" height="300%" x="-100%" y="-100%">
-        <fegaussianblur
-          class="blur"
-          result="coloredBlur"
-          stddeviation="3"
-        ></fegaussianblur>
-        <femerge>
+        <filter id="${GLOW_ID}" width="300%" height="300%" x="-100%" y="-100%">
+          <fegaussianblur
+            class="blur"
+            result="coloredBlur"
+            stddeviation="3"
+          ></fegaussianblur>
+          <femerge>
+            <femergenode in="coloredBlur"></femergenode>
+            <femergenode in="SourceGraphic"></femergenode>
+          </femerge>
+        </filter>
+        <filter id="${IMAGE_GLOW_ID}" width="300%" height="300%" x="-100%" y="-100%">
+          <fegaussianblur
+            class="blur"
+            result="coloredBlur"
+            stddeviation="10"
+          ></fegaussianblur>
+          <femerge>
           <femergenode in="coloredBlur"></femergenode>
-          <femergenode in="SourceGraphic"></femergenode>
-        </femerge>
-      </filter>
-      <filter id="${IMAGE_GLOW_ID}" width="300%" height="300%" x="-100%" y="-100%">
-        <fegaussianblur
-          class="blur"
-          result="coloredBlur"
-          stddeviation="10"
-        ></fegaussianblur>
-        <femerge>
-        <femergenode in="coloredBlur"></femergenode>
-        </femerge>
-      </filter>
+          </femerge>
+        </filter>
       </defs>`;
     }
     const convertedData = convertDataForGraph(data);

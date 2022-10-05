@@ -60,6 +60,9 @@
     rgba(255, 255, 255, 0) 70%
   );
 }
+.link img {
+  background: none;
+}
 
 .nodeSpecifics p {
   margin: 0;

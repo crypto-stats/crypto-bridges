@@ -25,7 +25,6 @@ svg text {
   transition: fill 400ms ease, stroke 400ms ease, opacity 400ms ease;
 }
 .circle-default {
-  fill: #304273;
   stroke: #334272;
   stroke-width: 2;
 }
