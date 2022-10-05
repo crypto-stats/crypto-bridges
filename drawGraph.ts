@@ -128,6 +128,7 @@ export function drawGraph(
   const chainImportBoundaries: [number, number] = [0, 0];
   const chainExportBoundaries: [number, number] = [0, 0];
   let LOGO_SIZE = 5;
+  let bridgeSelected: IBridgeLink | undefined;
 
   // initGui();
 
@@ -337,6 +338,7 @@ export function drawGraph(
   }
 
   function highlightBridge(link?: IBridgeLink) {
+    bridgeSelected = link;
     if (link === undefined) {
       return unselectAll();
     }
@@ -345,7 +347,13 @@ export function drawGraph(
         'path-selected',
         (d: any) => d.bridge === link.bridge && d.type !== undefined,
       )
-      .classed('transparent', (d: any) => d.bridge !== link.bridge)
+      .classed(
+        'transparent',
+        (d: any) =>
+          (bridgeSelected !== undefined &&
+            d.bridge !== bridgeSelected.bridge) ||
+          hidePathIfChainsWithinBoundaries(d),
+      )
       .style('filter', (d: any) =>
         PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
           ? `url(#${GLOW_ID})`
@@ -366,7 +374,12 @@ export function drawGraph(
       (d: any) => !chainsServed.includes(d.id as string),
     );
     blurredImages.classed('blurred-image-selected', false);
-    clickablePaths.classed('path-hidden', (d: any) => d.bridge !== link.bridge);
+    clickablePaths.classed(
+      'path-hidden',
+      (d: any) =>
+        (bridgeSelected !== undefined && d.bridge !== bridgeSelected.bridge) ||
+        hidePathIfChainsWithinBoundaries(d),
+    );
     linksContainer.classed('transparent', true).classed('path-hidden', true);
     nodesContainer.classed('transparent', true).classed('path-hidden', true);
   }
@@ -1058,12 +1071,24 @@ export function drawGraph(
         (d: any) => d.target.x - d.source.x <= 0 && d.type === undefined,
       )
       .classed('path-hidden', hidePathIfChainsWithinBoundaries)
-      .classed('transparent', hidePathIfChainsWithinBoundaries);
+      .classed(
+        'transparent',
+        (d: any) =>
+          (bridgeSelected !== undefined &&
+            d.bridge !== bridgeSelected.bridge) ||
+          hidePathIfChainsWithinBoundaries(d),
+      );
     clickablePaths
       .attr('d', (d: any) =>
         d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
       )
-      .classed('path-hidden', hidePathIfChainsWithinBoundaries);
+      .classed(
+        'path-hidden',
+        (d: any) =>
+          (bridgeSelected !== undefined &&
+            d.bridge !== bridgeSelected.bridge) ||
+          hidePathIfChainsWithinBoundaries(d),
+      );
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
