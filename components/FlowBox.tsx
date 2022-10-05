@@ -80,9 +80,9 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
               <span
                 className={styles.valueBar}
                 style={{
-                  width: `calc(${Math.round(
+                  width: `${Math.round(
                     (100 * (flow.total - minValue)) / (maxValue - minValue),
-                  )}% + 20px)`,
+                  )}%`,
                 }}
               />
               <p>{format(flow.total)}</p>
