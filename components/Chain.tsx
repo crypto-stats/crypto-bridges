@@ -1,7 +1,8 @@
+import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { IData } from '../data/types';
 import { useStore } from '../store';
-import styles from '../styles/NodeSpecifics.module.css';
+import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
 import DataBox from './DataBox';
 import FlowBox, { IChainFlow } from './FlowBox';
@@ -14,14 +15,17 @@ interface IBridgeProps {
 const ChainSpecifics = ({ data, chainId }: IBridgeProps): ReactElement => {
   const isImport = useStore((state) => state.flowsShowImport);
 
-  const findChain = (id: string) => data.chains.find(chain => chain.id === id);
+  const findChain = (id: string) =>
+    data.chains.find((chain) => chain.id === id);
   const getChainName = (id: string) => {
     const chain = findChain(id);
     if (!chain) {
       return null;
     }
-    return chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1);
-  }
+    return (
+      chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1)
+    );
+  };
 
   const chain = findChain(chainId);
   if (chain === undefined) return <div>Empty!</div>;
@@ -72,8 +76,12 @@ const ChainSpecifics = ({ data, chainId }: IBridgeProps): ReactElement => {
       );
       if (otherChainIndex === -1) {
         flows.push({
-          name: getChainName(isA ? flow.metadata.chainB : flow.metadata.chainA) || 'Unknown',
-          logo: findChain(isA ? flow.metadata.chainB : flow.metadata.chainA)?.logo ?? '',
+          name:
+            getChainName(isA ? flow.metadata.chainB : flow.metadata.chainA) ||
+            'Unknown',
+          logo:
+            findChain(isA ? flow.metadata.chainB : flow.metadata.chainA)
+              ?.logo ?? '',
           total: bridge.value,
           bridges: [bridge],
         });
@@ -93,9 +101,13 @@ const ChainSpecifics = ({ data, chainId }: IBridgeProps): ReactElement => {
         <div className={styles.nodeInfo}>
           <img src={chain.logo} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{chainName}</p>
+          {chain.website && (
+            <Link passHref href={chain.website}>
+              <img src="/website.svg" alt="Website" width={24} height={24} />
+            </Link>
+          )}
         </div>
         {chain.description && <p>{chain.description}</p>}
-        {chain.website && <a href={chain.website}>Website</a>}
       </div>
       <div className={styles.nodeItem}>
         <DataBox caption="Total value bridged" value={computeTVLForChain()} />
