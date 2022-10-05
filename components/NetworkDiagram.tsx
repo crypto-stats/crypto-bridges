@@ -25,7 +25,8 @@ interface IFlowInput {
   chain2: string;
   logo1: string;
   logo2: string;
-  value: number;
+  value12: number;
+  value21?: number;
 }
 interface IBridgeInput {
   x: number;

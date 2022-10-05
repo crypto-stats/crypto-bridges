@@ -26,6 +26,20 @@
   text-transform: uppercase;
   letter-spacing: 0.16em;
 }
+.flowTooltipFlex {
+  display: flex;
+  gap: 30px;
+  flex-direction: row;
+  justify-content: center;
+}
+.flowTooltipSingle {
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.flowTooltipSingle:nth-child(2) {
+  text-align: right;
+}
 .chainData {
   display: flex;
   justify-content: space-between;

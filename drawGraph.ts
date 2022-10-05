@@ -603,7 +603,7 @@ export function drawGraph(
     showFlowTooltip({
       x: (targetX - sourceX) / 2 + sourceX,
       y: (targetY - sourceY) / 2 + sourceY,
-      value: path.value,
+      value12: path.value,
       chain1: source.id,
       chain2: target.id,
       logo1: source.logo,
@@ -636,11 +636,23 @@ export function drawGraph(
       y: number;
       logo: string;
     };
+    let value21 = undefined;
+    paths.each((d: any) => {
+      if (
+        d.source.id === target.id &&
+        d.target.id === source.id &&
+        d.flow > 0
+      ) {
+        value21 = d.flow;
+        console.log(value21);
+      }
+    });
     if (mode === GRAPH_MODES.FLOWS) {
       showFlowTooltip({
         x: (target.x - source.x) / 2 + source.x,
         y: (target.y - source.y) / 2 + source.y,
-        value: path.flow,
+        value12: path.flow,
+        value21,
         chain1: source.id,
         chain2: target.id,
         logo1: source.logo,

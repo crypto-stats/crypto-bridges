@@ -51,9 +51,6 @@
   align-items: center;
   flex-direction: column-reverse;
 }
-.onelineVertical .poweredBy {
-  /* display: block; */
-}
 .question,
 .questionVertical {
   color: #90a0ce;
@@ -67,6 +64,7 @@
 .buttons {
   display: flex;
   gap: 16px;
+  height: 35px;
 }
 .filter {
   display: flex;
@@ -125,6 +123,7 @@
   cursor: pointer;
   gap: 5px;
   width: 125px;
+  height: 100%;
   transition: all 200ms ease;
 }
 .filterBox:hover {
@@ -181,7 +180,7 @@
   border-radius: 30px;
   display: inline-flex;
   gap: 4px;
-  height: 35px;
+  height: 100%;
   box-sizing: border-box;
 }
 .toggleVertical {
@@ -202,9 +201,6 @@
   color: #fff;
   background: rgba(215, 80, 200, 0);
   border-radius: 30px;
-}
-.toggleVertical button {
-  height: 30px;
 }
 .vertical {
   width: 100%;

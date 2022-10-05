@@ -170,33 +170,45 @@ export default function Header() {
           Where does value flow in crypto?
         </p>
       </div>
+
       <div className={styles.buttons}>
-        <div className={isHorizontal ? styles.toggle : styles.toggleVertical}>
-          {router.pathname.includes('chain') ? (
-            <ImportExport />
-          ) : (
-            <FlowBridge />
-          )}
-        </div>
-        {showFilters && (
-          <div
-            className={styles.filterBox}
-            onClick={() => setModalOpen(!modalIsOpen)}
-          >
-            <div className={styles.filterBoxContent}>
-              <img src="/filter.svg" alt="filter" height="15" />
-              <p>
-                Filters {filters.length > 0 ? <b>({filters.length})</b> : null}
-              </p>
+        {!router.pathname.includes('bridges/') && (
+          <>
+            <div
+              className={isHorizontal ? styles.toggle : styles.toggleVertical}
+            >
+              {router.pathname.includes('chain') ? (
+                <ImportExport />
+              ) : (
+                <FlowBridge />
+              )}
             </div>
-            {filters.length > 0 && (
-              <button className={styles.removeFilters} onClick={resetFilters}>
-                ×
-              </button>
+            {showFilters && (
+              <div
+                className={styles.filterBox}
+                onClick={() => setModalOpen(!modalIsOpen)}
+              >
+                <div className={styles.filterBoxContent}>
+                  <img src="/filter.svg" alt="filter" height="15" />
+                  <p>
+                    Filters{' '}
+                    {filters.length > 0 ? <b>({filters.length})</b> : null}
+                  </p>
+                </div>
+                {filters.length > 0 && (
+                  <button
+                    className={styles.removeFilters}
+                    onClick={resetFilters}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
+
       {showFilters && (
         <FiltersModal
           isHorizontal={isHorizontal}
