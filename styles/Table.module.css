@@ -85,7 +85,8 @@
   font-size: 14px;
   line-height: 17px;
 }
-.item a > p {
+.item a > p,
+.item a > div > p {
   width: 160px;
   text-align: right;
 }
@@ -107,6 +108,13 @@
   text-align: left;
 }
 
+.valueBar {
+  background: rgba(255, 255, 255, 0.1);
+  right: -10px;
+  height: 50px;
+  position: absolute;
+}
+
 .item a:hover {
   background: rgba(215, 80, 200, 0.5);
   scale: 1.006;
@@ -114,7 +122,8 @@
 .item > a > div {
   display: flex;
   gap: 8px;
-  align-items: flex-end;
+  align-items: inherit;
+  position: relative;
 }
 .item p {
   margin: 0;
@@ -124,4 +133,22 @@
   .item a {
     font-size: 12px;
   }
+}
+
+.seeAll {
+  border-radius: 40px;
+  border: none;
+  outline: none;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  background: rgba(69, 100, 178, 0.5);
+  transition: background 300ms ease;
+}
+.seeAll:hover {
+  background: rgba(69, 100, 178, 0.7);
 }

@@ -70,16 +70,11 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
                 <span className={styles.flowBoxSpacerArrow}></span>
               </div>
               <div className={styles.flowBoxChain}>
-                <img
-                  src={flow.logo}
-                  width={16}
-                  height={16}
-                  alt="logo"
-                />
+                <img src={flow.logo} width={16} height={16} alt="logo" />
                 <p>{flow.name}</p>
               </div>
             </div>
-            <p>{format(flow.total)}</p>
+            <p className={styles.flowBoxMainFlow}>{format(flow.total)}</p>
           </div>
           <div className={styles.flowBoxContent}>
             {flow.bridges.map((bridge, index) => (

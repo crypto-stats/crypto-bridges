@@ -1,6 +1,6 @@
 import { ReactElement, useMemo } from 'react';
 import { IData } from '../data/types';
-import styles from '../styles/NodeSpecifics.module.css';
+import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
 import BoxRow, { BoxAlign } from './BoxRow';
 import DataBox from './DataBox';

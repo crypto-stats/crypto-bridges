@@ -15,11 +15,7 @@ interface HomePageProps {
 
 const Home: NextPage<HomePageProps> = ({ data }) => {
   const convertedData = convertDataForGraph(data);
-  const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
-  const [showAllExports, setShowAllExports] = useState(false);
-  const [showAllImports, setShowAllImports] = useState(false);
-  const showExports = () => setShowAllExports(true);
-  const showImports = () => setShowAllImports(true);
+  const [displayLimit, setDisplayLimit] = useState<number>();
   const exports = convertedData.nodes
     .map((node) => ({
       id: node.id,
@@ -63,28 +59,16 @@ const Home: NextPage<HomePageProps> = ({ data }) => {
         <Table
           listsChains={true}
           title="Top Exporters"
-          tableContent={
-            showAllExports ? exports : exports.slice(0, displayLimit)
-          }
+          tableContent={exports}
+          limit={displayLimit}
         />
-        {!showAllExports && (
-          <button onClick={showExports} className={styles.seeAll}>
-            See all chains
-          </button>
-        )}
         <Table
           listsChains={true}
           title="Top Importers"
           valueIn
-          tableContent={
-            showAllImports ? imports : imports.slice(0, displayLimit)
-          }
+          tableContent={imports}
+          limit={displayLimit}
         />
-        {!showAllImports && (
-          <button onClick={showImports} className={styles.seeAll}>
-            See all chains
-          </button>
-        )}
       </menu>
     </Motion>
   );

@@ -12,7 +12,7 @@ interface IBridgeProps {
   chainId: string;
 }
 
-const ChainSpecifics = ({ data, chainId }: IBridgeProps): ReactElement => {
+const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
   const isImport = useStore((state) => state.flowsShowImport);
 
   const findChain = (id: string) =>
@@ -124,4 +124,4 @@ const ChainSpecifics = ({ data, chainId }: IBridgeProps): ReactElement => {
   );
 };
 
-export default ChainSpecifics;
+export default Chain;
