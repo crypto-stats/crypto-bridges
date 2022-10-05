@@ -44,6 +44,8 @@ export interface IFlowBoxProps {
 
 const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
   const isImport = useStore((state) => state.flowsShowImport);
+  const minValue = flows[flows.length - 1]?.total;
+  const maxValue = flows[0]?.total;
   return (
     <div className={styles.flowsContainer}>
       {flows.map((flow, index) => (
@@ -74,7 +76,17 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
                 <p>{flow.name}</p>
               </div>
             </div>
-            <p className={styles.flowBoxMainFlow}>{format(flow.total)}</p>
+            <div className={styles.flowBoxMainFlow}>
+              <span
+                className={styles.valueBar}
+                style={{
+                  width: `calc(${Math.round(
+                    (100 * (flow.total - minValue)) / (maxValue - minValue),
+                  )}% + 20px)`,
+                }}
+              />
+              <p>{format(flow.total)}</p>
+            </div>
           </div>
           <div className={styles.flowBoxContent}>
             {flow.bridges.map((bridge, index) => (

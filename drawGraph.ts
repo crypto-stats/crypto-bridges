@@ -654,10 +654,10 @@ export function drawGraph(
       if (
         d.source.id === target.id &&
         d.target.id === source.id &&
-        d.flow > 0
+        d.flow > 0 &&
+        d.bridge === undefined
       ) {
         value21 = d.flow;
-        console.log(value21);
       }
     });
     if (mode === GRAPH_MODES.FLOWS) {

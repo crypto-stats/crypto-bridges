@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ReactElement, ReactNode, useState } from 'react';
+import { ReactElement, ReactNode, useMemo, useState } from 'react';
 import styles from '../styles/Table.module.css';
 import { addLeadingZero, format } from '../utils';
 
@@ -28,13 +28,23 @@ const Table = ({
   limit,
   valueIn = false,
 }: ITableProps): ReactElement => {
-  const [limited, setLimited] = useState(limit !== undefined);
-  const toggleLimited = () => setLimited(!limited);
+  const [collapsed, setCollapsed] = useState(true);
+  const toggleCollapsed = () => setCollapsed(!collapsed);
   const array = tableContent.sort((a, b) =>
     valueIn ? b.in - a.in : b.tvl - a.tvl,
   );
-  const minValue = array[array.length - 1][valueIn ? 'in' : 'tvl'];
-  const maxValue = array[0][valueIn ? 'in' : 'tvl'];
+  const { minValue, maxValue } = useMemo(() => {
+    const inflows = tableContent.map((v) => v.in);
+    const outflows = tableContent.map((v) => v.tvl);
+    const minInflow = Math.min.apply(null, inflows);
+    const maxInflow = Math.max.apply(null, inflows);
+    const minOutflow = Math.min.apply(null, outflows);
+    const maxOutflow = Math.max.apply(null, outflows);
+    return {
+      minValue: Math.min(minInflow, minOutflow),
+      maxValue: Math.max(maxInflow, maxOutflow),
+    };
+  }, [tableContent]);
   return (
     <>
       <div className={styles.table}>
@@ -54,7 +64,7 @@ const Table = ({
           </div>
           <ol className={styles.list}>
             {array
-              .slice(0, limited ? limit : undefined)
+              .slice(0, collapsed ? limit : undefined)
               .map((content, index) => {
                 return (
                   <li key={content.id} className={styles.item}>
@@ -84,12 +94,12 @@ const Table = ({
                           <span
                             className={styles.valueBar}
                             style={{
-                              width: `${
+                              width: `${Math.round(
                                 (100 *
                                   (content[valueIn ? 'in' : 'tvl'] -
                                     minValue)) /
-                                (maxValue - minValue)
-                              }px`,
+                                  (maxValue - minValue),
+                              )}%`,
                             }}
                           />
                           <p>{`${format(
@@ -100,12 +110,12 @@ const Table = ({
                           <span
                             className={styles.valueBar}
                             style={{
-                              width: `${
+                              width: `${Math.round(
                                 (100 *
                                   (content[valueIn ? 'tvl' : 'in'] -
                                     minValue)) /
-                                (maxValue - minValue)
-                              }px`,
+                                  (maxValue - minValue),
+                              )}%`,
                             }}
                           />
                           <p>{`${format(
@@ -121,8 +131,8 @@ const Table = ({
         </div>
       </div>
       {limit !== undefined && (
-        <button className={styles.seeAll} onClick={toggleLimited}>
-          {limited ? 'See all chains' : 'Collapse'}
+        <button className={styles.seeAll} onClick={toggleCollapsed}>
+          {collapsed ? 'See all chains' : 'Collapse'}
         </button>
       )}
     </>

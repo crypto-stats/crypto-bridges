@@ -54,6 +54,15 @@
 .flowBoxMainFlow {
   letter-spacing: 0.16em;
   color: #dddddd;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.valueBar {
+  background: rgba(255, 255, 255, 0.1);
+  right: -5px;
+  height: 50px;
+  position: absolute;
 }
 .flowBoxContent {
   display: flex;

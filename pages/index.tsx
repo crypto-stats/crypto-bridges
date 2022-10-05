@@ -7,7 +7,7 @@ import { GetStaticBridgeProps, IData } from '../data/types';
 import styles from '../styles/index.module.css';
 import { convertDataForGraph, needsLandscape } from '../utils';
 
-const DEFAULT_MAX_ELEMENTS = 4;
+export const DEFAULT_MAX_ELEMENTS = 4;
 
 interface HomePageProps {
   data: IData;
@@ -15,7 +15,7 @@ interface HomePageProps {
 
 const Home: NextPage<HomePageProps> = ({ data }) => {
   const convertedData = convertDataForGraph(data);
-  const [displayLimit, setDisplayLimit] = useState<number>();
+  const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
   const exports = convertedData.nodes
     .map((node) => ({
       id: node.id,
