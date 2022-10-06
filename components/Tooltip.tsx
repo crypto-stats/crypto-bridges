@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
+import { PADDING } from '../drawGraph';
 import style from '../styles/Tooltip.module.css';
-import { formatShort } from '../utils';
+import { formatShort, getDiagramDimensions } from '../utils';
 import {
   TooltipBridgeArg,
   TooltipChainArg,
@@ -12,11 +14,24 @@ interface ITooltipProps {
   showBridgeTooltip: TooltipBridgeArg;
 }
 
+const TOOLTIP_WIDTH = 250;
+const TOOLTIP_HEIGHT = 150;
+const MARGIN_TOP = 50;
+
 export function Tooltip({
   showChainTooltip,
   showFlowTooltip,
   showBridgeTooltip,
 }: ITooltipProps) {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  useEffect(() => {
+    const getLayout = () => {
+      setDimensions(getDiagramDimensions());
+    };
+    getLayout();
+    window.addEventListener('resize', getLayout);
+    return () => window.removeEventListener('resize', getLayout);
+  }, [setDimensions]);
   const showTooltip =
     showChainTooltip !== false ||
     showFlowTooltip !== false ||
@@ -28,12 +43,22 @@ export function Tooltip({
       ? showFlowTooltip
       : showBridgeTooltip;
   if (tooltip === false || showTooltip === false) return null;
+  const coords = { x: tooltip.x, y: tooltip.y };
+  if (coords.y + TOOLTIP_HEIGHT + MARGIN_TOP > dimensions.height) {
+    coords.y -= TOOLTIP_HEIGHT + MARGIN_TOP * 1.5;
+  }
+  if (coords.x - TOOLTIP_WIDTH / 2 < 0) {
+    coords.x = TOOLTIP_WIDTH / 2 + PADDING;
+  }
+  if (coords.x + TOOLTIP_WIDTH / 2 > dimensions.width) {
+    coords.x = dimensions.width - TOOLTIP_WIDTH / 2 - PADDING;
+  }
   return (
     <div
       className={style.tooltip}
       style={{
-        top: `${tooltip.y}px`,
-        left: `${tooltip.x}px`,
+        top: `${coords.y}px`,
+        left: `${coords.x}px`,
       }}
     >
       {showChainTooltip !== false && (

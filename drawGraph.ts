@@ -38,7 +38,7 @@ import {
 
 let guiCreated = false;
 
-const PADDING = 30;
+export const PADDING = 30;
 
 const MIN_PATH_CLICK_WIDTH = 40;
 
