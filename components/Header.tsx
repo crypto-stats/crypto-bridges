@@ -124,6 +124,7 @@ export default function Header() {
       }
     };
     updateToSidePanel();
+    router.events.on('routeChangeStart', closeFilters);
     window.addEventListener('resize', updateToSidePanel);
     return () => window.removeEventListener('resize', updateToSidePanel);
   }, [setHorizontal]);
