@@ -123,6 +123,7 @@ export function drawGraph(
   const chainExportBoundaries: [number, number] = [0, 0];
   let LOGO_SIZE = 5;
   let bridgeSelected: IBridgeLink | undefined;
+  let sankeyNodesStacked = 0;
 
   // initGui();
 
@@ -348,12 +349,11 @@ export function drawGraph(
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
       )
-      .style('filter', (d: any) => {
-        console.log(d);
-        return PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
+      .style('filter', (d: any) =>
+        PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
           ? `url(#${GLOW_ID})`
-          : 'none';
-      });
+          : 'none',
+      );
     tvlCircles.classed('circle-selected', false);
     const chainsServed: string[] = [];
     data.links
@@ -384,12 +384,12 @@ export function drawGraph(
     const SANKEY_PADDING = PADDING + getTvlRadius(biggestTvlNode);
     sankeyLayout = sankey()
       .nodePadding(100)
-      .nodeWidth(50)
       .extent([
         [SANKEY_PADDING, SANKEY_PADDING],
         [width - SANKEY_PADDING, height - SANKEY_PADDING],
       ]);
     const { links, nodes } = sankeyLayout(sankeyInput);
+    sankeyNodesStacked = nodes.length - 1;
     updateSankeyLinks(links);
     //updateSankeyNodes(nodes);
     const LOGO_SIZE =
@@ -397,19 +397,30 @@ export function drawGraph(
       2 *
       Math.cos(Math.PI / 4) *
       0.8;
+    const circleDiameter =
+      Math.sqrt((NODE_AREAS_SHARE.SANKEY * availableArea) / Math.PI) * 2;
+    const stagger = sankeyNodesStacked * circleDiameter > height - PADDING * 2;
     tvlCircles
-      .attr('cx', moveCircleToSankeyNodeX)
+      .attr('cx', (d: any) => {
+        return moveCircleToSankeyNodeX(d, stagger ? circleDiameter : undefined);
+      })
       .attr('cy', moveCircleToSankeyNodeY);
     images
       .attr('x', (d: any) => {
-        return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+        return (
+          moveCircleToSankeyNodeX(d, stagger ? circleDiameter : undefined) -
+          LOGO_SIZE / 2
+        );
       })
       .attr('y', (d: any) => {
         return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
       });
     blurredImages
       .attr('x', (d: any) => {
-        return moveCircleToSankeyNodeX(d) - LOGO_SIZE / 2;
+        return (
+          moveCircleToSankeyNodeX(d, stagger ? circleDiameter : undefined) -
+          LOGO_SIZE / 2
+        );
       })
       .attr('y', (d: any) => {
         return moveCircleToSankeyNodeY(d) - LOGO_SIZE / 2;
@@ -521,7 +532,7 @@ export function drawGraph(
       .style('fill-opacity', '0.05');
   }
 
-  function moveCircleToSankeyNodeX(d: any) {
+  function moveCircleToSankeyNodeX(d: any, circleDiameter?: number) {
     const node = sankeyInput.nodes.find((node) => node.id === d.id);
     if (node === undefined) return 0;
     const arrayCheck = isImport
@@ -529,8 +540,16 @@ export function drawGraph(
       : [(sankeyInput.links[0]?.source as any)?.id as string];
     const isStartNode = arrayCheck.includes(node.id as string);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const value = isStartNode ? node.x1! : node.x0!;
-    return isNaN(value) ? 0 : value;
+    let value = isStartNode ? node.x1! : node.x0!;
+    if (
+      circleDiameter !== undefined &&
+      ((isImport && isStartNode) || (!isImport && !isStartNode))
+    ) {
+      const staggering = (height - PADDING * 2) / sankeyNodesStacked;
+      const index = Math.floor((d.y0 - PADDING) / staggering);
+      value += (Math.pow(-1, index) * circleDiameter * 0.8) / 2;
+    }
+    return isNaN(value) ? -90 : value;
   }
 
   function moveCircleToSankeyNodeY(d: any) {
@@ -1047,9 +1066,48 @@ export function drawGraph(
   }
 
   function ticked() {
-    tvlCircles.attr('cx', computeCircleX).attr('cy', computeCircleY);
-    images.attr('x', computeImageX).attr('y', computeImageY);
-    blurredImages.attr('x', computeImageX).attr('y', computeImageY);
+    const circleDiameter =
+      Math.sqrt((NODE_AREAS_SHARE.SANKEY * availableArea) / Math.PI) * 2;
+    const stagger = sankeyNodesStacked * circleDiameter > height - PADDING * 2;
+    const LOGO_SIZE =
+      Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
+      2 *
+      Math.cos(Math.PI / 4) *
+      0.8;
+    tvlCircles
+      .attr('cx', (d: any) => {
+        if (isImportExport) {
+          return moveCircleToSankeyNodeX(
+            d,
+            stagger ? circleDiameter : undefined,
+          );
+        }
+        return computeCircleX(d);
+      })
+      .attr('cy', computeCircleY);
+
+    images
+      .attr('x', (d: any) => {
+        if (isImportExport) {
+          return (
+            moveCircleToSankeyNodeX(d, stagger ? circleDiameter : undefined) -
+            LOGO_SIZE / 2
+          );
+        }
+        return computeImageX(d);
+      })
+      .attr('y', computeImageY);
+    blurredImages
+      .attr('x', (d: any) => {
+        if (isImportExport) {
+          return (
+            moveCircleToSankeyNodeX(d, stagger ? circleDiameter : undefined) -
+            LOGO_SIZE / 2
+          );
+        }
+        return computeImageX(d);
+      })
+      .attr('y', computeImageY);
     circleGroups.classed('path-hidden', hideNodeIfWithinBoundaries);
     paths
       .attr('d', (d: any) =>

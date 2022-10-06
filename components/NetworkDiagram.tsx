@@ -41,6 +41,8 @@ export type TooltipChainArg = IChainInput | false;
 export type TooltipFlowArg = IFlowInput | false;
 export type TooltipBridgeArg = IBridgeInput | false;
 
+let initialized = false;
+
 export default function NetworkDiagram() {
   const router = useRouter();
   const { isImport, chainImportBoundaries, chainExportBoundaries } = useStore(
@@ -79,6 +81,7 @@ export default function NetworkDiagram() {
       }
       return;
     }
+    if (initialized) return; // Otherwise below is called twice despite setGraph.
     if (svg.current !== null) {
       // Set filters as innerHTML because React doesn't recognize these
       // components and their typings.
@@ -120,6 +123,7 @@ export default function NetworkDiagram() {
     );
     const updateUrl = (path: string) => viz.updateSelected(path);
     router.events.on('routeChangeStart', updateUrl);
+    initialized = true;
     setGraph(viz);
   }, [
     svg,
