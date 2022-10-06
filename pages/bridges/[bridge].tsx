@@ -10,13 +10,19 @@ import styles from '../../styles/page.module.css';
 interface IBridgeProps {
   bridge: string;
   data: IData;
+  date: string;
 }
 
 interface IBridgePath {
   params: { bridge: string };
 }
 
-const Bridge: NextPage<IBridgeProps> = ({ bridge, data }: IBridgeProps) => {
+const Bridge: NextPage<IBridgeProps> = ({
+  bridge,
+  data,
+  date,
+}: IBridgeProps) => {
+  console.log(`Data for bridge page ${bridge} collected on ${date}`);
   return (
     <Motion>
       <section className={styles.section}>
@@ -80,8 +86,8 @@ export async function getStaticPaths(): Promise<{
 
 export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
   const data = await loadData();
-
-  return { props: { data, ...params }, revalidate: 5 * 60 };
+  const date = new Date().toString();
+  return { props: { data, date, ...params }, revalidate: 5 * 60 };
 };
 
 export default Bridge;

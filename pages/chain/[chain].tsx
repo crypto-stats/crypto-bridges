@@ -9,6 +9,7 @@ import styles from '../../styles/page.module.css';
 interface IChainPageProps {
   chain: string;
   data: IData;
+  date: string;
 }
 
 interface IChainPagePath {
@@ -17,8 +18,10 @@ interface IChainPagePath {
 
 const ChainPage: NextPage<IChainPageProps> = ({
   data,
+  date,
   chain,
 }: IChainPageProps) => {
+  console.log(`Data for chain page ${chain} collected on ${date}`);
   return (
     <Motion>
       <section className={styles.section}>
@@ -40,8 +43,8 @@ export async function getStaticPaths(): Promise<{
 
 export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
   const data = await loadData();
-
-  return { props: { data, ...params }, revalidate: 5 * 60 };
+  const date = new Date().toString();
+  return { props: { data, date, ...params }, revalidate: 5 * 60 };
 };
 
 export default ChainPage;

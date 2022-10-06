@@ -11,9 +11,11 @@ const DEFAULT_MAX_ELEMENTS = 4;
 
 interface IBridgeProps {
   data: IData;
+  date: string;
 }
 
-const Bridges: NextPage<IBridgeProps> = ({ data }) => {
+const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
+  console.log(`Data for bridge page collected on ${date}`);
   const convertedData = convertDataForGraph(data);
   const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
   const exports = convertedData.nodes
@@ -76,7 +78,8 @@ const Bridges: NextPage<IBridgeProps> = ({ data }) => {
 
 export const getStaticProps = async () => {
   const data = await loadData();
-  return { props: { data }, revalidate: 5 * 60 };
+  const date = new Date().toString();
+  return { props: { data, date }, revalidate: 5 * 60 };
 };
 
 export default Bridges;

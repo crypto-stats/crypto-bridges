@@ -348,11 +348,12 @@ export function drawGraph(
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
       )
-      .style('filter', (d: any) =>
-        PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
+      .style('filter', (d: any) => {
+        console.log(d);
+        return PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
           ? `url(#${GLOW_ID})`
-          : 'none',
-      );
+          : 'none';
+      });
     tvlCircles.classed('circle-selected', false);
     const chainsServed: string[] = [];
     data.links

@@ -11,9 +11,11 @@ export const DEFAULT_MAX_ELEMENTS = 4;
 
 interface HomePageProps {
   data: IData;
+  date: string;
 }
 
-const Home: NextPage<HomePageProps> = ({ data }) => {
+const Home: NextPage<HomePageProps> = ({ data, date }) => {
+  console.log(`Data for home page collected on ${date}`);
   const convertedData = convertDataForGraph(data);
   const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
   const exports = convertedData.nodes
@@ -78,6 +80,6 @@ export default Home;
 
 export const getStaticProps: GetStaticBridgeProps = async () => {
   const data = await loadData();
-
-  return { props: { data }, revalidate: 5 * 60 };
+  const date = new Date().toString();
+  return { props: { data, date }, revalidate: 5 * 60 };
 };
