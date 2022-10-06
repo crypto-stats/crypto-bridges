@@ -88,6 +88,7 @@
 .item a > p,
 .item a > div > p {
   width: 160px;
+  max-width: 110px;
   text-align: right;
 }
 .nameBox {
@@ -102,6 +103,10 @@
     rgba(255, 255, 255, 0.6) 0%,
     rgba(255, 255, 255, 0) 70%
   );
+}
+
+.name {
+  text-transform: capitalize;
 }
 
 .nameBox .name {

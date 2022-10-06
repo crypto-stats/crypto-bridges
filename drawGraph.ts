@@ -1269,6 +1269,7 @@ export function drawGraph(
       .classed('path-selected', false)
       .classed('path-hovered', false)
       .classed('path-hidden', false)
+      .classed('transparent', false)
       .style('filter', 'none');
     blurredImages
       .classed('blurred-image-selected', false)
