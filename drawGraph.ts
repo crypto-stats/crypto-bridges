@@ -42,7 +42,7 @@ export const PADDING = 30;
 
 const MIN_PATH_CLICK_WIDTH = 40;
 
-const PATHS_GLOW = true;
+const PATHS_GLOW = false;
 
 export enum GRAPH_MODES {
   FLOWS,
