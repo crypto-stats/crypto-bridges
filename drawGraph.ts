@@ -364,10 +364,15 @@ export function drawGraph(
         const target = (path.target as any).id as string;
         chainsServed.includes(target) ? true : chainsServed.push(target);
       });
-    circleGroups.classed(
-      'transparent',
-      (d: any) => !chainsServed.includes(d.id as string),
-    );
+    circleGroups
+      .classed(
+        'transparent',
+        (d: any) => !chainsServed.includes(d.id as string),
+      )
+      .classed(
+        'path-hidden',
+        (d: any) => !chainsServed.includes(d.id as string),
+      );
     blurredImages.classed('blurred-image-selected', false);
     clickablePaths.classed(
       'path-hidden',
