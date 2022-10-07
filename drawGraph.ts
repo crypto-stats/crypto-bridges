@@ -265,6 +265,7 @@ export function drawGraph(
           if (
             link.flow !== undefined &&
             link.flow > 0 &&
+            (link as any).bridge === undefined &&
             (link.source as any).id === node.id &&
             (link.target as any).id === item.id
           ) {
@@ -274,12 +275,14 @@ export function drawGraph(
         return false;
       })
       .map((item) => item.id);
+
     const sourceNodesArray = data.nodes
       .filter((item) => {
         for (const link of data.links) {
           if (
             link.flow !== undefined &&
             link.flow > 0 &&
+            (link as any).bridge === undefined &&
             (link.source as any).id === item.id &&
             (link.target as any).id === node.id
           ) {
@@ -289,6 +292,7 @@ export function drawGraph(
         return false;
       })
       .map((item) => item.id);
+
     const sourceOrTarget = isImport ? sourceNodesArray : targetNodesArray;
     const nodesArray = data.nodes.filter((item) =>
       sourceOrTarget.includes(item.id),
