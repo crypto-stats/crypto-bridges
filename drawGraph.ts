@@ -1161,15 +1161,17 @@ export function drawGraph(
   }
 
   function pathNodesAreWithinBoundaries(d: any) {
+    // Use <x+1 and >x-1 because of possible precision issue
+    // (Ethereum node disappearing).
     return (
-      d.target.in >= chainImportBoundaries[0] &&
-      d.target.in <= chainImportBoundaries[1] &&
-      d.target.tvl >= chainExportBoundaries[0] &&
-      d.target.tvl <= chainExportBoundaries[1] &&
-      d.source.in >= chainImportBoundaries[0] &&
-      d.source.in <= chainImportBoundaries[1] &&
-      d.source.tvl >= chainExportBoundaries[0] &&
-      d.source.tvl <= chainExportBoundaries[1]
+      d.target.in > chainImportBoundaries[0] - 1 &&
+      d.target.in < chainImportBoundaries[1] + 1 &&
+      d.target.tvl > chainExportBoundaries[0] - 1 &&
+      d.target.tvl < chainExportBoundaries[1] + 1 &&
+      d.source.in > chainImportBoundaries[0] - 1 &&
+      d.source.in < chainImportBoundaries[1] + 1 &&
+      d.source.tvl > chainExportBoundaries[0] - 1 &&
+      d.source.tvl < chainExportBoundaries[1] + 1
     );
   }
 
