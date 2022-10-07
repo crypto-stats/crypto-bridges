@@ -93,13 +93,8 @@ svg text {
 .transparent {
   opacity: 0;
 }
-.dash,
-.dash-reverse {
+.noPointer {
   pointer-events: none;
-  animation: dash 3600s linear infinite;
-}
-.dash-reverse {
-  animation-direction: reverse;
 }
 
 @keyframes dash {

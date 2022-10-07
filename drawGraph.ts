@@ -175,14 +175,11 @@ export function drawGraph(
     .data(data.links)
     .enter()
     .append('path')
-    .style(
-      'stroke-dasharray',
-      mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
-    )
     .style('fill', 'none')
     .style('fill-opacity', 0)
     .style('stroke-width', getPathWidth)
     .classed('highlight', true)
+    .classed('noPointer', true)
     .each(function (d: any) {
       const flowArray = data.links
         .map((link) => link.flow)
@@ -216,6 +213,11 @@ export function drawGraph(
       }
       select(this).classed(className, true);
     });
+  /* .each(function () {
+      const circle = document.createElement('circle');
+      circle.className = 'arrow';
+      (this as any).parentNode.insertBefore(circle, (this as any).nextSibling!);
+    }); */
 
   const circleGroups = svg
     .selectAll('circle')
@@ -465,10 +467,6 @@ export function drawGraph(
     links
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
-      .style(
-        'stroke-dasharray',
-        mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
-      )
       .style('filter', function (d: any) {
         return PATHS_GLOW && d.y0 !== d.y1 ? `url(#${GLOW_ID})` : 'none';
       });
@@ -476,12 +474,8 @@ export function drawGraph(
       .enter()
       .append('path')
       .attr('class', 'sankeyLink')
-      .style(
-        'stroke-dasharray',
-        mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
-      )
       .classed('highlight', true)
-      .classed('dash', true)
+      .classed('noPointer', true)
       .style('fill', 'none')
       .classed('path-default', true)
       .attr('d', computeCustomSankeyPath)
@@ -840,10 +834,6 @@ export function drawGraph(
 
   function setMode(newMode: GRAPH_MODES) {
     mode = newMode;
-    paths.style(
-      'stroke-dasharray',
-      mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
-    );
     paths.classed('transparent', hidePathIfChainsWithinBoundaries);
     clickablePaths.classed('path-hidden', hidePathIfChainsWithinBoundaries);
     circleGroups
@@ -1124,18 +1114,6 @@ export function drawGraph(
       .attr('d', (d: any) =>
         d.type === undefined ? getFlowPath(d) : getBridgePath(d),
       )
-      .classed(
-        'dash',
-        (d: any) => d.target.x - d.source.x > 0 || d.type !== undefined,
-      )
-      .style(
-        'stroke-dasharray',
-        mode === GRAPH_MODES.FLOWS ? MIN_PATH_WIDTH : 'none',
-      )
-      .classed(
-        'dash-reverse',
-        (d: any) => d.target.x - d.source.x <= 0 && d.type === undefined,
-      )
       .classed('path-hidden', hidePathIfChainsWithinBoundaries)
       .classed(
         'transparent',
@@ -1143,7 +1121,19 @@ export function drawGraph(
           (bridgeSelected !== undefined &&
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
-      );
+      ); /* .each(function (d: any, i: number) {
+        const selection = select(this);
+        const p = selection.node();
+        if (p === null) return;
+        const l = p.getTotalLength();
+        const coord = p.getPointAtLength(l * 0.2);
+        selection
+          .select('.arrow')
+          .attr('r', 10)
+          .style('fill', '#f00')
+          .attr('cx', (e: any) => (e.flow === d.flow ? coord.x : 3))
+          .attr('cy', (e: any) => (e.flow === d.flow ? coord.y : 3));
+      }); */
     clickablePaths
       .attr('d', (d: any) =>
         d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
