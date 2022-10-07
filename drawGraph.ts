@@ -345,9 +345,12 @@ export function drawGraph(
       .classed(
         'transparent',
         (d: any) =>
-          (bridgeSelected !== undefined &&
-            d.bridge !== bridgeSelected.bridge) ||
-          hidePathIfChainsWithinBoundaries(d),
+          bridgeSelected !== undefined && d.bridge !== bridgeSelected.bridge,
+      )
+      .classed(
+        'path-hidden',
+        (d: any) =>
+          bridgeSelected !== undefined && d.bridge !== bridgeSelected.bridge,
       )
       .style('filter', (d: any) =>
         PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
@@ -377,8 +380,7 @@ export function drawGraph(
     clickablePaths.classed(
       'path-hidden',
       (d: any) =>
-        (bridgeSelected !== undefined && d.bridge !== bridgeSelected.bridge) ||
-        hidePathIfChainsWithinBoundaries(d),
+        bridgeSelected !== undefined && d.bridge !== bridgeSelected.bridge,
     );
     linksContainer.classed('transparent', true).classed('path-hidden', true);
     nodesContainer.classed('transparent', true).classed('path-hidden', true);
@@ -1243,6 +1245,7 @@ export function drawGraph(
   function updateSelected(path: string) {
     if (path === '/') {
       isImportExport = false;
+      bridgeSelected = undefined;
       resize();
       ticked();
       unselectAll();
@@ -1271,7 +1274,13 @@ export function drawGraph(
       .classed('path-selected', false)
       .classed('path-hovered', false)
       .classed('path-hidden', false)
-      .classed('transparent', false)
+      .classed(
+        'transparent',
+        (d: any) =>
+          (bridgeSelected !== undefined &&
+            d.bridge !== bridgeSelected.bridge) ||
+          hidePathIfChainsWithinBoundaries(d),
+      )
       .style('filter', 'none');
     blurredImages
       .classed('blurred-image-selected', false)
