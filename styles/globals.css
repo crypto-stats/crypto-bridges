@@ -99,6 +99,9 @@ svg text {
 .noPointer {
   pointer-events: none;
 }
+.arrow {
+  fill: red;
+}
 
 @keyframes dash {
   from {

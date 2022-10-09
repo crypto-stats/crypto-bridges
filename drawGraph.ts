@@ -146,7 +146,9 @@ export function drawGraph(
     simulation.add(settings, 'Run Simulation');
   }
 
-  const clickablePaths = svg
+  const pathGroup = svg.append('g');
+
+  const clickablePaths = pathGroup
     .selectAll('line')
     .data(data.links)
     .enter()
@@ -175,7 +177,7 @@ export function drawGraph(
   const minFlow = Math.min.apply(null, flowArray);
   const maxFlow = Math.max.apply(null, flowArray);
   const [kAFlows, kBFlows] = findLogParameters(minFlow, maxFlow, 0, 1);
-  const paths = svg
+  const paths = pathGroup
     .selectAll('line')
     .data(data.links)
     .enter()
@@ -212,12 +214,28 @@ export function drawGraph(
         className = 'path-default-0';
       }
       select(this).classed(className, true);
-    });
-  /* .each(function () {
-      const circle = document.createElement('circle');
-      circle.className = 'arrow';
-      (this as any).parentNode.insertBefore(circle, (this as any).nextSibling!);
-    }); */
+    })
+    .each(function (d: any, i: number) {
+      select(this).classed(`path-${i}`, true);
+    })
+    .classed(
+      'arrowed-path',
+      (d: any) =>
+        d.bridge === undefined &&
+        d.type === undefined &&
+        d.category === undefined &&
+        d.flow > 0,
+    );
+
+  const arrowTips = paths.each(function (d: any, i: number) {
+    if (select(this).classed('arrowed-path')) {
+      pathGroup
+        .append('polygon')
+        .attr('points', () => getArrowPoints(d as IFlowLink))
+        .classed('arrow', true)
+        .classed(`arrow-${i}`, true);
+    }
+  });
 
   const circleGroups = svg
     .selectAll('circle')
@@ -596,12 +614,12 @@ export function drawGraph(
         'transform',
         (d: any) => `translate(${d.x0 as number}, ${d.y0 as number})`,
       )
-      .attr('height', (d: any) => (d.y1 - d.y0) as number);
+      .attr('height', (d: any) => d.y1 - d.y0);
     nodes
       .enter()
       .append('rect')
       .attr('class', 'sankeyNode')
-      .attr('height', (d: any) => (d.y1 - d.y0) as number)
+      .attr('height', (d: any) => d.y1 - d.y0)
       .attr('width', sankeyLayout.nodeWidth())
       .attr(
         'transform',
@@ -1222,19 +1240,32 @@ export function drawGraph(
           (bridgeSelected !== undefined &&
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
-      ); /* .each(function (d: any, i: number) {
-        const selection = select(this);
-        const p = selection.node();
-        if (p === null) return;
-        const l = p.getTotalLength();
-        const coord = p.getPointAtLength(l * 0.2);
-        selection
-          .select('.arrow')
-          .attr('r', 10)
-          .style('fill', '#f00')
-          .attr('cx', (e: any) => (e.flow === d.flow ? coord.x : 3))
-          .attr('cy', (e: any) => (e.flow === d.flow ? coord.y : 3));
-      }); */
+      );
+    paths.each(function (d: any, i: number) {
+      const p = select(this);
+      const path = p.node();
+      const offset = getTvlRadius(d.target);
+      if (path === null || !p.classed('arrowed-path')) return;
+      const selection = svg.select(`.arrow-${i}`);
+      selection.attr('points', () => getArrowPoints(d as IFlowLink));
+      const rect = selection.node();
+      if (rect === null) return;
+      const l = path.getTotalLength();
+      const aL = getArrowLength(d as IFlowLink);
+      const reverse = d.reverse; //d.target.x - d.source.x <= 0;
+      const coord = path.getPointAtLength(
+        reverse ? l - offset - aL : offset + aL,
+      );
+      const nextPoint = path.getPointAtLength(reverse ? l - offset : offset);
+      const angle =
+        (Math.atan2(nextPoint.y - coord.y, nextPoint.x - coord.x) * 180) /
+        Math.PI;
+
+      selection.attr(
+        'transform',
+        `translate(${coord.x},${coord.y})rotate(${angle})`,
+      );
+    });
     clickablePaths
       .attr('d', (d: any) =>
         d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
@@ -1251,6 +1282,15 @@ export function drawGraph(
     if (opacity < 1) {
       svg.attr('opacity', opacity);
     }
+  }
+
+  function getArrowPoints(d: IFlowLink) {
+    const v = getArrowLength(d);
+    return `0,${-v / 2} ${v},0 0,${v / 2}`;
+  }
+
+  function getArrowLength(d: IFlowLink) {
+    return getPathWidth(d) * 1.6 + 10;
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
