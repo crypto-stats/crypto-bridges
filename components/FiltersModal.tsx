@@ -1,31 +1,9 @@
 import Slider from '@mui/material/Slider';
-import { m, Variants } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useData } from '../data/data-context';
 import { useStore } from '../store';
 import styles from '../styles/Header.module.css';
 import { convertDataForGraph, formatShort } from '../utils';
-
-const ANIMATIONS: Variants = {
-  initial: {
-    opacity: 0,
-    x: 200,
-    y: -130,
-    scale: 0,
-  },
-  initialVertical: {
-    opacity: 0,
-    x: 0,
-    y: 200,
-    scale: 1,
-  },
-  animate: {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    scale: 1,
-  },
-};
 
 export const FiltersModal = ({
   isHorizontal,
@@ -119,16 +97,12 @@ export const FiltersModal = ({
     }
   }, [filters, chainImportBoundaries, chainExportBoundaries, boundaries]);
   return show ? (
-    <m.div
+    <div
       className={
         isHorizontal
           ? styles.filtersModalHorizontal
           : styles.filtersModalVertical
       }
-      initial={isHorizontal ? 'initial' : 'initialVertical'}
-      animate={'animate'}
-      variants={ANIMATIONS}
-      transition={{ duration: 0.25 }}
     >
       {!isHorizontal && (
         <button onClick={closeFilters} className={styles.closeFiltersButton}>
@@ -169,6 +143,6 @@ export const FiltersModal = ({
           />
         </div>
       </div>
-    </m.div>
+    </div>
   ) : null;
 };
