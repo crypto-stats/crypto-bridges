@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/FlowBox.module.css';
 import { format } from '../utils';
@@ -21,11 +20,10 @@ export interface IChainFlow {
 export interface IFlowBoxProps {
   name: string;
   logo: string;
-  data: IData;
   flows: IChainFlow[];
 }
 
-const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
+const FlowBox = ({ name, logo, flows }: IFlowBoxProps) => {
   const isImport = useStore((state) => state.flowsShowImport);
   const minValue = flows[flows.length - 1]?.total;
   const maxValue = flows[0]?.total;
