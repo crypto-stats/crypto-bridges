@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ReactElement } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/Chain.module.css';
@@ -14,6 +14,24 @@ interface IBridgeProps {
 
 const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
   const isImport = useStore((state) => state.flowsShowImport);
+
+  const { exportedValue, importedValue } = useMemo(() => {
+    let exported = 0,
+      imported = 0;
+    data.flows.forEach((flow) => {
+      if (flow.metadata.chainA === chainId) {
+        exported += flow.results.currentValueBridgedAToB ?? 0;
+        imported += flow.results.currentValueBridgedBToA ?? 0;
+      }
+      if (flow.metadata.chainB === chainId) {
+        exported += flow.results.currentValueBridgedBToA ?? 0;
+        imported += flow.results.currentValueBridgedAToB ?? 0;
+      }
+    });
+    const exportedValue = format(exported);
+    const importedValue = format(imported);
+    return { exportedValue, importedValue };
+  }, [data, chainId]);
 
   const findChain = (id: string) =>
     data.chains.find((chain) => chain.id === id);
@@ -32,16 +50,6 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
 
   const chainName = getChainName(chainId);
 
-  const computeTVLForChain = () => {
-    let tvl = 0;
-    data.flows.forEach((flow) => {
-      if (flow.metadata.chainA === chainId)
-        tvl += flow.results.currentValueBridgedAToB ?? 0;
-      if (flow.metadata.chainB === chainId)
-        tvl += flow.results.currentValueBridgedBToA ?? 0;
-    });
-    return format(tvl);
-  };
   const computeChainFlows = () => {
     const flows: IChainFlow[] = [];
     data.flows.forEach((flow) => {
@@ -117,7 +125,10 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
         {chain.description && <p>{chain.description}</p>}
       </div>
       <div className={styles.nodeItem}>
-        <DataBox caption="Total value bridged" value={computeTVLForChain()} />
+        <DataBox
+          caption={`Total value ${isImport ? 'imported' : 'exported'}`}
+          value={isImport ? importedValue : exportedValue}
+        />
       </div>
       <div className={styles.nodeItem}>
         <FlowBox
