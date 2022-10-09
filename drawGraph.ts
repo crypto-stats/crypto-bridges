@@ -869,6 +869,10 @@ export function drawGraph(
           }
           return false;
         })
+        .classed(
+          'path-unhovered',
+          (d: any) => !(d.source.id === node.id || d.target.id === node.id),
+        )
         .style('filter', function (d: any) {
           return PATHS_GLOW &&
             (d.source.id === node.id ||
