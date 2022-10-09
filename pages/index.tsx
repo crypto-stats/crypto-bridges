@@ -17,6 +17,7 @@ interface HomePageProps {
 const Home: NextPage<HomePageProps> = ({ data, date }) => {
   console.log(`Data for home page collected on ${date}`);
   const convertedData = convertDataForGraph(data);
+  console.log(data, convertedData);
   const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
   const exports = convertedData.nodes
     .map((node) => ({
