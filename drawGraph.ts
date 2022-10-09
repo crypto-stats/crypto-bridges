@@ -170,6 +170,10 @@ export function drawGraph(
       }
     });
 
+  const flowArray = data.links.map((link) => link.flow).filter((v) => v > 0);
+  const minFlow = Math.min.apply(null, flowArray);
+  const maxFlow = Math.max.apply(null, flowArray);
+  const [kAFlows, kBFlows] = findLogParameters(minFlow, maxFlow, 0, 1);
   const paths = svg
     .selectAll('line')
     .data(data.links)
@@ -181,34 +185,29 @@ export function drawGraph(
     .classed('highlight', true)
     .classed('noPointer', true)
     .each(function (d: any) {
-      const flowArray = data.links
-        .map((link) => link.flow)
-        .filter((v) => v > 0);
-      const minFlow = Math.min.apply(null, flowArray);
-      const maxFlow = Math.max.apply(null, flowArray);
-      const decile = (maxFlow - minFlow) / 10;
+      const image = kAFlows * Math.log(kBFlows * d.flow);
       let className = 'path-default';
-      if (d.flow === maxFlow) {
+      if (image > maxFlow - 1) {
         className = 'path-default-100';
-      } else if (d.flow > minFlow + 9 * decile) {
+      } else if (image > 0.9) {
         className = 'path-default-90';
-      } else if (d.flow > minFlow + 8 * decile) {
+      } else if (image > 0.8) {
         className = 'path-default-80';
-      } else if (d.flow > minFlow + 7 * decile) {
+      } else if (image > 0.7) {
         className = 'path-default-70';
-      } else if (d.flow > minFlow + 6 * decile) {
+      } else if (image > 0.6) {
         className = 'path-default-60';
-      } else if (d.flow > minFlow + 5 * decile) {
+      } else if (image > 0.5) {
         className = 'path-default-50';
-      } else if (d.flow > minFlow + 4 * decile) {
+      } else if (image > 0.4) {
         className = 'path-default-40';
-      } else if (d.flow > minFlow + 3 * decile) {
+      } else if (image > 0.3) {
         className = 'path-default-30';
-      } else if (d.flow > minFlow + 2 * decile) {
+      } else if (image > 0.2) {
         className = 'path-default-20';
-      } else if (d.flow > minFlow + 1 * decile) {
+      } else if (image > 0.1) {
         className = 'path-default-10';
-      } else if (d.flow === minFlow) {
+      } else if (image < minFlow + 1) {
         className = 'path-default-0';
       }
       select(this).classed(className, true);
@@ -470,6 +469,10 @@ export function drawGraph(
       .style('filter', function (d: any) {
         return PATHS_GLOW && d.y0 !== d.y1 ? `url(#${GLOW_ID})` : 'none';
       });
+    const flowArray = data.map((link) => link.value);
+    const minS = Math.min.apply(null, flowArray);
+    const maxS = Math.max.apply(null, flowArray);
+    const [kAS, kBS] = findLogParameters(minS, maxS, 0, 1);
     links
       .enter()
       .append('path')
@@ -477,11 +480,38 @@ export function drawGraph(
       .classed('highlight', true)
       .classed('noPointer', true)
       .style('fill', 'none')
-      .classed('path-default', true)
       .attr('d', computeCustomSankeyPath)
       .style('stroke-width', getSankeyPathWidth)
       .style('filter', function (d: any) {
         return PATHS_GLOW && d.y0 !== d.y1 ? `url(#${GLOW_ID})` : 'none';
+      })
+      .each(function (d: any) {
+        const image = kAS * Math.log(kBS * d.value);
+        let className = 'path-default';
+        if (image > maxS - 1) {
+          className = 'path-default-100';
+        } else if (image > 0.9) {
+          className = 'path-default-90';
+        } else if (image > 0.8) {
+          className = 'path-default-80';
+        } else if (image > 0.7) {
+          className = 'path-default-70';
+        } else if (image > 0.6) {
+          className = 'path-default-60';
+        } else if (image > 0.5) {
+          className = 'path-default-50';
+        } else if (image > 0.4) {
+          className = 'path-default-40';
+        } else if (image > 0.3) {
+          className = 'path-default-30';
+        } else if (image > 0.2) {
+          className = 'path-default-20';
+        } else if (image > 0.1) {
+          className = 'path-default-10';
+        } else if (image < minS + 1) {
+          className = 'path-default-0';
+        }
+        select(this).classed(className, true);
       });
     const clickableLinks = linksContainer
       .selectAll('.sankeyLinkClickable')
