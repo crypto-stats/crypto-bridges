@@ -70,10 +70,14 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
       if (bridge.value === 0) {
         return;
       }
-      const otherChainIndex = flows.findIndex(
-        (item) =>
-          item.name === (isA ? flow.metadata.chainB : flow.metadata.chainA),
-      );
+      const otherChainIndex = flows.findIndex((item) => {
+        const currentChainName = isA
+          ? flow.metadata.chainB
+          : flow.metadata.chainA;
+        const capitalizedChainName =
+          currentChainName[0].toUpperCase() + currentChainName.substring(1);
+        return item.name === capitalizedChainName;
+      });
       if (otherChainIndex === -1) {
         flows.push({
           name:
@@ -88,6 +92,7 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
       } else {
         flows[otherChainIndex].bridges.push(bridge);
         flows[otherChainIndex].total += bridge.value;
+        flows[otherChainIndex].bridges.sort((a, b) => b.value - a.value);
       }
     });
     return flows.sort((a, b) => b.total - a.total);
