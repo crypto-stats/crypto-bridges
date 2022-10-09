@@ -1,25 +1,8 @@
-import type { Variants } from 'framer-motion';
-import { m } from 'framer-motion';
 import Link from 'next/link';
 import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/FlowBox.module.css';
 import { format } from '../utils';
-
-const ANIMATIONS: Variants = {
-  initial: {
-    opacity: 0,
-    y: 10,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-  },
-  exit: {
-    opacity: 0,
-    y: 10,
-  },
-};
 
 interface IBridgeFlow {
   name: string;
@@ -49,15 +32,7 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
   return (
     <div className={styles.flowsContainer}>
       {flows.map((flow, index) => (
-        <m.div
-          key={`${index}-${flow.total}`}
-          className={styles.flowBox}
-          initial={'initial'}
-          animate={'animate'}
-          exit={'exit'}
-          variants={ANIMATIONS}
-          transition={{ duration: 0.5, delay: 0.2 + index * 0.15 }}
-        >
+        <div key={`${index}-${flow.total}`} className={styles.flowBox}>
           <div className={styles.flowBoxTitle}>
             <div
               className={
@@ -112,7 +87,7 @@ const FlowBox = ({ name, logo, flows, data }: IFlowBoxProps) => {
               </div>
             ))}
           </div>
-        </m.div>
+        </div>
       ))}
     </div>
   );

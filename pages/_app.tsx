@@ -1,4 +1,3 @@
-import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import type { AppProps } from 'next/app';
 import NextNProgress from 'nextjs-progressbar';
 import Footer from '../components/Footer';
@@ -48,29 +47,21 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <>
       <HtmlHead />
-      <LazyMotion features={domAnimation}>
-        <NextNProgress
-          color={GRAPH_COLORS.DEFAULT}
-          height={4}
-          options={{ trickle: false, showSpinner: false }}
-        />
-        <m.main
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2 }}
-        >
-          <DataProvider data={pageProps.data}>
-            <Header />
-            <NetworkDiagram />
-            <Panel>
-              <AnimatePresence exitBeforeEnter>
-                <Component {...pageProps} key={router.asPath} />
-              </AnimatePresence>
-            </Panel>
-            <Footer />
-          </DataProvider>
-        </m.main>
-      </LazyMotion>
+      <NextNProgress
+        color={GRAPH_COLORS.DEFAULT}
+        height={4}
+        options={{ trickle: false, showSpinner: false }}
+      />
+      <main>
+        <DataProvider data={pageProps.data}>
+          <Header />
+          <NetworkDiagram />
+          <Panel>
+            <Component {...pageProps} />
+          </Panel>
+          <Footer />
+        </DataProvider>
+      </main>
     </>
   );
 }
