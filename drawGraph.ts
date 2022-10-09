@@ -433,7 +433,13 @@ export function drawGraph(
       .extent([
         [SANKEY_PADDING, SANKEY_PADDING],
         [width - SANKEY_PADDING, height - SANKEY_PADDING],
-      ]);
+      ])
+      .nodeSort(
+        null as any as (
+          a: SankeyNodeMinimal<any, any>,
+          b: SankeyNodeMinimal<any, any>,
+        ) => number,
+      );
     const { links, nodes } = sankeyLayout(sankeyInput);
     sankeyNodesStacked = nodes.length - 1;
     updateSankeyLinks(links);
