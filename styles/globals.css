@@ -132,11 +132,14 @@ svg text::selection {
 .simplebar-horizontal {
   display: none;
 }
+.MuiSlider-root {
+  margin-bottom: 0 !important;
+}
 .MuiSlider-valueLabelOpen,
 .MuiSlider-valueLabel {
   background: none !important;
+  transform: translateY(-70%) scale(1) !important;
 }
-
 .MuiSlider-mark,
 .MuiSlider-markActive {
   width: 5px !important;
