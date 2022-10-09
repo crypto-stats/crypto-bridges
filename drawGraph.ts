@@ -647,17 +647,23 @@ export function drawGraph(
   }
 
   function onMouseOut() {
-    linksContainer.selectAll('.sankeyLink').classed('path-hovered', false);
+    linksContainer
+      .selectAll('.sankeyLink')
+      .classed('path-hovered', false)
+      .classed('path-unhovered', false);
     tvlCircles.classed('circle-hovered', false).style('filter', function () {
       return select(this).classed('circle-selected')
         ? `url(#${GLOW_ID})`
         : 'none';
     });
-    paths.classed('path-hovered', false).style('filter', function () {
-      return PATHS_GLOW && select(this).classed('path-selected')
-        ? `url(#${GLOW_ID})`
-        : 'none';
-    });
+    paths
+      .classed('path-hovered', false)
+      .classed('path-unhovered', false)
+      .style('filter', function () {
+        return PATHS_GLOW && select(this).classed('path-selected')
+          ? `url(#${GLOW_ID})`
+          : 'none';
+      });
     blurredImages.classed('blurred-image-hovered', false);
     showBridgeTooltip(false);
     showChainTooltip(false);
@@ -692,6 +698,14 @@ export function drawGraph(
         (d: any) =>
           (d.source.id === source.id && d.target.id === target.id) ||
           (d.target.id === source.id && d.source.id === target.id),
+      )
+      .classed(
+        'path-unhovered',
+        (d: any) =>
+          !(
+            (d.source.id === source.id && d.target.id === target.id) ||
+            (d.target.id === source.id && d.source.id === target.id)
+          ),
       )
       .style('filter', function (d: any) {
         return PATHS_GLOW &&
@@ -772,6 +786,14 @@ export function drawGraph(
           (d.source.id === source.id && d.target.id === target.id) ||
           (d.target.id === source.id && d.source.id === target.id),
       )
+      .classed(
+        'path-unhovered',
+        (d: any) =>
+          !(
+            (d.source.id === source.id && d.target.id === target.id) ||
+            (d.target.id === source.id && d.source.id === target.id)
+          ),
+      )
       .style('filter', function (d: any) {
         return PATHS_GLOW &&
           ((d.source.id === source.id && d.target.id === target.id) ||
@@ -812,6 +834,7 @@ export function drawGraph(
       });
     paths
       .classed('path-hovered', (d: any) => d.bridge === name)
+      .classed('path-unhovered', (d: any) => d.bridge !== name)
       .style('filter', function (d: any) {
         return PATHS_GLOW &&
           (d.bridge === name || select(this).classed('path-selected'))

@@ -48,6 +48,9 @@ svg text {
 .path-default {
   stroke: hsl(224, 41%, 32%);
 }
+.path-unhovered {
+  stroke: hsl(224, 41%, 32%) !important;
+}
 .path-default-0 {
   stroke: hsl(224, 41%, 32%);
 }
