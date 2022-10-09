@@ -285,7 +285,8 @@ export function drawGraph(
             link.flow > 0 &&
             (link as any).bridge === undefined &&
             (link.source as any).id === item.id &&
-            (link.target as any).id === node.id
+            (link.target as any).id === node.id &&
+            (link as IBridgeLink).type === undefined
           ) {
             return true;
           }
@@ -298,6 +299,39 @@ export function drawGraph(
     const nodesArray = data.nodes.filter((item) =>
       sourceOrTarget.includes(item.id),
     );
+    nodesArray.sort((nodeA, nodeB) => {
+      const linkA = data.links.find((link) => {
+        if (isImport) {
+          return (
+            (link.source as any).id === nodeA.id &&
+            (link.target as any).id === node.id &&
+            (link as IBridgeLink).type === undefined
+          );
+        } else {
+          return (
+            (link.target as any).id === nodeA.id &&
+            (link.source as any).id === node.id &&
+            (link as IBridgeLink).type === undefined
+          );
+        }
+      });
+      const linkB = data.links.find((link) => {
+        if (isImport) {
+          return (
+            (link.source as any).id === nodeB.id &&
+            (link.target as any).id === node.id &&
+            (link as IBridgeLink).type === undefined
+          );
+        } else {
+          return (
+            (link.target as any).id === nodeB.id &&
+            (link.source as any).id === node.id &&
+            (link as IBridgeLink).type === undefined
+          );
+        }
+      });
+      return (linkB?.flow || 0) - (linkA?.flow || 0);
+    });
     nodesArray.push(node);
     const linksArray = data.links
       .filter(
@@ -510,6 +544,9 @@ export function drawGraph(
           className = 'path-default-10';
         } else if (image < minS + 1) {
           className = 'path-default-0';
+        }
+        if (d.source.id === undefined || d.target.id === undefined) {
+          className = 'path-default';
         }
         select(this).classed(className, true);
       });
