@@ -38,6 +38,7 @@ export function convertDataForGraph(data: IData): IGraphData {
   const aggregatedFlows: IFlowLink[] = [];
   data.flows.forEach((flow) => {
     if (flow.errors !== undefined && Object.keys(flow.errors).length > 0) {
+      console.error('Data fetching error on the server: ' + flow);
       return;
     }
     if (flow.metadata.name === undefined) {
