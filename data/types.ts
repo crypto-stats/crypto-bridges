@@ -26,6 +26,7 @@ export interface IFlow {
     currentValueBridgedAToB: number | null;
     currentValueBridgedBToA: number | null;
   };
+  errors?: { [key: string]: string };
   bundle: string /*  | null */;
   metadata: {
     name: string;

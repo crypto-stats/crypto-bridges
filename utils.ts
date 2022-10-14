@@ -37,6 +37,9 @@ export function convertDataForGraph(data: IData): IGraphData {
   const graphData: IGraphData = { nodes: [], links: [] };
   const aggregatedFlows: IFlowLink[] = [];
   data.flows.forEach((flow) => {
+    if (flow.errors !== undefined && Object.keys(flow.errors).length > 0) {
+      return;
+    }
     if (flow.metadata.name === undefined) {
       console.error(
         'Data type error: no bridge name given for flow entry: ' + flow.id,
@@ -58,7 +61,9 @@ export function convertDataForGraph(data: IData): IGraphData {
       }
       graphData.nodes.push({
         id: chain.id,
-        name: chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1),
+        name:
+          chain.name ||
+          chain.id.charAt(0).toUpperCase() + chain.id.substring(1),
         logo: chain.logo,
         tvl: flow.results.currentValueBridgedAToB || 0,
         in: flow.results.currentValueBridgedBToA || 0,
@@ -84,7 +89,9 @@ export function convertDataForGraph(data: IData): IGraphData {
       }
       graphData.nodes.push({
         id: chain.id,
-        name: chain.name || chain.id.charAt(0).toUpperCase() + chain.id.substring(1),
+        name:
+          chain.name ||
+          chain.id.charAt(0).toUpperCase() + chain.id.substring(1),
         logo: chain.logo,
         tvl: flow.results.currentValueBridgedBToA || 0,
         in: flow.results.currentValueBridgedAToB || 0,
