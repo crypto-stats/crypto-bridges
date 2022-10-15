@@ -195,10 +195,10 @@
   resolved "https://registry.yarnpkg.com/@cosmjs/utils/-/utils-0.29.0.tgz#0a61e6d608e9f6f89a278cc71f4e7cee01199657"
   integrity sha512-NiJk3ISX+FU1cQcTTgmJcY84A8mV/p8L5CRewp/2jc/lUmo8j9lMGbX17U7NxVQ9RX5RmrwgdjYnBASzhRCVmA==
 
-"@cryptostats/sdk@^0.2.14":
-  version "0.2.14"
-  resolved "https://registry.yarnpkg.com/@cryptostats/sdk/-/sdk-0.2.14.tgz#ef1c3c536318b93c32364b3608d9bb4edd18bd5e"
-  integrity sha512-iaSrwYZfCuzXZ60NcKymwh8EbQWDQI2gIx2PE2L+z59ydlG9OLxG8QFHwWh52pcMBcnsQ2v9cYl0/ckUaXSVUA==
+"@cryptostats/sdk@^0.2.15":
+  version "0.2.15"
+  resolved "https://registry.yarnpkg.com/@cryptostats/sdk/-/sdk-0.2.15.tgz#52e4afb8a18f1641e28ce8e089b52a8258a93e38"
+  integrity sha512-qaL1DGdaQn/n1mGn2OqMKAtZvcrUzykc4I5GMJi+OMZj+oJ9d3mAEmiL/poY1cN2Ok5LNE+fX3SIeW5ITGGA3Q==
   dependencies:
     "@cosmjs/stargate" "^0.29.0"
     "@cosmjs/tendermint-rpc" "^0.29.0"

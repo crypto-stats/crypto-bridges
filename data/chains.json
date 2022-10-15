@@ -40,7 +40,7 @@
       "description": "EVMOS is Cosmos-ecosystem blockchain that supports Ethereum-native applications and tools by fully implementing the Ethereum Virtual Machine (EVM)."
     },
     {
-      "id": "arbitrum",
+      "id": "arbitrum-one",
       "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmeRunQGxv3haLoMfgwD2VjKwScf7gDQiA1DCYd1HNBCG6",
       "description": "Arbitrum is a scaling solution running on the Ethereum blockchain. As an \"optimistic rollup\", the chain is secured by the economic incentives to post a fraud-proof to Ethereum in the case of an invalid block.",
       "website": "https://arbitrum.io"

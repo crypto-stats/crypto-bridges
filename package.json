@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@cryptostats/sdk": "^0.2.14",
+    "@cryptostats/sdk": "^0.2.15",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.6",
