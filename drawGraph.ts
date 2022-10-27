@@ -1256,7 +1256,7 @@ export function drawGraph(
           hidePathIfChainsWithinBoundaries(d),
       );
     loaderTick++;
-    const opacity = 1.4 - loaderTick / 100;
+    const opacity = 1.7 - loaderTick / 50;
     if (opacity < 0) {
       loader.style('display', 'none');
     } else {
