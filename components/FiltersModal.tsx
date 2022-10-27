@@ -59,7 +59,7 @@ export const FiltersModal = ({
     };
   }, [data]);
   const updateChainImport = (e: any, values: [number, number]) => {
-    if (values[0] === 0 && values[1] === scale(100)) {
+    if (values[0] === 0 && values[1] === 100) {
       setFilters(filters.filter((name) => name !== 'chainImport'));
     } else if (!filters.includes('chainImport')) {
       setFilters([...filters, 'chainImport']);
@@ -67,7 +67,7 @@ export const FiltersModal = ({
     setChainImports([scale(values[0]), scale(values[1])]);
   };
   const updateChainExport = (e: any, values: [number, number]) => {
-    if (values[0] === 0 && values[1] === scale(100)) {
+    if (values[0] === 0 && values[1] === 100) {
       setFilters(filters.filter((name) => name !== 'chainExport'));
     } else if (!filters.includes('chainExport')) {
       setFilters([...filters, 'chainExport']);
