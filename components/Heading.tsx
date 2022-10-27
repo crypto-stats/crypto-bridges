@@ -3,7 +3,7 @@ import Head from 'next/head';
 export default function HtmlHead() {
   return (
     <Head>
-      <title>Cryptobridges</title>
+      <title>Cryptoflows</title>
       <meta
         name="description"
         content="Data sets and views on crypto economics"
