@@ -252,6 +252,16 @@ export function drawGraph(
     .on('mouseout', onMouseOut)
     .on('click', onClick);
 
+  const loader = svg
+    .selectAll('g')
+    .append('rect')
+    .classed('abra', true)
+    .attr('width', 800)
+    .attr('height', 400)
+    .style('fill', '#002');
+
+  let loaderTick = 0;
+
   resize();
   updateSelected(window.location.pathname);
   window.addEventListener('resize', resize);
@@ -1245,6 +1255,16 @@ export function drawGraph(
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
       );
+    loaderTick++;
+    const opacity = 1.4 - loaderTick / 100;
+    if (opacity < 0) {
+      loader.style('display', 'none');
+    } else {
+      loader
+        .attr('opacity', opacity)
+        .attr('width', width)
+        .attr('height', height);
+    }
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
