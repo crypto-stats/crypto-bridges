@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useData } from '../data/data-context';
 import { useStore } from '../store';
 import styles from '../styles/Header.module.css';
-import { convertDataForGraph, formatShort } from '../utils';
+import { convertDataForGraph, findLogParameters, formatShort } from '../utils';
 
 export const FiltersModal = ({
   isHorizontal,
@@ -30,72 +30,74 @@ export const FiltersModal = ({
     chainExportBoundaries: state.chainExportBoundaries,
     setChainExports: state.setChainExports,
   }));
-  const { boundaries, importMarks, exportMarks } = useMemo(() => {
+  const { importMarks, exportMarks, scale, log, max } = useMemo(() => {
     const convertedData = convertDataForGraph(data);
-    const bridgesFlow = convertedData.links
-      .filter((link) => (link as any).bridge !== undefined)
-      .map((link) => link.flow);
     const chainsTvl = convertedData.nodes.map((node) => node.tvl);
+    const max = Math.max(...chainsTvl);
+    const [kALog, kBLog] = findLogParameters(1, max, 0, 100);
+    const log = (value: number) => kALog * Math.log((value + 1) * kBLog);
+    const scale = (value: number) => Math.exp(value / kALog) / kBLog - 1;
+    const importMarks = convertedData.nodes.map((node) => ({
+      label: node.name,
+      // The material UI slider internally assigns `key={value}` to the dots,
+      // hence add randomness to be sure they're never the same.
+      value: Math.max(0, log(node.in) + Math.random() / 1000),
+    }));
+    const exportMarks = convertedData.nodes.map((node) => ({
+      label: node.name,
+      // See above
+      value: Math.max(0, log(node.tvl)) + Math.random() / 1000,
+    }));
     return {
-      importMarks: convertedData.nodes.map((node) => ({
-        label: node.name,
-        // The material UI slider internally assigns `key={value}` to the dots,
-        // hence add randomness to be sure they're never the same.
-        value: node.in + Math.random() / 1000,
-      })),
-      exportMarks: convertedData.nodes.map((node) => ({
-        label: node.name,
-        // See above
-        value: node.tvl + Math.random() / 1000,
-      })),
-      boundaries: {
-        minChainImport: 0,
-        maxChainImport: Math.max(...chainsTvl),
-        minChainExport: 0,
-        maxChainExport: Math.max(...chainsTvl),
-        minBridgeFlow: Math.min(...bridgesFlow),
-        maxBridgeFlow: Math.max(...bridgesFlow),
-      },
+      kALog,
+      kBLog,
+      log,
+      max,
+      scale,
+      importMarks,
+      exportMarks,
     };
   }, [data]);
   const updateChainImport = (e: any, values: [number, number]) => {
-    if (
-      values[0] === boundaries.minChainImport &&
-      values[1] === boundaries.maxChainImport
-    ) {
+    if (values[0] === 0 && values[1] === scale(100)) {
       setFilters(filters.filter((name) => name !== 'chainImport'));
     } else if (!filters.includes('chainImport')) {
       setFilters([...filters, 'chainImport']);
     }
-    setChainImports(values);
+    setChainImports([scale(values[0]), scale(values[1])]);
   };
   const updateChainExport = (e: any, values: [number, number]) => {
-    if (
-      values[0] === boundaries.minChainExport &&
-      values[1] === boundaries.maxChainExport
-    ) {
+    if (values[0] === 0 && values[1] === scale(100)) {
       setFilters(filters.filter((name) => name !== 'chainExport'));
     } else if (!filters.includes('chainExport')) {
       setFilters([...filters, 'chainExport']);
     }
-    setChainExports(values);
+    setChainExports([scale(values[0]), scale(values[1])]);
   };
   useEffect(() => {
     if (
-      (chainImportBoundaries[0] !== boundaries.minChainImport ||
-        chainImportBoundaries[1] !== boundaries.maxChainImport) &&
+      (chainImportBoundaries[0] !== 0 ||
+        chainImportBoundaries[1] !== max + 1) &&
       !filters.includes('chainImport')
     ) {
-      setChainImports([boundaries.minChainImport, boundaries.maxChainImport]);
+      setChainImports([0, max + 1]);
     }
     if (
-      (chainExportBoundaries[0] !== boundaries.minChainExport ||
-        chainExportBoundaries[1] !== boundaries.maxChainExport) &&
+      (chainExportBoundaries[0] !== 0 ||
+        chainExportBoundaries[1] !== max + 1) &&
       !filters.includes('chainExport')
     ) {
-      setChainExports([boundaries.minChainExport, boundaries.maxChainExport]);
+      setChainExports([0, max + 1]);
     }
-  }, [filters, chainImportBoundaries, chainExportBoundaries, boundaries]);
+  }, [
+    filters,
+    chainImportBoundaries,
+    chainExportBoundaries,
+    scale,
+    setChainExports,
+    setChainImports,
+    max,
+  ]);
   return show ? (
     <div
       className={
@@ -113,16 +115,17 @@ export const FiltersModal = ({
         <h3>Value Imported</h3>
         <div className={styles.inputRange}>
           <Slider
-            value={chainImportBoundaries}
+            value={[
+              log(chainImportBoundaries[0]),
+              log(chainImportBoundaries[1]),
+            ]}
             onChange={updateChainImport as any}
             valueLabelDisplay="on"
-            valueLabelFormat={(value: number, index: number) =>
-              formatShort(value, 1)
-            }
-            scale={(x) => x}
+            valueLabelFormat={(value: number) => formatShort(value, 1)}
+            scale={scale}
             marks={importMarks}
-            min={boundaries.minChainImport}
-            max={boundaries.maxChainImport}
+            min={0}
+            max={100}
           />
         </div>
       </div>
@@ -130,16 +133,17 @@ export const FiltersModal = ({
         <h3>Value Exported</h3>
         <div className={styles.inputRange}>
           <Slider
-            value={chainExportBoundaries}
+            value={[
+              log(chainExportBoundaries[0]),
+              log(chainExportBoundaries[1]),
+            ]}
             onChange={updateChainExport as any}
             valueLabelDisplay="on"
-            valueLabelFormat={(value: number, index: number) =>
-              formatShort(value, 1)
-            }
-            scale={(x) => x}
+            valueLabelFormat={(value: number) => formatShort(value, 1)}
+            scale={scale}
             marks={exportMarks}
-            min={boundaries.minChainExport}
-            max={boundaries.maxChainExport}
+            min={0}
+            max={100}
           />
         </div>
       </div>
