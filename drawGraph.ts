@@ -124,6 +124,7 @@ export function drawGraph(
   let LOGO_SIZE = 5;
   let bridgeSelected: IBridgeLink | undefined;
   let sankeyNodesStacked = 0;
+  let loaderTick = 0;
 
   // initGui();
 
@@ -251,16 +252,6 @@ export function drawGraph(
     .on('mouseover', onMouseOverNode)
     .on('mouseout', onMouseOut)
     .on('click', onClick);
-
-  const loader = svg
-    .selectAll('g')
-    .append('rect')
-    .classed('abra', true)
-    .attr('width', 800)
-    .attr('height', 400)
-    .style('fill', '#002');
-
-  let loaderTick = 0;
 
   resize();
   updateSelected(window.location.pathname);
@@ -1256,14 +1247,9 @@ export function drawGraph(
           hidePathIfChainsWithinBoundaries(d),
       );
     loaderTick++;
-    const opacity = 1.7 - loaderTick / 50;
-    if (opacity < 0) {
-      loader.style('display', 'none');
-    } else {
-      loader
-        .attr('opacity', opacity)
-        .attr('width', width)
-        .attr('height', height);
+    const opacity = -0.7 + loaderTick / 50;
+    if (opacity < 1) {
+      svg.attr('opacity', opacity);
     }
   }
 
