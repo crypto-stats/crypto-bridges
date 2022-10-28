@@ -186,7 +186,7 @@ interface IDimensions {
 export function getDiagramDimensions(): IDimensions {
   const isLandscape = needsLandscape();
   const isMobile = devicePixelRatio > 1.5;
-  const usedWidth = isMobile ? screen.availWidth : innerWidth;
+  const usedWidth = innerWidth;
   const usedHeight = isMobile ? screen.availHeight : innerHeight;
   return {
     width: isLandscape ? usedWidth - PANEL_WIDTH : usedWidth,
