@@ -48,8 +48,14 @@ svg text {
 .path-default {
   stroke: hsl(224, 41%, 32%);
 }
+.arrow-default {
+  fill: hsl(224, 41%, 32%);
+}
 .path-unhovered {
   stroke: hsl(224, 41%, 32%) !important;
+}
+.arrow-unhovered {
+  fill: hsl(224, 41%, 32%) !important;
 }
 .path-default-0 {
   stroke: hsl(224, 41%, 32%);
@@ -84,13 +90,53 @@ svg text {
 .path-default-100 {
   stroke: hsl(307, 63%, 58%);
 }
+.arrow-default-0 {
+  fill: hsl(224, 41%, 32%);
+}
+.arrow-default-10 {
+  fill: hsl(232, 43%, 34%);
+}
+.arrow-default-20 {
+  fill: hsl(240, 45%, 36%);
+}
+.arrow-default-30 {
+  fill: hsl(248, 47%, 39%);
+}
+.arrow-default-40 {
+  fill: hsl(256, 50%, 41%);
+}
+.arrow-default-50 {
+  fill: hsl(265, 52%, 45%);
+}
+.arrow-default-60 {
+  fill: hsl(273, 54%, 48%);
+}
+.arrow-default-70 {
+  fill: hsl(281, 56%, 51%);
+}
+.arrow-default-80 {
+  fill: hsl(289, 58%, 54%);
+}
+.arrow-default-90 {
+  fill: hsl(298, 60%, 56%);
+}
+.arrow-default-100 {
+  fill: hsl(307, 63%, 58%);
+}
 .path-hovered {
   stroke: #d750c8;
+}
+.arrow-hovered {
+  fill: #d750c8;
 }
 .path-selected {
   stroke: #d750c8;
 }
-.path-hidden {
+.arrow-selected {
+  fill: #d750c8;
+}
+.path-hidden,
+.arrow-hidden {
   display: none;
 }
 .transparent {
@@ -98,9 +144,6 @@ svg text {
 }
 .noPointer {
   pointer-events: none;
-}
-.arrow {
-  fill: red;
 }
 
 @keyframes dash {

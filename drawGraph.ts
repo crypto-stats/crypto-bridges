@@ -227,13 +227,40 @@ export function drawGraph(
         d.flow > 0,
     );
 
-  const arrowTips = paths.each(function (d: any, i: number) {
+  paths.each(function (d: any, i: number) {
     if (select(this).classed('arrowed-path')) {
+      const image = kAFlows * Math.log(kBFlows * d.flow);
+      let className = 'arrow-default';
+      if (image > maxFlow - 1) {
+        className = 'arrow-default-100';
+      } else if (image > 0.9) {
+        className = 'arrow-default-90';
+      } else if (image > 0.8) {
+        className = 'arrow-default-80';
+      } else if (image > 0.7) {
+        className = 'arrow-default-70';
+      } else if (image > 0.6) {
+        className = 'arrow-default-60';
+      } else if (image > 0.5) {
+        className = 'arrow-default-50';
+      } else if (image > 0.4) {
+        className = 'arrow-default-40';
+      } else if (image > 0.3) {
+        className = 'arrow-default-30';
+      } else if (image > 0.2) {
+        className = 'arrow-default-20';
+      } else if (image > 0.1) {
+        className = 'arrow-default-10';
+      } else if (image < minFlow + 1) {
+        className = 'arrow-default-0';
+      }
       pathGroup
         .append('polygon')
         .attr('points', () => getArrowPoints(d as IFlowLink))
-        .classed('arrow', true)
-        .classed(`arrow-${i}`, true);
+        .classed('highlight', true)
+        .classed('noPointer', true)
+        .classed(`arrow-${i}`, true)
+        .classed(className, true);
     }
   });
 
@@ -380,7 +407,12 @@ export function drawGraph(
       links: linksArray,
     };
     resetSankey(width, height);
-    paths.classed('transparent', true);
+    paths.classed('transparent', true).each(function (d: any, i: number) {
+      if (select(this).classed('arrowed-path')) {
+        const arrowTip = svg.select(`.arrow-${i}`);
+        arrowTip.classed('transparent', true);
+      }
+    });
     circleGroups.classed(
       'transparent',
       (c: any) =>
@@ -414,7 +446,34 @@ export function drawGraph(
         PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
           ? `url(#${GLOW_ID})`
           : 'none',
-      );
+      )
+      .each(function (d: any, i: number) {
+        if (select(this).classed('arrowed-path')) {
+          const arrowTip = svg.select(`.arrow-${i}`);
+          arrowTip
+            .classed(
+              'arrow-selected',
+              () => d.bridge === link.bridge && d.type !== undefined,
+            )
+            .classed(
+              'transparent',
+              () =>
+                bridgeSelected !== undefined &&
+                d.bridge !== bridgeSelected.bridge,
+            )
+            .classed(
+              'arrow-hidden',
+              () =>
+                bridgeSelected !== undefined &&
+                d.bridge !== bridgeSelected.bridge,
+            )
+            .style('filter', () =>
+              PATHS_GLOW && d.bridge === link.bridge && d.bridge !== undefined
+                ? `url(#${GLOW_ID})`
+                : 'none',
+            );
+        }
+      });
     tvlCircles.classed('circle-selected', false);
     const chainsServed: string[] = [];
     data.links
@@ -682,6 +741,19 @@ export function drawGraph(
         return PATHS_GLOW && select(this).classed('path-selected')
           ? `url(#${GLOW_ID})`
           : 'none';
+      })
+      .each(function (d: any, i: number) {
+        if (select(this).classed('arrowed-path')) {
+          const arrowTip = svg.select(`.arrow-${i}`);
+          arrowTip
+            .classed('arrow-hovered', false)
+            .classed('arrow-unhovered', false)
+            .style('filter', function () {
+              return PATHS_GLOW && select(this).classed('arrow-selected')
+                ? `url(#${GLOW_ID})`
+                : 'none';
+            });
+        }
       });
     blurredImages.classed('blurred-image-hovered', false);
     showBridgeTooltip(false);
@@ -820,6 +892,34 @@ export function drawGraph(
             select(this).classed('path-selected'))
           ? `url(#${GLOW_ID})`
           : 'none';
+      })
+      .each(function (d: any, i: number) {
+        if (select(this).classed('arrowed-path')) {
+          const arrowTip = svg.select(`.arrow-${i}`);
+          arrowTip
+            .classed(
+              'arrow-hovered',
+              () =>
+                (d.source.id === source.id && d.target.id === target.id) ||
+                (d.target.id === source.id && d.source.id === target.id),
+            )
+            .classed(
+              'arrow-unhovered',
+              () =>
+                !(
+                  (d.source.id === source.id && d.target.id === target.id) ||
+                  (d.target.id === source.id && d.source.id === target.id)
+                ),
+            )
+            .style('filter', function () {
+              return PATHS_GLOW &&
+                ((d.source.id === source.id && d.target.id === target.id) ||
+                  (d.target.id === source.id && d.source.id === target.id) ||
+                  select(this).classed('arrow-selected'))
+                ? `url(#${GLOW_ID})`
+                : 'none';
+            });
+        }
       });
     tvlCircles
       .classed('circle-hovered', function (c: any) {
@@ -859,6 +959,20 @@ export function drawGraph(
           (d.bridge === name || select(this).classed('path-selected'))
           ? `url(#${GLOW_ID})`
           : 'none';
+      })
+      .each(function (d: any, i: number) {
+        if (select(this).classed('arrowed-path')) {
+          const arrowTip = svg.select(`.arrow-${i}`);
+          arrowTip
+            .classed('arrow-hovered', () => d.bridge === name)
+            .classed('arrow-unhovered', () => d.bridge !== name)
+            .style('filter', function () {
+              return PATHS_GLOW &&
+                (d.bridge === name || select(this).classed('arrow-selected'))
+                ? `url(#${GLOW_ID})`
+                : 'none';
+            });
+        }
       });
   }
 
@@ -899,6 +1013,32 @@ export function drawGraph(
               select(this).classed('path-selected'))
             ? `url(#${GLOW_ID})`
             : 'none';
+        })
+        .each(function (d: any, i: number) {
+          if (select(this).classed('arrowed-path')) {
+            const arrowTip = svg.select(`.arrow-${i}`);
+            arrowTip
+              .classed('arrow-hovered', () => {
+                if (d.source.id === node.id || d.target.id === node.id) {
+                  connectedNodeNames.push(d.source.id as string);
+                  connectedNodeNames.push(d.target.id as string);
+                  return true;
+                }
+                return false;
+              })
+              .classed(
+                'arrow-unhovered',
+                () => !(d.source.id === node.id || d.target.id === node.id),
+              )
+              .style('filter', function () {
+                return PATHS_GLOW &&
+                  (d.source.id === node.id ||
+                    d.target.id === node.id ||
+                    select(this).classed('arrow-selected'))
+                  ? `url(#${GLOW_ID})`
+                  : 'none';
+              });
+          }
         });
       tvlCircles
         .classed(
@@ -953,7 +1093,16 @@ export function drawGraph(
 
   function setMode(newMode: GRAPH_MODES) {
     mode = newMode;
-    paths.classed('transparent', hidePathIfChainsWithinBoundaries);
+    paths
+      .classed('transparent', hidePathIfChainsWithinBoundaries)
+      .each(function (d: any, i: number) {
+        if (select(this).classed('arrowed-path')) {
+          const arrowTip = svg.select(`.arrow-${i}`);
+          arrowTip.classed('transparent', () =>
+            hidePathIfChainsWithinBoundaries(d),
+          );
+        }
+      });
     clickablePaths.classed('path-hidden', hidePathIfChainsWithinBoundaries);
     circleGroups
       .classed('transparent', false)
@@ -1103,7 +1252,7 @@ export function drawGraph(
       Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
       2 *
       Math.cos(Math.PI / 4) *
-      0.8;
+      (width > 500 ? 0.8 : 1.2);
     [kAP, kBP] = getPathWidthParameters();
 
     svg.attr('width', width).attr('height', height);
@@ -1193,7 +1342,7 @@ export function drawGraph(
       Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
       2 *
       Math.cos(Math.PI / 4) *
-      0.8;
+      (width > 500 ? 0.8 : 1.2);
     tvlCircles
       .attr('cx', (d: any) => {
         if (isImportExport) {
@@ -1240,32 +1389,38 @@ export function drawGraph(
           (bridgeSelected !== undefined &&
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
-      );
-    paths.each(function (d: any, i: number) {
-      const p = select(this);
-      const path = p.node();
-      const offset = getTvlRadius(d.target);
-      if (path === null || !p.classed('arrowed-path')) return;
-      const selection = svg.select(`.arrow-${i}`);
-      selection.attr('points', () => getArrowPoints(d as IFlowLink));
-      const rect = selection.node();
-      if (rect === null) return;
-      const l = path.getTotalLength();
-      const aL = getArrowLength(d as IFlowLink);
-      const reverse = d.reverse; //d.target.x - d.source.x <= 0;
-      const coord = path.getPointAtLength(
-        reverse ? l - offset - aL : offset + aL,
-      );
-      const nextPoint = path.getPointAtLength(reverse ? l - offset : offset);
-      const angle =
-        (Math.atan2(nextPoint.y - coord.y, nextPoint.x - coord.x) * 180) /
-        Math.PI;
+      )
+      .each(function (d: any, i: number) {
+        const p = select(this);
+        const path = p.node();
+        const offset = getTvlRadius(d.target);
+        if (path === null || !p.classed('arrowed-path')) return;
+        const selection = svg.select(`.arrow-${i}`);
+        const rect = selection.node();
+        if (rect === null) return;
+        const l = path.getTotalLength();
+        const aL = getArrowLength(d as IFlowLink);
+        const reverse = d.target.x - d.source.x > 0;
+        const coord = path.getPointAtLength(
+          reverse ? l - offset - aL : offset + aL,
+        );
+        const nextPoint = path.getPointAtLength(reverse ? l - offset : offset);
+        const angle =
+          (Math.atan2(nextPoint.y - coord.y, nextPoint.x - coord.x) * 180) /
+          Math.PI;
 
-      selection.attr(
-        'transform',
-        `translate(${coord.x},${coord.y})rotate(${angle})`,
-      );
-    });
+        selection
+          .attr('points', () => getArrowPoints(d as IFlowLink))
+          .attr('transform', `translate(${coord.x},${coord.y})rotate(${angle})`)
+          .classed('arrow-hidden', () => hidePathIfChainsWithinBoundaries(d))
+          .classed(
+            'transparent',
+            () =>
+              (bridgeSelected !== undefined &&
+                d.bridge !== bridgeSelected.bridge) ||
+              hidePathIfChainsWithinBoundaries(d),
+          );
+      });
     clickablePaths
       .attr('d', (d: any) =>
         d.type !== undefined ? getBridgePath(d) : getFlowPath(d),
@@ -1290,7 +1445,7 @@ export function drawGraph(
   }
 
   function getArrowLength(d: IFlowLink) {
-    return getPathWidth(d) * 1.6 + 10;
+    return getPathWidth(d) * 1.6 + width < 500 ? 7 : 9;
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
@@ -1421,7 +1576,23 @@ export function drawGraph(
             d.bridge !== bridgeSelected.bridge) ||
           hidePathIfChainsWithinBoundaries(d),
       )
-      .style('filter', 'none');
+      .style('filter', 'none')
+      .each(function (d: any, i: number) {
+        if (select(this).classed('arrowed-path')) {
+          const arrowTip = svg.select(`.arrow-${i}`);
+          arrowTip
+            .classed('arrow-selected', false)
+            .classed('arrow-hovered', false)
+            .classed('arrow-hidden', false)
+            .classed(
+              'transparent',
+              () =>
+                (bridgeSelected !== undefined &&
+                  d.bridge !== bridgeSelected.bridge) ||
+                hidePathIfChainsWithinBoundaries(d),
+            );
+        }
+      });
     blurredImages
       .classed('blurred-image-selected', false)
       .classed('blurred-image-hovered', false);
