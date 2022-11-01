@@ -530,7 +530,7 @@ export function drawGraph(
       Math.sqrt((NODE_AREAS_SHARE.MIN * availableArea) / Math.PI) *
       2 *
       Math.cos(Math.PI / 4) *
-      0.8;
+      (width > 500 ? 0.8 : 1.2);
     const circleDiameter =
       Math.sqrt((NODE_AREAS_SHARE.SANKEY * availableArea) / Math.PI) * 2;
     const stagger = sankeyNodesStacked * circleDiameter > height - PADDING * 2;
@@ -1412,7 +1412,10 @@ export function drawGraph(
         const angle =
           (Math.atan2(nextPoint.y - coord.y, nextPoint.x - coord.x) * 180) /
           Math.PI;
-
+        p.style('stroke-dasharray', l).style(
+          'stroke-dashoffset',
+          (offset + aL - 8) * (reverse ? 1 : -1),
+        );
         selection
           .attr('points', () => getArrowPoints(d as IFlowLink))
           .attr('transform', `translate(${coord.x},${coord.y})rotate(${angle})`)
@@ -1437,7 +1440,7 @@ export function drawGraph(
           hidePathIfChainsWithinBoundaries(d),
       );
     loaderTick++;
-    const opacity = -0.7 + loaderTick / 50;
+    const opacity = -0.5 + loaderTick / 50;
     if (opacity < 1) {
       svg.attr('opacity', opacity);
     }
