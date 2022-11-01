@@ -254,8 +254,12 @@ export function drawGraph(
       } else if (image < minFlow + 1) {
         className = 'arrow-default-0';
       }
-      pathGroup
-        .append('polygon')
+      const p = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'polygon',
+      );
+      this.parentNode?.insertBefore(p, this.nextSibling);
+      select(p)
         .attr('points', () => getArrowPoints(d as IFlowLink))
         .classed('highlight', true)
         .classed('noPointer', true)
@@ -1445,7 +1449,7 @@ export function drawGraph(
   }
 
   function getArrowLength(d: IFlowLink) {
-    return getPathWidth(d) * 1.6 + width < 500 ? 7 : 9;
+    return getPathWidth(d) * 1.6 + 5;
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
