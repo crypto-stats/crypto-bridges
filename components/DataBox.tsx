@@ -2,7 +2,7 @@ import styles from '../styles/NumberBox.module.css';
 
 export interface IDataBoxProps {
   caption: string;
-  value: string;
+  value: any;
 }
 
 const DataBox = ({ caption, value }: IDataBoxProps) => {

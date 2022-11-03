@@ -46,7 +46,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
       if (!isLandscape) {
         return DEFAULT_MAX_ELEMENTS;
       }
-      const freeSpace = (innerHeight - 40 - 40 * 3) / 2 - 24 - 40 - 16 - 51;
+      const freeSpace = (innerHeight - 32 - 32 * 3) / 2 - 24 - 32 - 16 - 51;
       const maxElements = Math.floor(freeSpace / 60);
       setDisplayLimit(maxElements);
       return maxElements;

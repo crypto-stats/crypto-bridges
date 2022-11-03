@@ -1,6 +1,7 @@
+import Airtable from 'airtable';
 import type { NextPage } from 'next';
 import BackButton from '../../components/BackButton';
-import BridgeSpecifics from '../../components/Bridge';
+import BridgeSpecifics, { ISecurityData } from '../../components/Bridge';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
 import { loadData } from '../../data/load-data';
@@ -11,6 +12,7 @@ interface IBridgeProps {
   bridge: string;
   data: IData;
   date: string;
+  securityData?: ISecurityData;
 }
 
 interface IBridgePath {
@@ -21,13 +23,14 @@ const Bridge: NextPage<IBridgeProps> = ({
   bridge,
   data,
   date,
+  securityData,
 }: IBridgeProps) => {
   console.log(`Data for bridge page ${bridge} collected on ${date}`);
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <BridgeSpecifics data={data} id={bridge} />
+        <BridgeSpecifics data={data} id={bridge} securityData={securityData} />
         <Table
           listsChains={true}
           title={'connected chains'}
@@ -87,7 +90,23 @@ export async function getStaticPaths(): Promise<{
 export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
   const data = await loadData();
   const date = new Date().toString();
-  return { props: { data, date, ...params }, revalidate: 5 * 60 };
+  const securityData = await new Promise<ISecurityData>((resolve, reject) => {
+    const base = new Airtable({
+      apiKey: process.env.AIR_TABLE_API_KEY,
+    }).base('apppls15bkAlz7ko1');
+    base('tblZZDK3wwSUKWy5J') // ="Table 1"
+      .select({ view: 'Grid view' })
+      .eachPage((records) => {
+        const entry = records.find(
+          (records) => records.fields['Bridge'] === params?.bridge,
+        );
+        if (entry === undefined) {
+          return reject();
+        }
+        resolve(entry.fields as unknown as ISecurityData);
+      });
+  });
+  return { props: { data, date, securityData, ...params }, revalidate: 5 * 60 };
 };
 
 export default Bridge;
