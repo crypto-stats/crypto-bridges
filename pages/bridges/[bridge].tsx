@@ -1,5 +1,6 @@
 import Airtable from 'airtable';
 import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import BackButton from '../../components/BackButton';
 import BridgeSpecifics, { ISecurityData } from '../../components/Bridge';
 import Motion from '../../components/Motion';
@@ -12,7 +13,6 @@ interface IBridgeProps {
   bridge: string;
   data: IData;
   date: string;
-  securityData?: ISecurityData;
 }
 
 interface IBridgePath {
@@ -23,9 +23,25 @@ const Bridge: NextPage<IBridgeProps> = ({
   bridge,
   data,
   date,
-  securityData,
 }: IBridgeProps) => {
   console.log(`Data for bridge page ${bridge} collected on ${date}`);
+  const [securityData, setSecurityData] = useState<ISecurityData>();
+  useEffect(() => {
+    const base = new Airtable({
+      apiKey: process.env.NEXT_PUBLIC_AIR_TABLE_API_KEY,
+    }).base('apppls15bkAlz7ko1');
+    base('tblZZDK3wwSUKWy5J') // ="Table 1"
+      .select({ view: 'Grid view' })
+      .eachPage((records) => {
+        const entry = records.find(
+          (records) => records.fields['Bridge'] === bridge,
+        );
+        if (entry === undefined) {
+          return;
+        }
+        setSecurityData(entry.fields as unknown as ISecurityData);
+      });
+  }, [bridge]);
   return (
     <Motion>
       <section className={styles.section}>
@@ -90,23 +106,8 @@ export async function getStaticPaths(): Promise<{
 export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
   const data = await loadData();
   const date = new Date().toString();
-  const securityData = await new Promise<ISecurityData>((resolve, reject) => {
-    const base = new Airtable({
-      apiKey: process.env.AIR_TABLE_API_KEY,
-    }).base('apppls15bkAlz7ko1');
-    base('tblZZDK3wwSUKWy5J') // ="Table 1"
-      .select({ view: 'Grid view' })
-      .eachPage((records) => {
-        const entry = records.find(
-          (records) => records.fields['Bridge'] === params?.bridge,
-        );
-        if (entry === undefined) {
-          return reject();
-        }
-        resolve(entry.fields as unknown as ISecurityData);
-      });
-  });
-  return { props: { data, date, securityData, ...params }, revalidate: 5 * 60 };
+
+  return { props: { data, date, ...params }, revalidate: 5 * 60 };
 };
 
 export default Bridge;
