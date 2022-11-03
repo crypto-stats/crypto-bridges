@@ -83,7 +83,7 @@ const BridgeSpecifics = ({
               {
                 caption: 'Score',
                 value: (
-                  <p className={styles.nodeCategory}>
+                  <span className={styles.nodeCategory}>
                     <span
                       className={styles.trustlessnessLight}
                       style={{
@@ -93,15 +93,15 @@ const BridgeSpecifics = ({
                       }}
                     ></span>
                     {securityData?.Trustlessness ?? ''}
-                  </p>
+                  </span>
                 ),
               },
               {
                 caption: 'Type',
                 value: (
-                  <p className={styles.nodeCategory}>
+                  <span className={styles.nodeCategory}>
                     {securityData?.Category ?? ''}
-                  </p>
+                  </span>
                 ),
               },
             ]}
