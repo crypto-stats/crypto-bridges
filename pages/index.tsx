@@ -51,6 +51,7 @@ export default Home;
 
 export const getStaticProps: GetStaticBridgeProps = async () => {
   const data = await loadData();
+  console.log(process.env);
 
-  return { props: { data }, revalidate: 5 * 60 };
+  return { props: { data }, revalidate: 10 };
 };
