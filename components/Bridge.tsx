@@ -1,4 +1,6 @@
-import { ReactElement, useMemo } from 'react';
+import Airtable from 'airtable';
+import Link from 'next/link';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { IData } from '../data/types';
 import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
@@ -9,6 +11,34 @@ interface IBridgeProps {
   data: IData;
   id: string;
 }
+
+interface ISecurityData {
+  Bridge: string;
+  Description: string;
+  Category: string;
+  'Security assumptions': string;
+  Trustlessness: string;
+  Documentation: string;
+  'Bounty max': string;
+  'Bounty live since': string;
+  'Bounty link': string;
+}
+
+type Trust = 'Very High' | 'High' | 'Medium' | 'Low' | 'Very Low';
+
+const trustToColor = (trust: Trust) => {
+  switch (trust) {
+    case 'Very High':
+    case 'High':
+      return '#00B73E';
+    case 'Medium':
+      return '#FF7C04';
+    case 'Low':
+    case 'Very Low':
+    default:
+      return '#E20723';
+  }
+};
 
 const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
   const bridge = data.bridges.find((bridge) => bridge.id === id);
@@ -22,6 +52,33 @@ const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
     });
     return result;
   }, [data, id]);
+
+  const [securityData, setSecurityData] = useState<ISecurityData>();
+  useEffect(() => {
+    const base = new Airtable({
+      apiKey: process.env.NEXT_PUBLIC_AIR_TABLE_API_KEY,
+    }).base('apppls15bkAlz7ko1');
+    base('tblZZDK3wwSUKWy5J') // ="Table 1"
+      .select({ view: 'Grid view' })
+      .eachPage(
+        function page(records, fetchNextPage) {
+          console.log(records);
+          records.forEach(function (record) {
+            console.log(record.get('Bridge'), id);
+            if (record.get('Bridge') === id) {
+              setSecurityData(record.fields as unknown as ISecurityData);
+            }
+          });
+          fetchNextPage();
+        },
+        function done(err) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+        },
+      );
+  }, [id]);
   if (bridge === undefined) return <div>Empty!</div>;
   return (
     <div className={styles.nodeSpecifics}>
@@ -38,33 +95,86 @@ const BridgeSpecifics = ({ data, id }: IBridgeProps): ReactElement => {
         </p>
         <DataBox caption="bridge TVL" value={format(tvl)} />
       </div>
-      <div className={styles.nodeItemGap8}>
-        <h2>Trustiness</h2>
-        <p className={styles.specialInfo}>
-          Trusted systems with no staked collateral
-        </p>
+      <div className={styles.nodeItem}>
+        <h2>
+          Trustlessness <span className={styles.byPartner}>by LI.FI</span>
+        </h2>
+        <BoxRow
+          align={BoxAlign.Left}
+          data={[
+            {
+              caption: 'Score',
+              value: (
+                <span className={styles.nodeCategory}>
+                  <span
+                    className={styles.trustlessnessLight}
+                    style={{
+                      background: trustToColor(
+                        securityData?.Trustlessness ?? '',
+                      ),
+                    }}
+                  ></span>
+                  {securityData?.Trustlessness ?? ''}
+                </span>
+              ),
+            },
+            {
+              caption: 'Type',
+              value: (
+                <span className={styles.nodeCategory}>
+                  {securityData?.Category ?? ''}
+                </span>
+              ),
+            },
+          ]}
+        />
+        <p className={styles.boxCaption}>Security Assumptions</p>
+        <div className={styles.securityDataList}>
+          {(securityData?.['Security assumptions'] ?? '')
+            .split('\n')
+            .map((info, index) => (
+              <p key={index} className={styles.specialInfo}>
+                {info}
+              </p>
+            ))}
+        </div>
       </div>
       <div className={styles.nodeItem}>
         <h2>
-          Bug bounties{' '}
-          <span className={styles.byImmunefi}>by immunefi.com</span>
+          Bug bounties <span className={styles.byPartner}>by immunefi.com</span>
         </h2>
-        <BoxRow
-          data={[
-            { caption: 'Live since', value: '11 Feb 2022' },
-            { caption: 'KYC required', value: 'yes' },
-            { caption: 'max bounty', value: '$10,000,000' },
-          ]}
-          align={BoxAlign.Center}
-        />
-        <a
-          href="#"
-          className={styles.bugButton}
-          rel="noreferrer"
-          target="_blank"
-        >
-          Submit bug
-        </a>
+        {securityData?.['Bounty max'] !== undefined ? (
+          <>
+            <BoxRow
+              data={[
+                {
+                  caption: 'Live since',
+                  value: securityData['Bounty live since'],
+                },
+                {
+                  caption: 'max bounty',
+                  value: format(securityData['Bounty max']),
+                },
+              ]}
+              align={BoxAlign.Left}
+            />
+            <Link passHref href={securityData['Bounty link']}>
+              <a className={styles.bugButton} rel="noreferrer" target="_blank">
+                Submit bug
+              </a>
+            </Link>
+          </>
+        ) : (
+          <div className={styles.bounty404}>
+            <img
+              src="/nobounty.svg"
+              alt="No bug bounty"
+              width="15"
+              height="15"
+            />
+            <p>This bridge has no bug bounty</p>
+          </div>
+        )}
       </div>
       {bridge.metadata.audits?.length && (
         <div className={styles.nodeItem}>

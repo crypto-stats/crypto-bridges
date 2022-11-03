@@ -1452,7 +1452,8 @@ export function drawGraph(
   }
 
   function getArrowLength(d: IFlowLink) {
-    return getPathWidth(d) * 1.6 + 5;
+    const addition = 7; // Should be 3 when width < 500.
+    return getPathWidth(d) * 1.6 + addition;
   }
 
   function hidePathIfChainsWithinBoundaries(d: any) {
@@ -1552,6 +1553,7 @@ export function drawGraph(
       ticked();
       unselectAll();
       setMode(GRAPH_MODES.FLOWS);
+      ticked();
     } else if (path.includes('bridges')) {
       isImportExport = false;
       resize();

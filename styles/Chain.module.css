@@ -4,6 +4,9 @@
   flex-direction: column;
   gap: 24px;
 }
+.securityDataList {
+  gap: 5px;
+}
 .nodeItemGap8 {
   display: flex;
   flex-direction: column;
@@ -24,15 +27,37 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  /* font-family: 'Inter'; */
+  font-style: normal;
   font-weight: 500;
-  font-size: 20px;
-  line-height: 150%;
+  font-size: 15px;
+  line-height: 20px;
+  /* or 133% */
+
   color: #dddddd;
 }
-.byImmunefi {
+.boxCaption {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a7a7a7;
+}
+.byPartner {
   text-transform: none;
   color: #6073a3;
   letter-spacing: normal;
+}
+.bounty404 {
+  display: flex;
+  gap: 5px;
+  /* font-family: 'Inter'; */
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  color: #dddddd;
 }
 .bugButton {
   padding: 8px 0;
@@ -84,6 +109,13 @@
   display: block;
   background: rgba(69, 100, 178, 0.2);
   border-radius: 4px;
+}
+.trustlessnessLight {
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  display: inline-block;
 }
 .nodeDataItem {
   display: flex;
