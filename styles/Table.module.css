@@ -102,6 +102,8 @@
   text-align: right;
   padding-right: 10px;
   box-sizing: border-box;
+}
+.autoWidth {
   flex: 1;
 }
 .nameBox {

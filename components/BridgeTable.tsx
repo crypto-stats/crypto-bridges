@@ -63,7 +63,7 @@ const BridgeTable = ({
                       passHref={true}
                     >
                       <a>
-                        <p className={styles.nameBox}>
+                        <p className={`${styles.nameBox} ${styles.autoWidth}`}>
                           <span>{addLeadingZero(index + 1)}</span>
                           <span>
                             <img
