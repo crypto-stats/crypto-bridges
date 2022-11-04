@@ -1272,22 +1272,31 @@ export function drawGraph(
     currentSimulation = forceSimulation(data.nodes as SimulationNodeDatum[])
       .force(
         'charge',
-        forceManyBody().strength((d: any) => {
-          const force = -30 / (10000 - repulsionForce * 1000);
-          return force * availableArea;
-        }),
+        forceManyBody().strength(
+          (d: any) =>
+            (-availableArea * getTvlRadius(d)) /
+            (10000 - repulsionForce * 1000),
+        ),
       )
       .force(
         'link',
         forceLink()
-          .strength((d: any) => 0.1 - repulsionForce * 0.01)
+          .strength(
+            (d: any) =>
+              0.2 -
+              0.02 *
+                Math.pow(
+                  Math.max(0.01, kAFlows * Math.log(kBFlows * d.flow)),
+                  2,
+                ) *
+                repulsionForce,
+          )
           .id((d: any) => (d as IChainNode).id)
           .links(data.links),
       )
       .force('center', forceCenter(width / 2, height / 2))
       .on('tick', ticked)
       .on('end', ticked);
-
     tvlCircles.attr('r', getTvlRadius);
     images
       .attr('width', LOGO_SIZE)
