@@ -111,7 +111,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
 export const getStaticProps = async () => {
   const data = await loadData();
   const date = new Date().toString();
-  return { props: { data, date }, revalidate: 5 * 60 };
+  return { props: { data, date, env: process.env }, revalidate: 5 * 60 };
 };
 
 export default Bridges;
