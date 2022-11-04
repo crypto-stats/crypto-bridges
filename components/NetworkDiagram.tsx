@@ -60,9 +60,15 @@ export default function NetworkDiagram() {
     useState<TooltipBridgeArg>(false);
   const data = useData();
   const svg = useRef<SVGSVGElement>(null);
+  const [repulsion, setRepulsion] = useState(1);
+  const increaseRepulsion = () => setRepulsion(repulsion + 1);
+  const decreaseRepulsion = () => setRepulsion(repulsion - 1);
   useEffect(() => {
     if (data === undefined) return;
     if (graph !== undefined) {
+      if (graph.repulsion() !== repulsion) {
+        graph.setRepulsion(repulsion);
+      }
       if (graph.showsImports() !== isImport) {
         graph.showImports(isImport);
         graph.updateSelected(router.asPath);
@@ -131,6 +137,7 @@ export default function NetworkDiagram() {
     router,
     graph,
     isImport,
+    repulsion,
     setShowBridgeTooltip,
     setShowChainTooltip,
     setShowFlowTooltip,
@@ -141,6 +148,10 @@ export default function NetworkDiagram() {
   return (
     <div className={style.networkDiagram}>
       <svg ref={svg}></svg>
+      <div className={style.buttons}>
+        <button onClick={increaseRepulsion}>+</button>
+        <button onClick={decreaseRepulsion}>-</button>
+      </div>
       <Tooltip
         showChainTooltip={showChainTooltip}
         showFlowTooltip={showFlowTooltip}

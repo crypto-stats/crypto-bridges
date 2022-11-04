@@ -58,6 +58,8 @@ export interface INetworkGraph {
   updateImportBoundaries: (boundaries: [number, number]) => void;
   exportBoundaries: () => [number, number];
   updateExportBoundaries: (boundaries: [number, number]) => void;
+  repulsion: () => number;
+  setRepulsion: (value: number) => void;
 }
 
 enum DISTRIBUTION {
@@ -125,6 +127,8 @@ export function drawGraph(
   let bridgeSelected: IBridgeLink | undefined;
   let sankeyNodesStacked = 0;
   let loaderTick = 0;
+  let repulsionForce = 1;
+  let reRunSimulation = false;
 
   // initGui();
 
@@ -1241,10 +1245,14 @@ export function drawGraph(
 
   function resize() {
     const dimensions = getDiagramDimensions();
-    // Cancel resize if the dimensions have not actualy changed (as in
-    // portrait mode height resize).
-    if (dimensions.width === width && dimensions.height === height) {
-      return;
+    if (!reRunSimulation) {
+      // Cancel resize if the dimensions have not actualy changed (as in
+      // portrait mode height resize).
+      if (dimensions.width === width && dimensions.height === height) {
+        return;
+      }
+    } else {
+      reRunSimulation = false;
     }
     if (currentSimulation !== undefined) {
       currentSimulation.stop();
@@ -1265,13 +1273,14 @@ export function drawGraph(
       .force(
         'charge',
         forceManyBody().strength((d: any) => {
-          const force = getTvlRadius(d) / -10000;
+          const force = -30 / (10000 - repulsionForce * 1000);
           return force * availableArea;
         }),
       )
       .force(
         'link',
         forceLink()
+          .strength((d: any) => 0.1 - repulsionForce * 0.01)
           .id((d: any) => (d as IChainNode).id)
           .links(data.links),
       )
@@ -1635,6 +1644,16 @@ export function drawGraph(
     ticked();
   }
 
+  function repulsion() {
+    return repulsionForce;
+  }
+
+  function setRepulsion(value: number) {
+    repulsionForce = value;
+    reRunSimulation = true;
+    resize();
+  }
+
   return {
     updateSelected,
     showImports,
@@ -1643,5 +1662,7 @@ export function drawGraph(
     updateImportBoundaries,
     exportBoundaries,
     updateExportBoundaries,
+    repulsion,
+    setRepulsion,
   };
 }
