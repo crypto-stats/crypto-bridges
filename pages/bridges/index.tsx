@@ -33,6 +33,8 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
   const { bridges, subbridges } = useMemo(() => {
     const bridges: BridgeList = [];
     const subbridges: SubbridgeList = [];
+    const getBridgeName = (id: string) => data.bridges.find(bridge => bridge.id === id)?.metadata.name || id;
+
     convertedData.links.forEach((x) => {
       const link = x as unknown as IBridgeLink;
       if (link.bridge === undefined) return;
@@ -41,7 +43,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
       );
       if (existingBridgeIndex === -1) {
         bridges.push({
-          name: link.bridge,
+          name: getBridgeName(link.bridge),
           id: link.bridge,
           tvl: link.flow,
           logo: link.logo,
@@ -56,7 +58,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
       );
       if (existingSubbridgeIndex === -1) {
         subbridges.push({
-          name: link.source + ' - ' + link.target,
+          name: `${getBridgeName(link.bridge)}: ${link.source} - ${link.target}`,
           id: link.bridge,
           tvl: link.flow,
           logo: link.logo,
@@ -73,8 +75,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
     });
     return { bridges, subbridges };
   }, [convertedData, data]);
-  bridges.sort((a, b) => b.tvl - a.tvl);
-  subbridges.sort((a, b) => b.tvl - a.tvl);
+
   useEffect(() => {
     const findMaxElements = () => {
       const isLandscape = needsLandscape();

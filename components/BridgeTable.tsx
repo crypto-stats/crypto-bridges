@@ -25,7 +25,6 @@ const BridgeTable = ({
 }: IBridgeTableProps): ReactElement => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleCollapsed = () => setCollapsed(!collapsed);
-  const array = tableContent.sort((a, b) => b.tvl - a.tvl);
   const { minValue, maxValue } = useMemo(() => {
     const tvl = tableContent.map((v) => v.tvl);
     const minTvl = Math.min.apply(null, tvl);
@@ -35,6 +34,7 @@ const BridgeTable = ({
       maxValue: maxTvl,
     };
   }, [tableContent]);
+
   return (
     <>
       <div className={styles.table}>
@@ -52,7 +52,8 @@ const BridgeTable = ({
             <p>{'TVL'}</p>
           </div>
           <ol className={styles.list}>
-            {array
+            {tableContent
+              .sort((a, b) => b.tvl - a.tvl)
               .slice(0, collapsed ? limit : undefined)
               .map((content, index) => {
                 return (
