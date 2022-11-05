@@ -8,6 +8,13 @@
       "whitepaper": "https://github.com/AcalaNetwork/Acala-white-paper/blob/master/Acala_Whitepaper.pdf"
     },
     {
+      "id": "aptos",
+      "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmbUfEDSM1XVVSiAxWEqZBYjXMf1Ja45dVVdbH2gtmukDg",
+      "description": "TODO",
+      "website": "https://aptos.dev/",
+      "whitepaper": "https://aptos.dev/aptos-white-paper/aptos-white-paper-index/"
+    },
+    {
       "id": "axelar",
       "name": "Axelar Chain",
       "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmS9Gu4osnWCd3PPxwWrb3uUWCERGWAR4TSkjNQt4orUki",
