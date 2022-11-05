@@ -36,7 +36,5 @@ export async function loadData(): Promise<IData> {
 
   const bridges: any = await collection.getBundles();
 
-  const securityData = await fetch('https://v1.nocodeapi.com/dmihal/airtable/EcuYTRIwIpUHVGwG?tableName=Bridges')
-
   return { flows, bridges, chains: chainData.chains as any };
 }
