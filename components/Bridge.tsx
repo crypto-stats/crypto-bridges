@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ReactElement, useMemo } from 'react';
+import { ISecurityData, Trust } from '../data/security-data';
 import { IData } from '../data/types';
 import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
@@ -9,22 +10,8 @@ import DataBox from './DataBox';
 interface IBridgeProps {
   data: IData;
   id: string;
-  securityData?: ISecurityData;
+  securityData: ISecurityData | null;
 }
-
-export interface ISecurityData {
-  Bridge: string;
-  Description: string;
-  Category: string;
-  'Security assumptions': string;
-  Trustlessness: Trust;
-  Documentation: string;
-  'Bounty max': string;
-  'Bounty live since': string;
-  'Bounty link': string;
-}
-
-export type Trust = 'Very High' | 'High' | 'Medium' | 'Low' | 'Very Low';
 
 const trustToColor = (trust: Trust) => {
   switch (trust) {

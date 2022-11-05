@@ -1,11 +1,10 @@
-import Airtable from 'airtable';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
 import BackButton from '../../components/BackButton';
-import BridgeSpecifics, { ISecurityData } from '../../components/Bridge';
+import BridgeSpecifics from '../../components/Bridge';
 import Motion from '../../components/Motion';
 import Table from '../../components/Table';
 import { loadData } from '../../data/load-data';
+import { getSecurityData, ISecurityData } from '../../data/security-data';
 import { GetStaticBridgeProps, IData } from '../../data/types';
 import styles from '../../styles/page.module.css';
 
@@ -13,6 +12,7 @@ interface IBridgeProps {
   bridge: string;
   data: IData;
   date: string;
+  securityData: ISecurityData | null;
 }
 
 interface IBridgePath {
@@ -22,26 +22,11 @@ interface IBridgePath {
 const Bridge: NextPage<IBridgeProps> = ({
   bridge,
   data,
+  securityData,
   date,
 }: IBridgeProps) => {
   console.log(`Data for bridge page ${bridge} collected on ${date}`);
-  const [securityData, setSecurityData] = useState<ISecurityData>();
-  useEffect(() => {
-    const base = new Airtable({
-      apiKey: process.env.NEXT_PUBLIC_AIR_TABLE_API_KEY,
-    }).base('apppls15bkAlz7ko1');
-    base('tblZZDK3wwSUKWy5J') // ="Table 1"
-      .select({ view: 'Grid view' })
-      .eachPage((records) => {
-        const entry = records.find(
-          (records) => records.fields['Bridge'] === bridge,
-        );
-        if (entry === undefined) {
-          return;
-        }
-        setSecurityData(entry.fields as unknown as ISecurityData);
-      });
-  }, [bridge]);
+
   return (
     <Motion>
       <section className={styles.section}>
@@ -106,8 +91,9 @@ export async function getStaticPaths(): Promise<{
 export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
   const data = await loadData();
   const date = new Date().toString();
+  const securityData = await getSecurityData(params!.bridge);
 
-  return { props: { data, date, ...params }, revalidate: 5 * 60 };
+  return { props: { data, date, securityData, ...params }, revalidate: 5 * 60 };
 };
 
 export default Bridge;

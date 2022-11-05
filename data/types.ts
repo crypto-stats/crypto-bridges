@@ -57,5 +57,6 @@ export interface IBridge {
 }
 
 export type GetStaticBridgeProps<T = any> = GetStaticProps<
-  T & { data: IData; date: string }
+  T & { data: IData; date: string },
+  { bridge: string }
 >;
