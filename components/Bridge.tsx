@@ -53,10 +53,7 @@ const BridgeSpecifics = ({
           <p className={styles.nodeName}>{bridge.metadata.name}</p>
           <p className={styles.nodeCategory}>{bridge.metadata.category}</p>
         </div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+        <p>{bridge.metadata.description || securityData?.Description}</p>
         <DataBox caption="bridge TVL" value={format(tvl)} />
       </div>
       {securityData && (
