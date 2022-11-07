@@ -36,6 +36,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
     const subBridges: SubBridge[] = [];
     const subBridgesById: { [id: string]: SubBridge } = {};
     const getBridgeName = (id: string) => data.bridges.find(bridge => bridge.id === id)?.metadata.name || id;
+    const getChainName = (id: string) => data.chains.find(chain => chain.id === id)?.name || id;
 
     convertedData.links.forEach((x) => {
       const link = x as unknown as IBridgeLink;
@@ -57,7 +58,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
       const id = `${link.bridge}-${link.source}-${link.target}`;
       if (!subBridgesById[id]) {
         const subBridge = {
-          name: `${getBridgeName(link.bridge)}: ${link.source} - ${link.target}`,
+          name: `${getBridgeName(link.bridge)}: ${getChainName(link.source)} - ${getChainName(link.target)}`,
           id: link.bridge,
           tvl: link.flow,
           logo: link.logo,
