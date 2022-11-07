@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { ReactElement, useMemo } from 'react';
 import { ISecurityData, Trust } from '../data/security-data';
 import { IData } from '../data/types';
 import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
+import BountyBox from './BountyBox';
 import BoxRow, { BoxAlign } from './BoxRow';
 import DataBox from './DataBox';
 
@@ -56,6 +56,7 @@ const BridgeSpecifics = ({
         <p>{bridge.metadata.description || securityData?.Description}</p>
         <DataBox caption="bridge TVL" value={format(tvl)} />
       </div>
+
       {securityData && (
         <div className={styles.nodeItem}>
           <h2>
@@ -102,43 +103,9 @@ const BridgeSpecifics = ({
           </div>
         </div>
       )}
-      <div className={styles.nodeItem}>
-        <h2>
-          Bug bounties <span className={styles.byPartner}>by immunefi.com</span>
-        </h2>
-        {securityData?.['Bounty max'] !== undefined ? (
-          <>
-            <BoxRow
-              data={[
-                {
-                  caption: 'Live since',
-                  value: securityData['Bounty live since'],
-                },
-                {
-                  caption: 'max bounty',
-                  value: format(Number(securityData['Bounty max'])),
-                },
-              ]}
-              align={BoxAlign.Left}
-            />
-            <Link passHref href={securityData['Bounty link']}>
-              <a className={styles.bugButton} rel="noreferrer" target="_blank">
-                Submit bug
-              </a>
-            </Link>
-          </>
-        ) : (
-          <div className={styles.bounty404}>
-            <img
-              src="/nobounty.svg"
-              alt="No bug bounty"
-              width="15"
-              height="15"
-            />
-            <p>This bridge has no bug bounty</p>
-          </div>
-        )}
-      </div>
+
+      <BountyBox securityData={securityData} />
+
       {bridge.metadata.audits?.length && (
         <div className={styles.nodeItem}>
           <div className={styles.nodeDataItem}>

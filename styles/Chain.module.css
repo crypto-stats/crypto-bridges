@@ -49,31 +49,6 @@
   color: #6073a3;
   letter-spacing: normal;
 }
-.bounty404 {
-  display: flex;
-  gap: 5px;
-  /* font-family: 'Inter'; */
-  font-style: normal;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 20px;
-  color: #dddddd;
-}
-.bugButton {
-  padding: 8px 0;
-  background: rgba(69, 100, 178, 0.5);
-  border: 1px solid #2a3c6b;
-  border-radius: 40px;
-  text-decoration: none;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  transition: background 400ms ease;
-}
-.bugButton:hover {
-  background: rgba(69, 100, 178, 0.7);
-}
 .nodeInfo {
   display: flex;
   align-items: center;

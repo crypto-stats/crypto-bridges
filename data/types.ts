@@ -53,6 +53,7 @@ export interface IBridge {
     icon: string;
     website?: string;
     audits?: IAudit[];
+    description?: string;
   };
 }
 
