@@ -14,8 +14,8 @@ interface IBridgeProps {
   date: string;
 }
 
-type BridgeList = { id: string; name: string; tvl: number; logo: string }[];
-type SubbridgeList = {
+type IBridge = { id: string; name: string; tvl: number; logo: string };
+type SubBridge = {
   id: string;
   name: string;
   tvl: number;
@@ -24,40 +24,39 @@ type SubbridgeList = {
   chain1Logo?: string;
   chain2Name: string;
   chain2Logo?: string;
-}[];
+};
 
 const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
   console.log(`Data for bridge page collected on ${date}`);
   const convertedData = convertDataForGraph(data);
   const [displayLimit, setDisplayLimit] = useState(DEFAULT_MAX_ELEMENTS);
-  const { bridges, subbridges } = useMemo(() => {
-    const bridges: BridgeList = [];
-    const subbridges: SubbridgeList = [];
+  const { bridges, subBridges } = useMemo(() => {
+    const bridges: IBridge[] = [];
+    const bridgesById: { [id: string]: IBridge } = {};
+    const subBridges: SubBridge[] = [];
+    const subBridgesById: { [id: string]: SubBridge } = {};
     const getBridgeName = (id: string) => data.bridges.find(bridge => bridge.id === id)?.metadata.name || id;
 
     convertedData.links.forEach((x) => {
       const link = x as unknown as IBridgeLink;
       if (link.bridge === undefined) return;
-      const existingBridgeIndex = bridges.findIndex(
-        (bridge) => bridge.name === link.bridge,
-      );
-      if (existingBridgeIndex === -1) {
-        bridges.push({
+
+      if (!bridgesById[link.bridge]) {
+        const bridge: IBridge = {
           name: getBridgeName(link.bridge),
           id: link.bridge,
           tvl: link.flow,
           logo: link.logo,
-        });
+        };
+        bridges.push(bridge);
+        bridgesById[link.bridge] = bridge;
       } else {
-        bridges[existingBridgeIndex].tvl += link.flow;
+        bridgesById[link.bridge].tvl += link.flow;
       }
-      const existingSubbridgeIndex = subbridges.findIndex(
-        (subbridge) =>
-          [link.source, link.target].includes(subbridge.chain1Name) &&
-          [link.source, link.target].includes(subbridge.chain2Name),
-      );
-      if (existingSubbridgeIndex === -1) {
-        subbridges.push({
+
+      const id = `${link.bridge}-${link.source}-${link.target}`;
+      if (!subBridgesById[id]) {
+        const subBridge = {
           name: `${getBridgeName(link.bridge)}: ${link.source} - ${link.target}`,
           id: link.bridge,
           tvl: link.flow,
@@ -68,12 +67,14 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
           chain2Name: link.target,
           chain2Logo: data.chains.find((chain) => chain.id === link.target)
             ?.logo,
-        });
+        };
+        subBridges.push(subBridge);
+        subBridgesById[id] = subBridge;
       } else {
-        subbridges[existingSubbridgeIndex].tvl += link.flow;
+        subBridgesById[id].tvl += link.flow;
       }
     });
-    return { bridges, subbridges };
+    return { bridges, subBridges };
   }, [convertedData, data]);
 
   useEffect(() => {
@@ -101,7 +102,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
         />
         <BridgeTable
           title="Top sub bridges"
-          tableContent={subbridges}
+          tableContent={subBridges}
           limit={displayLimit}
         />
       </menu>
