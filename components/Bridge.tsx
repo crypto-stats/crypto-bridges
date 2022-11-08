@@ -1,3 +1,4 @@
+import { usePlausible } from 'next-plausible';
 import { ReactElement, useMemo } from 'react';
 import { ISecurityData, Trust } from '../data/security-data';
 import { IData } from '../data/types';
@@ -33,6 +34,7 @@ const BridgeSpecifics = ({
   id,
   securityData,
 }: IBridgeProps): ReactElement => {
+  const plausible = usePlausible();
   const bridge = data.bridges.find((bridge) => bridge.id === id);
   const tvl = useMemo(() => {
     let result = 0;
@@ -45,6 +47,8 @@ const BridgeSpecifics = ({
     return result;
   }, [data, id]);
   if (bridge === undefined) return <div>Empty!</div>;
+
+  const trackLifiClick = () => void plausible('lifi-click');
 
   return (
     <div className={styles.nodeSpecifics}>
@@ -67,7 +71,15 @@ const BridgeSpecifics = ({
       {securityData && (
         <div className={styles.nodeItem}>
           <h2>
-            Trustlessness <span className={styles.byPartner}>by LI.FI</span>
+            Trustlessness {}
+            <a
+              className={styles.byPartner}
+              onClick={trackLifiClick}
+              target="_blank"
+              href="https://li.fi/"
+            >
+              by LI.FI
+            </a>
           </h2>
           <BoxRow
             align={BoxAlign.Left}
