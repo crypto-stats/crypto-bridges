@@ -1,3 +1,4 @@
+import { usePlausible } from 'next-plausible';
 import Link from 'next/link';
 import { ReactElement, ReactNode, useMemo, useState } from 'react';
 import styles from '../styles/Table.module.css';
@@ -28,8 +29,8 @@ const Table = ({
   limit,
   valueIn = false,
 }: ITableProps): ReactElement => {
+  const plausible = usePlausible();
   const [collapsed, setCollapsed] = useState(true);
-  const toggleCollapsed = () => setCollapsed(!collapsed);
   const array = tableContent.sort((a, b) =>
     valueIn ? b.in - a.in : b.tvl - a.tvl,
   );
@@ -45,6 +46,18 @@ const Table = ({
       maxValue: Math.max(maxInflow, maxOutflow),
     };
   }, [tableContent]);
+
+  const toggleCollapsed = () => {
+    if (collapsed) {
+      plausible('expand-table', {
+        props: {
+          title,
+        },
+      });
+    }
+    setCollapsed(!collapsed);
+  }
+
   return (
     <>
       <div className={styles.table}>

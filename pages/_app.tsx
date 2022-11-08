@@ -10,6 +10,7 @@ import '../styles/globals.css';
 
 import Router from 'next/router';
 import { DataProvider } from '../data/data-context';
+import PlausibleProvider from 'next-plausible';
 
 const routeChange = () => {
   // Temporary fix to avoid flash of unstyled content
@@ -52,16 +53,18 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         height={4}
         options={{ trickle: false, showSpinner: false }}
       />
-      <main>
-        <DataProvider data={pageProps.data}>
-          <Header />
-          <NetworkDiagram />
-          <Panel>
-            <Component {...pageProps} />
-          </Panel>
-          <Footer />
-        </DataProvider>
-      </main>
+      <PlausibleProvider domain="cryptoflows.info">
+        <main>
+          <DataProvider data={pageProps.data}>
+            <Header />
+            <NetworkDiagram />
+            <Panel>
+              <Component {...pageProps} />
+            </Panel>
+            <Footer />
+          </DataProvider>
+        </main>
+      </PlausibleProvider>
     </>
   );
 }

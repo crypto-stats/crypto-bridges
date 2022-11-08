@@ -1,5 +1,7 @@
+const { withPlausibleProxy } = require('next-plausible')
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+let nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
@@ -19,5 +21,9 @@ const nextConfig = {
     ],
   },
 };
+
+nextConfig = withPlausibleProxy({
+  customDomain: 'https://analytics.cryptostats.community',
+})(nextConfig);
 
 module.exports = nextConfig;

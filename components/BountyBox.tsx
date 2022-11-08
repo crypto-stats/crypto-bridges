@@ -3,16 +3,30 @@ import { ISecurityData } from '../data/security-data';
 import styles from '../styles/BountyBox.module.css';
 import BoxRow, { BoxAlign } from './BoxRow';
 import { format } from '../utils';
+import { usePlausible } from 'next-plausible';
 
 interface BountyBoxProps {
+  id: string;
   securityData: ISecurityData | null;
 }
 
-export default function BountyBox({ securityData }: BountyBoxProps) {
+const IMMUNEFI_LANDING_PAGE = 'https://immunefi.webflow.com/';
+
+export default function BountyBox({ id, securityData }: BountyBoxProps) {
+  const plausible = usePlausible();
+
+  const trackBountyClick = () => {
+    plausible('bounty-click', {
+      props: {
+        id,
+      },
+    })
+  }
+
   return (
     <div className={styles.nodeItem}>
       <h2>
-        Bug bounties <span className={styles.byPartner}>by immunefi.com</span>
+        Bug bounties <a href={IMMUNEFI_LANDING_PAGE} className={styles.byPartner}>by immunefi.com</a>
       </h2>
 
       {securityData?.['Bounty max'] !== undefined ? (
@@ -30,8 +44,13 @@ export default function BountyBox({ securityData }: BountyBoxProps) {
             ]}
             align={BoxAlign.Left}
           />
-          <a href={securityData['Bounty link']} className={styles.bugButton} rel="noreferrer" target="_blank">
-            Submit bug
+          <a
+            href={securityData['Bounty link']}
+            className={styles.bugButton}
+            onClick={trackBountyClick}
+            target="_blank"
+          >
+            View bounty details
           </a>
         </>
       ) : (

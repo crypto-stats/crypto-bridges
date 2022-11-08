@@ -17,6 +17,7 @@
     "d3-sankey": "^0.12.3",
     "dat.gui": "^0.7.9",
     "next": "12.2.4",
+    "next-plausible": "^3.6.4",
     "nextjs-progressbar": "^0.0.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -49,6 +50,7 @@
     "rules": {
       "no-console": 1,
       "prettier/prettier": 0,
+      "react/jsx-no-target-blank": 0,
       "@next/next/no-img-element": 0,
       "@typescript-eslint/no-floating-promises": 0,
       "@typescript-eslint/no-misused-promises": 0,

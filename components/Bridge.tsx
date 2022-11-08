@@ -104,7 +104,7 @@ const BridgeSpecifics = ({
         </div>
       )}
 
-      <BountyBox securityData={securityData} />
+      <BountyBox id={id} securityData={securityData} />
 
       {bridge.metadata.audits?.length && (
         <div className={styles.nodeItem}>

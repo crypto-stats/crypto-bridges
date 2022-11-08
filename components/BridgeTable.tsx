@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ReactElement, ReactNode, useMemo, useState } from 'react';
 import styles from '../styles/Table.module.css';
 import { addLeadingZero, format } from '../utils';
+import { usePlausible } from 'next-plausible';
 
 export interface IBridgeTableItem {
   id: string;
@@ -23,8 +24,8 @@ const BridgeTable = ({
   title,
   limit,
 }: IBridgeTableProps): ReactElement => {
+  const plausible = usePlausible();
   const [collapsed, setCollapsed] = useState(true);
-  const toggleCollapsed = () => setCollapsed(!collapsed);
   const { minValue, maxValue } = useMemo(() => {
     const tvl = tableContent.map((v) => v.tvl);
     const minTvl = Math.min.apply(null, tvl);
@@ -34,6 +35,17 @@ const BridgeTable = ({
       maxValue: maxTvl,
     };
   }, [tableContent]);
+
+  const toggleCollapsed = () => {
+    if (collapsed) {
+      plausible('expand-table', {
+        props: {
+          title,
+        },
+      });
+    }
+    setCollapsed(!collapsed);
+  }
 
   return (
     <>
