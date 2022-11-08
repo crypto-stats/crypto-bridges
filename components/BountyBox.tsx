@@ -12,10 +12,13 @@ interface BountyBoxProps {
   tvl: number;
 }
 
-const IMMUNEFI_LANDING_PAGE = 'https://immunefi.webflow.com/';
+const IMMUNEFI_LANDING_PAGE = 'https://immunefi.webflow.io/';
 
 export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
   const plausible = usePlausible();
+
+  const utm = `?utm_source=cryptoflows&utm_medium=partner&utm_campaign=2022_Q4_partnership&utm_content=${id}`;
+  const immunefiLink = `${IMMUNEFI_LANDING_PAGE}${utm}`;
 
   const trackBountyClick = () => {
     plausible('bounty-click', {
@@ -24,14 +27,14 @@ export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
       },
     })
   };
-  const trackImmunefiClick = () => void plausible('bounty-click');
+  const trackImmunefiClick = () => void plausible('immunefi-click');
 
   return (
     <div className={styles.nodeItem}>
       <h2>
         Bug bounties {}
         <a
-          href={IMMUNEFI_LANDING_PAGE}
+          href={immunefiLink}
           className={styles.byPartner}
           target="_blank"
           onClick={trackImmunefiClick}
@@ -60,7 +63,7 @@ export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
             align={BoxAlign.Left}
           />
           <a
-            href={securityData['Bounty link']}
+            href={securityData['Bounty link'] + utm}
             onClick={trackBountyClick}
             target="_blank"
             className={styles.immunefiCTA}
@@ -76,7 +79,7 @@ export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
             This bridge has no bug bounty
           </p>
           <a
-            href={IMMUNEFI_LANDING_PAGE}
+            href={immunefiLink}
             target="_blank"
             onClick={trackImmunefiClick}
             className={styles.immunefiCTA}
