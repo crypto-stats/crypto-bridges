@@ -9,11 +9,12 @@ import { usePlausible } from 'next-plausible';
 interface BountyBoxProps {
   id: string;
   securityData: ISecurityData | null;
+  tvl: number;
 }
 
 const IMMUNEFI_LANDING_PAGE = 'https://immunefi.webflow.com/';
 
-export default function BountyBox({ id, securityData }: BountyBoxProps) {
+export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
   const plausible = usePlausible();
 
   const trackBountyClick = () => {
@@ -46,6 +47,10 @@ export default function BountyBox({ id, securityData }: BountyBoxProps) {
               {
                 caption: 'Live since',
                 value: securityData['Bounty live since'],
+              },
+              {
+                caption: '% of TVL',
+                value: (parseFloat(securityData['Bounty max']) / tvl * 100).toFixed(1) + '%',
               },
               {
                 caption: 'max bounty',
