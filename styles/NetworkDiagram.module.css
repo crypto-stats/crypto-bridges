@@ -20,7 +20,7 @@
 }
 .buttons {
   position: absolute;
-  left: calc(50% - 45px);
+  left: 10;
   margin-bottom: 10px;
   bottom: 0;
 }
@@ -29,13 +29,19 @@
   background: #283b6d;
   border: none;
   padding: 10px;
-  width: 40px;
-  height: 40px;
-  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  font-size: 24px;
   line-height: 5px;
   margin-right: 10px;
   cursor: pointer;
+  opacity: 0.5;
 }
 .buttons button:hover {
   background: #344d8b;
+  opacity: 0.8;
+}
+.buttons button:disabled {
+  background: #344d8b;
+  opacity: 0.3 !important;
 }

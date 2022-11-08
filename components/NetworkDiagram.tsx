@@ -60,9 +60,11 @@ export default function NetworkDiagram() {
     useState<TooltipBridgeArg>(false);
   const data = useData();
   const svg = useRef<SVGSVGElement>(null);
-  const [repulsion, setRepulsion] = useState(1);
-  const increaseRepulsion = () => setRepulsion(repulsion + 1);
-  const decreaseRepulsion = () => setRepulsion(repulsion - 1);
+
+  const [repulsion, setRepulsion] = useState(5);
+  const increaseRepulsion = repulsion < 9 ? () => setRepulsion(repulsion + 1) : undefined;
+  const decreaseRepulsion = repulsion > -9 ? () => setRepulsion(repulsion - 1) : undefined;
+
   useEffect(() => {
     if (data === undefined) return;
     if (graph !== undefined) {
@@ -149,8 +151,8 @@ export default function NetworkDiagram() {
     <div className={style.networkDiagram}>
       <svg ref={svg}></svg>
       <div className={style.buttons}>
-        <button onClick={increaseRepulsion}>+</button>
-        <button onClick={decreaseRepulsion}>-</button>
+        <button onClick={increaseRepulsion} disabled={repulsion > 8}>+</button>
+        <button onClick={decreaseRepulsion} disabled={repulsion < -8}>-</button>
       </div>
       <Tooltip
         showChainTooltip={showChainTooltip}
