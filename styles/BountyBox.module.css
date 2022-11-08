@@ -22,8 +22,6 @@
 }
 
 .bounty404 {
-  display: flex;
-  gap: 5px;
   /* font-family: 'Inter'; */
   font-style: normal;
   font-weight: 500;
@@ -31,18 +29,24 @@
   line-height: 20px;
   color: #dddddd;
 }
-.bugButton {
-  padding: 8px 0;
-  background: rgba(69, 100, 178, 0.5);
-  border: 1px solid #2a3c6b;
-  border-radius: 40px;
-  text-decoration: none;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  transition: background 400ms ease;
+
+.warn {
+  color: #E20723;
+  vertical-align: middle;
+  margin-right: 8px;
 }
-.bugButton:hover {
-  background: rgba(69, 100, 178, 0.7);
+
+.immunefiCTA {
+  text-decoration: underline;
+  color: #6073A3;
+  display: block;
+  margin-top: 24px;
+}
+.immunefiCTA:hover {
+  text-decoration: none;
+}
+
+.external {
+  margin-left: 8px;
+  vertical-align: middle;
 }

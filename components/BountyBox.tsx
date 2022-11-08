@@ -3,6 +3,7 @@ import { ISecurityData } from '../data/security-data';
 import styles from '../styles/BountyBox.module.css';
 import BoxRow, { BoxAlign } from './BoxRow';
 import { format } from '../utils';
+import { AlertTriangle, ExternalLink } from 'lucide-react';
 import { usePlausible } from 'next-plausible';
 
 interface BountyBoxProps {
@@ -21,12 +22,21 @@ export default function BountyBox({ id, securityData }: BountyBoxProps) {
         id,
       },
     })
-  }
+  };
+  const trackImmunefiClick = () => plausible('bounty-click');
 
   return (
     <div className={styles.nodeItem}>
       <h2>
-        Bug bounties <a href={IMMUNEFI_LANDING_PAGE} className={styles.byPartner}>by immunefi.com</a>
+        Bug bounties {}
+        <a
+          href={IMMUNEFI_LANDING_PAGE}
+          className={styles.byPartner}
+          target="_blank"
+          onClick={trackImmunefiClick}
+        >
+          by immunefi.com
+        </a>
       </h2>
 
       {securityData?.['Bounty max'] !== undefined ? (
@@ -46,22 +56,29 @@ export default function BountyBox({ id, securityData }: BountyBoxProps) {
           />
           <a
             href={securityData['Bounty link']}
-            className={styles.bugButton}
             onClick={trackBountyClick}
             target="_blank"
+            className={styles.immunefiCTA}
           >
             View bounty details
+            <ExternalLink className={styles.external} size={16} />
           </a>
         </>
       ) : (
         <div className={styles.bounty404}>
-          <img
-            src="/nobounty.svg"
-            alt="No bug bounty"
-            width="15"
-            height="15"
-          />
-          <p>This bridge has no bug bounty</p>
+          <p>
+            <AlertTriangle className={styles.warn} size={16} />
+            This bridge has no bug bounty
+          </p>
+          <a
+            href={IMMUNEFI_LANDING_PAGE}
+            target="_blank"
+            onClick={trackImmunefiClick}
+            className={styles.immunefiCTA}
+          >
+            Learn how to secure your project
+            <ExternalLink className={styles.external} size={16} />
+          </a>
         </div>
       )}
     </div>
