@@ -142,7 +142,7 @@ export default function Header() {
             <span className={styles.verticalAlign}>
               <Image src="/logo.png" width={45} height={45} alt="" />
             </span> */}
-              <h1>Cryptoflows.info</h1>
+              <h1>CryptoFlows.info</h1>
             </a>
           </Link>
           <p className={styles.baseline}>
