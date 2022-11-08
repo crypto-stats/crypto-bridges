@@ -149,6 +149,7 @@ export default function NetworkDiagram() {
     <div className={style.networkDiagram}>
       <svg ref={svg}></svg>
       <div className={style.buttons}>
+        <span style={{color: 'white'}}>{repulsion}</span>
         <button onClick={increaseRepulsion}>+</button>
         <button onClick={decreaseRepulsion}>-</button>
       </div>
