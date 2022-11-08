@@ -61,7 +61,7 @@ export default function NetworkDiagram() {
   const data = useData();
   const svg = useRef<SVGSVGElement>(null);
 
-  const [repulsion, setRepulsion] = useState(8);
+  const [repulsion, setRepulsion] = useState(7);
   const increaseRepulsion = repulsion < 9 ? () => setRepulsion(repulsion + 1) : undefined;
   const decreaseRepulsion = repulsion > -9 ? () => setRepulsion(repulsion - 1) : undefined;
 
