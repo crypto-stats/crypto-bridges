@@ -1216,18 +1216,19 @@ export function drawGraph(
     }
   }
 
-  function getTvlRadius(d: any): number {
+  function getTvlRadius(d: IChainNode): number {
     if (mode === GRAPH_MODES.SANKEY) {
       return Math.sqrt((NODE_AREAS_SHARE.SANKEY * availableArea) / Math.PI);
     }
+    const totalTVL = d.tvl + d.in;
     switch (distribution) {
       case DISTRIBUTION.LINEAR: {
-        const areaShare = kLinAN * d.tvl + kLinBN;
+        const areaShare = kLinAN * totalTVL + kLinBN;
         const area = availableArea * areaShare;
         return Math.sqrt(area / Math.PI);
       }
       case DISTRIBUTION.LOGARITHMIC: {
-        const areaShare = kLogAN * Math.log(kLogBN * d.tvl);
+        const areaShare = kLogAN * Math.log(kLogBN * totalTVL);
         const area = availableArea * areaShare;
         return Math.sqrt(area / Math.PI);
       }
