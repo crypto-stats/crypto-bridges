@@ -22,13 +22,11 @@ export interface ISecurityData {
   [FIELDS.BOUNTY_MAX]: string;
   [FIELDS.BOUNTY_START_DATE]: string;
   [FIELDS.BOUNTY_URL]: string;
+  trustRanking: Trust | null;
 }
 
 export async function getSecurityData(id: string): Promise<ISecurityData | null> {
   const response = await fetch(`https://v1.nocodeapi.com/kallemoen/airtable/pzFlVZPATntbwBAk?tableName=Bridges&filterByFormula=Bridge%3D"${id}%22`);
   const json = await response.json();
-  return json.records?.length ? {
-    ...json.records[0].fields,
-    trustRanking: trustStringToEnum[json.records[0].fields[FIELDS.TRUSTLESSNESS]] || null,
-  } : null;
+  return json.records?.length ? json.records[0].fields : null;
 }
