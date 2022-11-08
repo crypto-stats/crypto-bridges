@@ -31,25 +31,18 @@ export default function Footer() {
     >
       <p>
         <a
-          href="https://twitter.com/CryptoStats_"
+          href="https://twitter.com/CryptoFeesInfo"
           target="_blank"
           rel="noreferrer"
         >
           <Image src="/twitter.svg" alt="twitter" width="20" height="20" />
         </a>
         <a
-          href="https://github.com/crypto-stats/"
+          href="https://github.com/crypto-stats/crypto-bridges"
           target="_blank"
           rel="noreferrer"
         >
           <Image src="/github.svg" alt="twitter" width="20" height="20" />
-        </a>
-        <a
-          href="https://cryptostats.community/discord"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Image src="/discord.svg" alt="twitter" width="20" height="20" />
         </a>
       </p>
       <p>
