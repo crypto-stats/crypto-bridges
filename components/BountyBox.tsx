@@ -24,7 +24,7 @@ export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
       },
     })
   };
-  const trackImmunefiClick = () => plausible('bounty-click');
+  const trackImmunefiClick = () => void plausible('bounty-click');
 
   return (
     <div className={styles.nodeItem}>

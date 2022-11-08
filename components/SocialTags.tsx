@@ -22,7 +22,7 @@ const SocialTags = ({ title, description }: SocialTagsProps) => {
       <meta property="og:title" content={shortTitle} />
       <meta
         property="og:image"
-        content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph.png`}
+        content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL!}/open-graph.png`}
       />
       <meta property="og:description" content={_description} />
 
@@ -30,7 +30,7 @@ const SocialTags = ({ title, description }: SocialTagsProps) => {
       <meta name="twitter:description" content={_description} />
       <meta
         name="twitter:image"
-        content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph.png`}
+        content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL!}/open-graph.png`}
       />
       <meta name="twitter:card" content="summary_large_image" />
     </Head>
