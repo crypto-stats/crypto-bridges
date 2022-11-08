@@ -6,6 +6,7 @@ import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
 import DataBox from './DataBox';
 import FlowBox, { IChainFlow } from './FlowBox';
+import SocialTags from './SocialTags';
 
 interface IBridgeProps {
   data: IData;
@@ -105,8 +106,14 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
     });
     return flows.sort((a, b) => b.total - a.total);
   };
+
   return (
     <div className={styles.nodeSpecifics}>
+      <SocialTags
+        title={chainName}
+        description={chain.description}
+      />
+
       <div className={styles.nodeItem}>
         <h2>chain</h2>
       </div>

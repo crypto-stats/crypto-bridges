@@ -6,6 +6,7 @@ import { format } from '../utils';
 import BountyBox from './BountyBox';
 import BoxRow, { BoxAlign } from './BoxRow';
 import DataBox from './DataBox';
+import SocialTags from './SocialTags';
 
 interface IBridgeProps {
   data: IData;
@@ -44,8 +45,14 @@ const BridgeSpecifics = ({
     return result;
   }, [data, id]);
   if (bridge === undefined) return <div>Empty!</div>;
+
   return (
     <div className={styles.nodeSpecifics}>
+      <SocialTags
+        title={bridge.metadata.name}
+        description={bridge.metadata.description || securityData?.Description}
+      />
+
       <div className={styles.nodeItem}>
         <h2>bridge</h2>
         <div className={styles.nodeInfo}>

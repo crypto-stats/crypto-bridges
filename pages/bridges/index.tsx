@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useEffect, useMemo, useState } from 'react';
 import BridgeTable from '../../components/BridgeTable';
 import Motion from '../../components/Motion';
+import SocialTags from '../../components/SocialTags';
 import { loadData } from '../../data/load-data';
 import { IData } from '../../data/types';
 import styles from '../../styles/index.module.css';
@@ -95,6 +96,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
   }, [setDisplayLimit]);
   return (
     <Motion>
+      <SocialTags title="Bridges" />
       <menu className={styles.menu}>
         <BridgeTable
           title="Top Bridges"

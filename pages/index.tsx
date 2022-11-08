@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import Motion from '../components/Motion';
+import SocialTags from '../components/SocialTags';
 import Table from '../components/Table';
 import { loadData } from '../data/load-data';
 import { GetStaticBridgeProps, IData } from '../data/types';
@@ -41,6 +42,7 @@ const Home: NextPage<HomePageProps> = ({ data, date }) => {
       bridgedOut: 0,
     }))
     .sort((a, b) => b.in - a.in);
+
   useEffect(() => {
     const findMaxElements = () => {
       const isLandscape = needsLandscape();
@@ -56,8 +58,10 @@ const Home: NextPage<HomePageProps> = ({ data, date }) => {
     window.addEventListener('resize', findMaxElements);
     return () => window.removeEventListener('resize', findMaxElements);
   }, [setDisplayLimit]);
+
   return (
     <Motion>
+      <SocialTags />
       <menu className={styles.menu}>
         <Table
           listsChains={true}
