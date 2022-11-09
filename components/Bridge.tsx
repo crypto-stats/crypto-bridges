@@ -62,7 +62,6 @@ const BridgeSpecifics = ({
         <div className={styles.nodeInfo}>
           <img src={bridge.metadata.icon} width={30} height={30} alt="logo" />
           <p className={styles.nodeName}>{bridge.metadata.name}</p>
-          <p className={styles.nodeCategory}>{bridge.metadata.category}</p>
         </div>
         <p>{bridge.metadata.description || securityData?.Description}</p>
         <DataBox caption="bridge TVL" value={format(tvl)} />
