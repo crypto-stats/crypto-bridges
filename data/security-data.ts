@@ -1,3 +1,5 @@
+import Airtable from "airtable";
+
 export const FIELDS = {
   BRIDGE: 'Bridge' as 'Bridge',
   DESCRIPTION: 'Description' as 'Description',
@@ -25,8 +27,15 @@ export interface ISecurityData {
   trustRanking: Trust | null;
 }
 
+const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time * 1000));
+
 export async function getSecurityData(id: string): Promise<ISecurityData | null> {
-  const response = await fetch(`https://v1.nocodeapi.com/kallemoen/airtable/pzFlVZPATntbwBAk?tableName=Bridges&filterByFormula=Bridge%3D"${id}%22`);
-  const json = await response.json();
-  return json.records?.length ? json.records[0].fields : null;
+  await wait(Math.random() * 5 * 8);
+
+  const base = new Airtable({
+    apiKey: process.env.AIR_TABLE_API_KEY,
+  }).base('apppls15bkAlz7ko1');
+  const table = base('tblZZDK3wwSUKWy5J');
+  const result = await table.select({ filterByFormula: `Bridge="${id}"` }).all();
+  return result.length > 0 ? result[0].fields as unknown as ISecurityData : null;
 }
