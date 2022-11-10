@@ -18,8 +18,13 @@ export interface ITableProps {
   title: string;
   listsChains: boolean;
   valueIn?: boolean;
+  sortCombined?: boolean;
   limit?: number;
 }
+
+const sortIn = (a: ITableItem, b: ITableItem) => b.in - a.in;
+const sortOut = (a: ITableItem, b: ITableItem) => b.tvl - a.tvl;
+const combinedSorter = (a: ITableItem, b: ITableItem) => (b.tvl + b.in) - (a.tvl + a.in);
 
 const Table = ({
   tableContent,
@@ -28,12 +33,12 @@ const Table = ({
   listsChains,
   limit,
   valueIn = false,
+  sortCombined = false,
 }: ITableProps): ReactElement => {
   const plausible = usePlausible();
   const [collapsed, setCollapsed] = useState(true);
-  const array = tableContent.sort((a, b) =>
-    valueIn ? b.in - a.in : b.tvl - a.tvl,
-  );
+  const array = tableContent.sort(sortCombined ? combinedSorter : valueIn ? sortIn : sortOut);
+
   const { minValue, maxValue } = useMemo(() => {
     const inflows = tableContent.map((v) => v.in);
     const outflows = tableContent.map((v) => v.tvl);
