@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { ReactElement, useMemo } from 'react';
+import { ISecurityData } from '../data/security-data';
 import { IData } from '../data/types';
 import { useStore } from '../store';
 import styles from '../styles/Chain.module.css';
 import { format } from '../utils';
+import BountyBox from './BountyBox';
 import DataBox from './DataBox';
 import FlowBox, { IChainFlow } from './FlowBox';
 import SocialTags from './SocialTags';
@@ -11,9 +13,10 @@ import SocialTags from './SocialTags';
 interface IBridgeProps {
   data: IData;
   chainId: string;
+  securityData: ISecurityData | null;
 }
 
-const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
+const Chain = ({ data, chainId, securityData }: IBridgeProps): ReactElement => {
   const isImport = useStore((state) => state.flowsShowImport);
 
   const { exportedValue, importedValue } = useMemo(() => {
@@ -131,6 +134,9 @@ const Chain = ({ data, chainId }: IBridgeProps): ReactElement => {
         </div>
         {chain.description && <p>{chain.description}</p>}
       </div>
+
+      {securityData && <BountyBox id={chainId} securityData={securityData} />}
+
       <div className={styles.nodeItem}>
         <DataBox
           caption={`Total value ${isImport ? 'imported' : 'exported'}`}

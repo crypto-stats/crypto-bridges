@@ -1,14 +1,16 @@
-import type { NextPage } from 'next';
+import type { GetStaticProps, NextPage } from 'next';
 import BackButton from '../../components/BackButton';
 import Chain from '../../components/Chain';
 import Motion from '../../components/Motion';
 import { loadData } from '../../data/load-data';
-import { GetStaticBridgeProps, IData } from '../../data/types';
+import { getSecurityData, ISecurityData } from '../../data/security-data';
+import { IData } from '../../data/types';
 import styles from '../../styles/page.module.css';
 
 interface IChainPageProps {
   chain: string;
   data: IData;
+  securityData: ISecurityData | null;
   date: string;
 }
 
@@ -20,13 +22,14 @@ const ChainPage: NextPage<IChainPageProps> = ({
   data,
   date,
   chain,
+  securityData,
 }: IChainPageProps) => {
   console.log(`Data for chain page ${chain} collected on ${date}`);
   return (
     <Motion>
       <section className={styles.section}>
         <BackButton />
-        <Chain data={data} chainId={chain} />
+        <Chain data={data} chainId={chain} securityData={securityData} />
       </section>
     </Motion>
   );
@@ -41,10 +44,13 @@ export async function getStaticPaths(): Promise<{
   return { paths, fallback: false };
 }
 
-export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
-  const data = await loadData();
+export const getStaticProps: GetStaticProps<IChainPageProps, { chain: string }> = async ({ params }) => {
+  const [data, securityData] = await Promise.all([
+    loadData(),
+    getSecurityData(params!.chain),
+  ]);
   const date = new Date().toString();
-  return { props: { data, date, ...params }, revalidate: 5 * 60 };
+  return { props: { data, date, securityData, chain: params!.chain }, revalidate: 5 * 60 };
 };
 
 export default ChainPage;

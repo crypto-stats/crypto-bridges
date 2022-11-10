@@ -5,11 +5,12 @@ import BoxRow, { BoxAlign } from './BoxRow';
 import { format } from '../utils';
 import { AlertTriangle, ExternalLink } from 'lucide-react';
 import { usePlausible } from 'next-plausible';
+import { IDataBoxProps } from './DataBox';
 
 interface BountyBoxProps {
   id: string;
   securityData: ISecurityData | null;
-  tvl: number;
+  tvl?: number;
 }
 
 const IMMUNEFI_LANDING_PAGE = 'https://immunefi.webflow.io/';
@@ -19,6 +20,24 @@ export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
 
   const utm = `?utm_source=cryptoflows&utm_medium=partner&utm_campaign=2022_Q4_partnership&utm_content=${id}`;
   const immunefiLink = `${IMMUNEFI_LANDING_PAGE}${utm}`;
+
+  const statBoxes: IDataBoxProps[] = [];
+  if (securityData) {
+    statBoxes.push({
+      caption: 'Live since',
+      value: securityData['Bounty live since'],
+    });
+    if (tvl) {
+      statBoxes.push({
+        caption: '% of TVL',
+        value: (parseFloat(securityData['Bounty max']) / tvl * 100).toFixed(1) + '%',
+      });
+    }
+    statBoxes.push({
+      caption: 'max bounty',
+      value: format(Number(securityData['Bounty max'])),
+    });
+  }
 
   const trackBountyClick = () => {
     plausible('bounty-click', {
@@ -45,23 +64,7 @@ export default function BountyBox({ id, securityData, tvl }: BountyBoxProps) {
 
       {securityData?.['Bounty max'] !== undefined ? (
         <>
-          <BoxRow
-            data={[
-              {
-                caption: 'Live since',
-                value: securityData['Bounty live since'],
-              },
-              {
-                caption: '% of TVL',
-                value: (parseFloat(securityData['Bounty max']) / tvl * 100).toFixed(1) + '%',
-              },
-              {
-                caption: 'max bounty',
-                value: format(Number(securityData['Bounty max'])),
-              },
-            ]}
-            align={BoxAlign.Left}
-          />
+          <BoxRow data={statBoxes as [IDataBoxProps, IDataBoxProps]} align={BoxAlign.Left} />
           <a
             href={securityData['Bounty link'] + utm}
             onClick={trackBountyClick}

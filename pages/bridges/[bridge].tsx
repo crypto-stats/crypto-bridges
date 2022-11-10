@@ -89,9 +89,11 @@ export async function getStaticPaths(): Promise<{
 }
 
 export const getStaticProps: GetStaticBridgeProps = async ({ params }) => {
-  const data = await loadData();
   const date = new Date().toString();
-  const securityData = await getSecurityData(params!.bridge);
+  const [data, securityData] = await Promise.all([
+    loadData(),
+    getSecurityData(params!.bridge),
+  ]);
 
   return { props: { data, date, securityData, ...params }, revalidate: 5 * 60 };
 };
