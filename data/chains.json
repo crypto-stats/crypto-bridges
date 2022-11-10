@@ -73,24 +73,12 @@
       "website": "https://polygon.technology/solutions/polygon-pos/"
     },
     {
-      "id": "multichain",
-      "logo": "https://defillama.com/_next/image?url=https%3A%2F%2Ficons.llama.fi%2Fmultichain.jpg&w=32&q=75"
-    },
-    {
       "id": "avalanche",
       "logo": "https://cryptostats.infura-ipfs.io/ipfs/QmcWreeBT5HuurXsc5LbdDphmXUY3T4YrfnXvqt6y2no68"
     },
     {
       "id": "fantom",
       "logo": "https://cryptostats.infura-ipfs.io/ipfs/Qmej3LprBGEi5ZXaFknt3CZd2krM9MvY5HzeEEqRuGC5K7"
-    },
-    {
-      "id": "ripple",
-      "logo": "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=023"
-    },
-    {
-      "id": "cardano",
-      "logo": "https://cryptologos.cc/logos/cardano-ada-logo.png?v=023"
     },
     {
       "id": "solana",
