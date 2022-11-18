@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { FOOTER_HEIGHT, PANEL_WIDTH } from '../constants';
 import styles from '../styles/Footer.module.css';
@@ -47,11 +48,13 @@ export default function Footer() {
       </p>
       <p>
         <a href="https://cryptofees.info/">CryptoFees.info</a> |{' '}
-        <a href="https://money-movers.info/">MoneyMovers.info</a> |{' '}
         <a href="https://openorgs.info/">OpenOrgs.info</a> |{' '}
         <a href="https://l2fees.info/">L2Fees.info</a> |{' '}
-        <a href="https://stakers.info/">Stakers.info</a> |{' '}
         <a href="https://moneyprinter.info/">MoneyPrinter.info</a>
+        {' - '}
+        <Link href="/bridges/ibc"><a>IBC</a></Link> | {}
+        <Link href="/bridges/axelar"><a>Axelar</a></Link> | {}
+        <Link href="/bridges/wormhole"><a>Wormhole</a></Link>
       </p>
     </footer>
   );
