@@ -104,7 +104,7 @@ const Bridges: NextPage<IBridgeProps> = ({ data, date }) => {
           limit={displayLimit}
         />
         <BridgeTable
-          title="Top sub bridges"
+          title="Top Sub-Bridges"
           tableContent={subBridges}
           limit={displayLimit}
         />

@@ -65,13 +65,13 @@ const Home: NextPage<HomePageProps> = ({ data, date }) => {
       <menu className={styles.menu}>
         <Table
           listsChains={true}
-          title="Top Exporters"
+          title="Top Exporters (Assets Locked)"
           tableContent={exports}
           limit={displayLimit}
         />
         <Table
           listsChains={true}
-          title="Top Importers"
+          title="Top Importers (Assets Minted)"
           valueIn
           tableContent={imports}
           limit={displayLimit}
